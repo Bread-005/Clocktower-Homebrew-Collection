@@ -10,7 +10,9 @@ document.querySelector('.js-add-role').addEventListener('click', addRole)
 
 function addRole() {
     const input = document.querySelector('.input');
-
+    if (input.value === "") {
+        return;
+    }
     homebrewCharacters.push(input.value);
     let characterOutput = "";
     for (let i = 0; i < homebrewCharacters.length; i++) {
