@@ -1,22 +1,41 @@
-let role1 = {
-    name: "Washerwoman",
-    characterType: "Townsfolk",
-    ability: "You start knowing that 1 of 2 players is a particular Townsfolk"
-}
 
-let homebrewCharacters = [];
-
-document.querySelector('.js-add-role').addEventListener('click', addRole)
+document.querySelector('.js-add-role').addEventListener('click', addRole);
+document.querySelector('.js-remove-role').addEventListener('click', removeRole);
+document.addEventListener("DOMContentLoaded",function () {
+    displayRoles();
+});
 
 function addRole() {
     const input = document.querySelector('.input');
     if (input.value === "") {
         return;
     }
-    homebrewCharacters.push(input.value);
+    localStorage.setItem(Date.now().toString(), input.value);
+    displayRoles();
+}
+
+function removeRole() {
+    const input = document.querySelector('.input');
+    if (input.value === "") {
+        return;
+    }
+    for (let i = 0; i < localStorage.length; i++) {
+        if (localStorage.getItem(localStorage.key(i)).startsWith(input.value)) {
+            localStorage.removeItem(localStorage.key(i));
+            break;
+        }
+    }
+    displayRoles();
+}
+
+function displayRoles() {
+    if (localStorage.length === 0) {
+        document.getElementById("homebrewroles").innerHTML = "Die Rollenliste ist leer";
+        return;
+    }
     let characterOutput = "";
-    for (let i = 0; i < homebrewCharacters.length; i++) {
-        characterOutput = characterOutput.concat("<li>" + homebrewCharacters[i] + "</li>");
+    for (let i = 0; i < localStorage.length; i++) {
+        characterOutput = characterOutput.concat("<li data-key=" + localStorage.key(i) + ">" + localStorage.getItem(localStorage.key(i)) + "</li>");
     }
     document.getElementById("homebrewroles").innerHTML = characterOutput;
 }
