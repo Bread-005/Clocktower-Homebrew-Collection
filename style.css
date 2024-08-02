@@ -1,0 +1,17 @@
+body {
+    margin:10px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    font-family: Kokonor, sans-serif;
+}
+
+.rolesidea, .clocktowerimage {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+#homebrewroles {
+    list-style: none;
+}
