@@ -27,3 +27,6 @@ body {
 button {
     background: #8c839e;
 }
+button:hover {
+    background: lightblue;
+}
