@@ -19,35 +19,59 @@ document.addEventListener("DOMContentLoaded",function () {
         if (isListEmpty("role-idea")) {
             return;
         }
-        let characterOutput = "";
         const roleIdeas = createTempLocalStorage("role-idea");
         roleIdeas.sort((a,b) => a.key.replace("-role-idea","") - b.key.replace("-role-idea",""));
-        for (let roleIdea of roleIdeas) {
-            characterOutput = characterOutput.concat("<li id=" + roleIdea.key + ">" + roleIdea.value +
-                "<button class='js-delete-button icon-button' id=" + roleIdea.key + " data-key=" + roleIdea.key +"> <i class='js-delete-button fa-solid fa-trash' data-key=" + roleIdea.key +"></i></button>" +
-                "<label><input class='rate-field' type='number' name=rating" + roleIdea.key +" min='0' max='10' id='" + roleIdea.key + "-rate-field'/></label>" +
-                "<button class ='rate-button' data-key=" + roleIdea.key +"><i class='rate fa-sharp fa-regular fa-star' data-key=" + roleIdea.key +"></i></button></li>");
-            // let deleteButton = document.createElement("button");
-            // let list = document.createElement("list");
-            // document.body.appendChild(list);
-            // list.appendChild(deleteButton);
-        }
-        document.getElementById("homebrewroles").innerHTML = characterOutput;
-    }
+         for (let roleIdea of roleIdeas) {
 
-    document.addEventListener('click', function(event){
-        const dataKey = event.target.dataset.key;
-        if (event.target.classList.contains("js-delete-button")) {
-            document.getElementById(dataKey + "-role-idea").remove();
-            localStorage.removeItem(dataKey);
-            isListEmpty("role-idea");
+            const list = document.createElement("li");
+            list.setAttribute("id",roleIdea.key);
+            list.textContent = roleIdea.value;
+
+            const deleteButton = document.createElement("button");
+            deleteButton.setAttribute("class","js-delete-button icon-button");
+            deleteButton.setAttribute("id",roleIdea.key);
+            deleteButton.setAttribute("data-key",roleIdea.key);
+
+            const deleteButtonIcon = document.createElement("i");
+            deleteButtonIcon.setAttribute("class","js-delete-button fa-solid fa-trash");
+            deleteButtonIcon.setAttribute("data-key",roleIdea.key);
+
+            const input = document.createElement("input");
+            input.setAttribute("id",roleIdea.key + "-rate-field");
+            input.setAttribute("class","rate-field");
+            input.setAttribute("type","number");
+            input.setAttribute("name","rating" + roleIdea.key);
+            input.setAttribute("min","0");
+            input.setAttribute("max","10");
+
+            const rateButton = document.createElement("button");
+            rateButton.setAttribute("class","rate-button");
+            rateButton.setAttribute("data-key",roleIdea.key);
+
+            const rateButtonIcon = document.createElement("i");
+            rateButtonIcon.setAttribute("class","rate fa-sharp fa-regular fa-star");
+            rateButtonIcon.setAttribute("data-key",roleIdea.key);
+
+            rateButton.append(rateButtonIcon);
+            deleteButton.append(deleteButtonIcon);
+            list.append(deleteButton);
+            list.append(input);
+            list.append(rateButton);
+            document.getElementById("homebrewroles").append(list);
+
+            deleteButton.addEventListener("click",function () {
+                localStorage.removeItem(roleIdea.key);
+                list.remove();
+                isListEmpty("role-idea");
+            });
+
+            rateButton.addEventListener("click",function () {
+                const input = document.getElementById(roleIdea.key + "-rate-field");
+                localStorage.setItem(roleIdea.key + "-rate",input.value);
+                displayRatings();
+            });
         }
-        if (event.target.classList.contains("rate-button") || event.target.classList.contains("rate")) {
-            const input = document.getElementById(dataKey + "-rate-field");
-            localStorage.setItem(dataKey + "-rate",input.value);
-            displayRatings();
-        }
-    });
+}
 
     function isListEmpty(contentType) {
         let roleIdeaCount = 0;
