@@ -15,3 +15,15 @@ body {
 #homebrewroles {
     list-style: none;
 }
+
+.icon-button {
+    margin-left: 10px;
+}
+
+#rate-history {
+    margin-top: 20px;
+}
+
+button {
+    background: #8c839e;
+}
