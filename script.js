@@ -1,42 +1,52 @@
-
-document.querySelector('.js-add-role').addEventListener('click', addRole);
-document.querySelector('.js-remove-role').addEventListener('click', removeRole);
 document.addEventListener("DOMContentLoaded",function () {
-    displayRoles();
-});
 
-function addRole() {
-    const input = document.querySelector('.input');
-    if (input.value === "") {
-        return;
-    }
-    localStorage.setItem(Date.now().toString(), input.value);
-    displayRoles();
-}
+    document.querySelector('.js-add-role').addEventListener('click', addRole);
 
-function removeRole() {
-    const input = document.querySelector('.input');
-    if (input.value === "") {
-        return;
-    }
-    for (let i = 0; i < localStorage.length; i++) {
-        if (localStorage.getItem(localStorage.key(i)).startsWith(input.value)) {
-            localStorage.removeItem(localStorage.key(i));
-            break;
+    displayRoles();
+
+    function addRole() {
+        const input = document.querySelector('.input');
+        if (input.value === "") {
+            return;
         }
+        const key = Date.now().toString();
+        localStorage.setItem(key, input.value);
+        displayRoles();
     }
-    displayRoles();
-}
 
-function displayRoles() {
-    if (localStorage.length === 0) {
-        document.getElementById("homebrewroles").innerHTML = "Die Rollenliste ist leer";
-        return;
-    }
-    let characterOutput = "";
-    for (let i = 0; i < localStorage.length; i++) {
-        characterOutput = characterOutput.concat("<li data-key=" + localStorage.key(i) + ">" + localStorage.getItem(localStorage.key(i)) + "</li>");
-    }
-    document.getElementById("homebrewroles").innerHTML = characterOutput;
-}
+    function displayRoles() {
+        if (emptyRoleListText()) {
+            return;
+        }
+        let characterOutput = "";
+        const roleIdeas = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            const value = localStorage.getItem(key);
+            roleIdeas.push({key,value});
+        }
 
+        roleIdeas.sort((a,b) => a.key - b.key);
+        for (let roleIdea of roleIdeas) {
+            characterOutput = characterOutput.concat("<li id=" + roleIdea.key + "-list" + ">" + roleIdea.value +
+                "<button class='js-delete-button' id=" + roleIdea.key +" + data-key=" + roleIdea.key +">Rolle entfernen</button></li>");
+        }
+        document.getElementById("homebrewroles").innerHTML = characterOutput;
+    }
+
+    document.addEventListener('click', function(event){
+        if (event.target.classList.contains("js-delete-button")) {
+            const dataKey = event.target.dataset.key;
+            document.getElementById(dataKey + "-list").remove();
+            localStorage.removeItem(dataKey);
+            emptyRoleListText();
+        }
+    });
+
+    function emptyRoleListText() {
+        if (localStorage.length === 0) {
+            document.getElementById("homebrewroles").innerHTML = "Die Rollenliste ist leer";
+        }
+        return localStorage.length === 0;
+    }
+});
