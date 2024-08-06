@@ -23,8 +23,17 @@ document.addEventListener("DOMContentLoaded",function () {
         const roleIdeas = createTempLocalStorage("role-idea");
         roleIdeas.sort((a,b) => a.key.replace("-role-idea","") - b.key.replace("-role-idea",""));
         document.getElementById("homebrewroles").innerHTML = "";
+
+        const table = document.createElement("table");
+        table.setAttribute("class","role-idea-table");
+
+        const tableBody = document.createElement("tbody");
+
          for (let roleIdea of roleIdeas) {
 
+             const columnRoleIdea = document.createElement("td");
+             const columnDeleteAndRate = document.createElement("td");
+             columnDeleteAndRate.setAttribute("class","column-delete-and-rate");
              const tableRow = document.createElement("tr");
 
              const list = document.createElement("li");
@@ -49,47 +58,68 @@ document.addEventListener("DOMContentLoaded",function () {
              input.setAttribute("max","10");
 
              const rateButton = document.createElement("button");
-             rateButton.setAttribute("class","rate-button");
+             rateButton.setAttribute("class","rate-button icon-button");
              rateButton.setAttribute("data-key",roleIdea.key);
 
              const rateButtonIcon = document.createElement("i");
              rateButtonIcon.setAttribute("class","rate fa-sharp fa-regular fa-star");
              rateButtonIcon.setAttribute("data-key",roleIdea.key);
 
+             const wikiButton = document.createElement("button");
+             wikiButton.setAttribute("class","wiki-button icon-button");
+             wikiButton.setAttribute("a","")
+
+             const wikiButtonIcon = document.createElement("i");
+             wikiButtonIcon.setAttribute("class","wiki-button-icon fa-solid fa-book");
+
+             const anchor = document.createElement("a");
+             anchor.setAttribute("href","wiki.html");
+             anchor.setAttribute("target","_blank");
+
              rateButton.append(rateButtonIcon);
              deleteButton.append(deleteButtonIcon);
-             list.append(deleteButton);
-             list.append(input);
-             list.append(rateButton);
-             tableRow.append(list);
-             document.getElementById("homebrewroles").append(list);
+             wikiButton.append(wikiButtonIcon);
+             anchor.append(wikiButton);
+             columnRoleIdea.append(list);
+             columnDeleteAndRate.append(input);
+             columnDeleteAndRate.append(rateButton);
+             columnDeleteAndRate.append(anchor);
+             columnDeleteAndRate.append(deleteButton);
+             tableRow.append(columnRoleIdea);
+             tableRow.append(columnDeleteAndRate);
+             tableBody.append(tableRow);
+             table.append(tableBody);
+             document.getElementById("homebrewroles").append(table);
 
              deleteButton.addEventListener("click",function () {
                  localStorage.removeItem(roleIdea.key);
-                 list.remove();
+                 localStorage.removeItem(roleIdea.key + "-rate");
+                 tableRow.remove();
                  isListEmpty("role-idea");
+                 displayRatings();
              });
 
              rateButton.addEventListener("click",function () {
                  const input = document.getElementById(roleIdea.key + "-rate-field");
+                 if (input < 0 || input > 11) return;
                  localStorage.setItem(roleIdea.key + "-rate",input.value);
                  displayRatings();
              });
-        }
-}
+         }
+    }
 
     function isListEmpty(contentType) {
         let roleIdeaCount = 0;
         for (let i = 0; i < localStorage.length; i++) {
-            if (localStorage.key(i).includes(contentType)) {
+            if (localStorage.key(i).endsWith(contentType)) {
                 roleIdeaCount++;
             }
         }
         if (roleIdeaCount === 0) {
-            if (contentType.equals("role-idea")) {
+            if (contentType === "role-idea") {
                 document.getElementById("homebrewroles").innerHTML = "Die Rollenliste ist leer";
             }
-            if (contentType.equals("rate")) {
+            if (contentType === "rate") {
                 document.getElementById("homebrewroles").innerHTML = "Niemand hat bisher eine Rolle bewertet";
             }
         }
