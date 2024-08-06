@@ -67,14 +67,12 @@ document.addEventListener("DOMContentLoaded",function () {
 
              const wikiButton = document.createElement("button");
              wikiButton.setAttribute("class","wiki-button icon-button");
-             wikiButton.setAttribute("a","")
 
              const wikiButtonIcon = document.createElement("i");
              wikiButtonIcon.setAttribute("class","wiki-button-icon fa-solid fa-book");
 
              const anchor = document.createElement("a");
-             anchor.setAttribute("href","wiki.html");
-             anchor.setAttribute("target","_blank");
+             anchor.setAttribute("href","wiki.html?r=" + roleIdea.key);
 
              rateButton.append(rateButtonIcon);
              deleteButton.append(deleteButtonIcon);
