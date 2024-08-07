@@ -6,7 +6,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" crossorigin="anonymous" href="https://core.ontavio.de/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" crossorigin="anonymous" href="https://core.ontavio.de/font-awesome/6.4.0/css/all.min.css"/>
     <title>Clocktower Ideen Sammlung</title>
 </head>
 <body>
@@ -17,18 +17,29 @@
     </div>
     <br>
     <div class="rolesidea">
-        <h2>Rollen Ideen</h2>
-        Schreibe hier eine Rollenidee in folgendem Format:<br>
-        Rollenname (Charaktertyp): Fähigkeitentext
-        <br>
+        Schreibe hier eine Rollenidee<br>
         <form>
-            <label>
-                <input class="input" type="text" name="input"/>
-            </label>
-            <button class="button js-add-role" name="click" type="submit">
+            <label for="role-name">Rollenname</label>
+            <input class="input" id="role-name" type="text"/>
+            <br>
+            <div class="character-type-dropdown">
+                <label for="character-types">Charaktertyp</label>
+                <select class="character-types" id="character-types">
+                    <option value="Townsfolk">Townsfolk</option>
+                    <option value="Outsider">Outsider</option>
+                    <option value="Minion">Minion</option>
+                    <option value="Demon">Demon</option>
+                    <option value="Traveller">Traveller</option>
+                </select>
+            </div>
+            <label for="ability-text">Fähigkeitentext</label>
+            <input class="input" id="ability-text" type="text"/>
+            <br>
+            <button class="button js-add-role" name="click" type="reset">
                 Rolle absenden
             </button>
         </form>
+        <h2>Rollen Ideen</h2>
         <div class="role-idea-content">
             <ul id="homebrewroles">Die Rollenliste ist leer</ul>
         </div>
