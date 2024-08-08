@@ -45,12 +45,22 @@ document.addEventListener("DOMContentLoaded",function () {
              const role = JSON.parse(localStorage.getItem(roleIdea.key));
 
              const columnRoleIdea = document.createElement("td");
+             columnRoleIdea.setAttribute("class","column-role-idea");
              const columnDeleteAndRate = document.createElement("td");
              columnDeleteAndRate.setAttribute("class","column-delete-and-rate");
              const tableRow = document.createElement("tr");
+             tableRow.setAttribute("class","table-row-role-idea");
 
              const list = document.createElement("li");
              list.setAttribute("id",roleIdea.key);
+             list.setAttribute("class","role-idea-list");
+
+             const image = document.createElement("img");
+             image.setAttribute("class","clocktower-icon clocktower-icon-role-idea");
+             image.setAttribute("src","placeholder-icon.png");
+             if (role["image"]) {
+                 image.setAttribute("src",role["image"]);
+             }
              list.textContent = role["name"] + " (" + role["characterType"] + "): " + role["abilityText"];
 
              const deleteButton = document.createElement("button");
@@ -91,6 +101,7 @@ document.addEventListener("DOMContentLoaded",function () {
              deleteButton.append(deleteButtonIcon);
              wikiButton.append(wikiButtonIcon);
              anchor.append(wikiButton);
+             list.prepend(image);
              columnRoleIdea.append(list);
              columnDeleteAndRate.append(input);
              columnDeleteAndRate.append(rateButton);
@@ -112,10 +123,14 @@ document.addEventListener("DOMContentLoaded",function () {
 
              rateButton.addEventListener("click",function () {
                  const input = document.getElementById(roleIdea.key + "-rate-field");
-                 if (input.value === "" || input.value < 0 || input.value > 10) return;
+                 if (input.value === "" || input.value < 0 || input.value > 10) {
+                     input.value = "";
+                     return;
+                 }
                  role["rating"] = input.value;
                  localStorage.setItem(roleIdea.key,JSON.stringify(role));
                  displayRatings();
+                 input.value = "";
              });
          }
     }

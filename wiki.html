@@ -11,6 +11,38 @@
 </head>
 <body>
 
+<div class="page-top">
+    <img src="placeholder-icon.png" id="wiki-role-image" class="clocktower-icon wiki-clocktower-icon"/>
+    <div class="center">
+        <h1 id="role-name" class="center"></h1>
+        <h2 id="character-type" class="center"></h2>
+        <h2 id="ability-text" class="center"></h2>
+    </div>
+    <div>
+        <button id="edit-button-role" class="icon-button center" type="reset"><i class="fa-solid fa-pen fa-pen-to-square"></i></button>
+    </div>
+</div>
+
+<div id="image-submission">
+    <input type="file" id="image-input-file">
+    <input type="url" id="image-input-url">
+    <button id="upload-button">Setze Bild für die Rolle</button>
+</div>
+
+<div class="center">
+    <h2>How To Run</h2>
+    <p id="howtorun-text"></p>
+    <button id="edit-button-how-to-run" class="icon-button" type="reset"><i class="fa-solid fa-pen fa-pen-to-square" id="edit-button-icon"></i></button>
+    <form>
+        <textarea class="howtorun-input" id="howtorun-input" cols="60" rows="6" placeholder="How To Run Text"></textarea>
+        <button id="howtorun-button" class="howtorun-button center" type="submit">Change Text</button>
+    </form>
+</div>
+
+<div class="center margin-top-30">
+    <p id="role-rating"></p>
+</div>
+
 <script src="wiki.js" defer>
 
 </script>
