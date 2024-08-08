@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded",function () {
             characterType: characterTypeInput.value,
             abilityText: abilityTextInput.value
         }
-        localStorage.setItem(key + "-role-idea", JSON.stringify(role));
+        localStorage.setItem(key, JSON.stringify(role));
         roleNameInput.value = "";
         abilityTextInput.value = "";
         displayRoles();
@@ -136,7 +136,7 @@ document.addEventListener("DOMContentLoaded",function () {
             document.getElementById("homebrewroles").innerHTML = "Die Rollenliste ist leer";
         }
         if (ratingCount === 0) {
-            document.getElementById("homebrewroles").innerHTML = "Niemand hat bisher eine Rolle bewertet";
+            document.getElementById("role-history").innerHTML = "Niemand hat bisher eine Rolle bewertet";
         }
     }
 

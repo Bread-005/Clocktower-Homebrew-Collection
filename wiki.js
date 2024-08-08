@@ -3,8 +3,6 @@ document.addEventListener("DOMContentLoaded",function () {
     const key = searchParameters.get("r");
     const role = JSON.parse(localStorage.getItem(key));
 
-    console.log(role);
-
     if (role["comments"] === undefined) {
         role["comments"] = [];
     }
@@ -97,7 +95,8 @@ document.addEventListener("DOMContentLoaded",function () {
 
     displayComments();
 
-    editButton.addEventListener("click",function () {
+    editButton.addEventListener("click",function (event) {
+        event.preventDefault();
         howToRunInput.textContent = howToRunText.textContent;
         editButton.style.display = "none";
         howToRunInput.style.display = "block";
@@ -120,17 +119,44 @@ document.addEventListener("DOMContentLoaded",function () {
         if (inputComment.value === "") {
             return;
         }
-        role["comments"].push(inputComment.value);
+        if (inputComment.value.includes("beleidigung")) {
+            inputComment.value = "";
+            return;
+        }
+        const commentKey = Date.now().toString();
+
+        const comment = {
+            message: inputComment.value,
+            key: commentKey
+        }
+        role["comments"].push(comment);
         localStorage.setItem(key,JSON.stringify(role));
         inputComment.value = "";
         displayComments();
     });
 
     function displayComments() {
-        let commentString = "";
-        for (const comment of role["comments"]) {
-            commentString = commentString.concat("<li>" + comment + "</li>");
+        ul.innerHTML = "";
+        for (let i = 0; i < role["comments"].length; i++) {
+            const list = document.createElement("li");
+            list.textContent = role["comments"][i]["message"];
+            const deleteButton = document.createElement("button");
+            deleteButton.setAttribute("class","icon-button");
+            deleteButton.setAttribute("data-key",role["comments"][i]["key"]);
+
+            const deleteButtonIcon = document.createElement("i");
+            deleteButtonIcon.setAttribute("class","js-delete-button fa-solid fa-trash");
+            deleteButtonIcon.setAttribute("data-key",role["comments"][i]["key"]);
+
+            deleteButton.append(deleteButtonIcon);
+            list.append(deleteButton);
+            ul.append(list);
+
+            deleteButton.addEventListener("click",function () {
+                role["comments"].splice(i,1);
+                localStorage.setItem(key,JSON.stringify(role));
+                displayComments();
+            });
         }
-        ul.innerHTML = commentString;
     }
 })
