@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded",function () {
     displayRole();
 
     const roleRating = document.getElementById("role-rating");
-    roleRating.textContent = "Bewertung: " + role["rating"];
+    roleRating.textContent = "Bewertung: ";
     if (role["rating"] === undefined) {
         roleRating.textContent = "Niemand hat diese Rolle bisher bewertet";
     }
@@ -41,6 +41,7 @@ document.addEventListener("DOMContentLoaded",function () {
         grayStarIcon.setAttribute("class", "fa-regular fa-star");
         roleRating.append(grayStarIcon);
     }
+    roleRating.append(" " + role["rating"] + "/10");
     const halfStarIcon = document.createElement("i");
 
     const howToRunInput = document.getElementById("howtorun-input");
@@ -112,7 +113,6 @@ document.addEventListener("DOMContentLoaded",function () {
         if (imageString === "") {
             return;
         }
-        console.log(imageString);
         role["image"] = imageString;
         localStorage.setItem(key, JSON.stringify(role));
         document.getElementById("wiki-role-image").setAttribute("src", role["image"]);

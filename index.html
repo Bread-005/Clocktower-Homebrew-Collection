@@ -15,14 +15,14 @@
     <div class="clocktowerimage">
         <img src="BotC.webp" width="200px">
     </div>
-    <br>
-    <div class="rolesidea center">
-        Schreibe hier eine Rollenidee<br>
-        <form>
-            <label for="role-name">Rollenname</label>
-            <input class="input" id="role-name" type="text"/>
-            <br>
-            <div class="character-type-dropdown">
+    <div class="rolesidea center margin-top-20">
+        Schreibe hier eine Rollenidee
+        <form class="flex-start">
+            <div>
+                <label class="margin" for="role-name">Rollenname</label>
+                <input class="input" id="role-name" type="text"/>
+            </div>
+            <div class="margin">
                 <label for="character-types">Charaktertyp</label>
                 <select class="character-types" id="character-types">
                     <option value="Townsfolk">Townsfolk</option>
@@ -32,10 +32,8 @@
                     <option value="Traveller">Traveller</option>
                 </select>
             </div>
-            <label for="ability-text">Fähigkeitentext</label>
-            <input class="input" id="ability-text" type="text"/>
-            <br>
-            <button class="button js-add-role" name="click" type="reset">
+            <textarea class="text-area-input margin" id="ability-text" cols="30" rows="4" placeholder="Fähigkeitentext"></textarea>
+            <button id="js-add-role" class="button" name="click" type="reset">
                 Rolle absenden
             </button>
         </form>
@@ -44,9 +42,9 @@
     <div class="filter">
         <div>
             Suche
-            <input id="role-search" type="text" class="height-20">
+            <input id="role-search" type="text" class="padding">
             CharacterTyp
-            <select id="character-typ-selection">
+            <select id="character-typ-selection" class="padding">
                 <option value="All">All</option>
                 <option value="Townsfolk">Townsfolk</option>
                 <option value="Outsider">Outsider</option>
@@ -57,7 +55,7 @@
         </div>
         <div>
             Sortierung
-            <select id="sorting">
+            <select id="sorting" class="padding">
                 <option value="Alphabet A-Z">Alphabet A-Z</option>
                 <option value="Alphabet Z-A">Alphabet Z-A</option>
                 <option value="Neuste zuerst">Neuste zuerst</option>
@@ -67,6 +65,9 @@
     </div>
     <div class="center">
         <div id="homebrewroles" class="homebrewroles center margin-top-20">Die Rollenliste ist leer</div>
+    </div>
+    <div id="role-idea-page-selection" class="next-to-each-other">
+
     </div>
 
 

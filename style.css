@@ -68,6 +68,7 @@ button:hover {
     border: 2px solid transparent;
     background-color: lightgray;
     font-size: 20px;
+    border-radius: 12px;
 }
 
 .howtorun-div {
@@ -181,4 +182,29 @@ textarea {
 
 .column-role-idea {
     width: 100%;
+}
+
+.margin {
+    margin: 5px;
+}
+
+.padding {
+    padding: 5px;
+}
+
+.flex-start {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.next-to-each-other {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.blue {
+    background-color: lightskyblue;
 }

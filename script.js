@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded",function () {
 
-    document.querySelector('.js-add-role').addEventListener('click', addRole);
+    document.getElementById("js-add-role").addEventListener("click",addRole);
 
     const roleSearch = document.getElementById("role-search");
     const characterTypSelection = document.getElementById("character-typ-selection");
@@ -31,17 +31,18 @@ document.addEventListener("DOMContentLoaded",function () {
     }
 
     function displayRoles(input) {
-        const roleIdeaArray = createTempLocalStorage();
-        roleIdeaArray.sort((a, b) => a.key - b.key);
+        const array = createTempLocalStorage();
+        array.sort((a, b) => a.key - b.key);
         if (input === "Neuste zuerst") {
-            roleIdeaArray.reverse();
+            array.reverse();
         }
         if (input === "Alphabet A-Z") {
-            roleIdeaArray.sort((a,b) => sortAlphabetically(a["role"],b["role"],true));
+            array.sort((a,b) => sortAlphabetically(a["role"],b["role"],true));
         }
         if (input === "Alphabet Z-A") {
-            roleIdeaArray.sort((a,b) => sortAlphabetically(a["role"],b["role"],false));
+            array.sort((a,b) => sortAlphabetically(a["role"],b["role"],false));
         }
+        const roleIdeaArray = array.slice((Number.parseInt(localStorage.getItem("page")) - 1) * 10,Number.parseInt(localStorage.getItem("page")) * 10);
         document.getElementById("homebrewroles").innerHTML = "";
 
         const table = document.createElement("table");
@@ -98,10 +99,9 @@ document.addEventListener("DOMContentLoaded",function () {
              rateButtonIcon.setAttribute("data-key",roleIdea.key);
 
              const wikiButton = document.createElement("button");
-             wikiButton.setAttribute("class","wiki-button icon-button");
 
              const wikiButtonIcon = document.createElement("i");
-             wikiButtonIcon.setAttribute("class","wiki-button-icon fa-solid fa-book");
+             wikiButtonIcon.setAttribute("class","fa-solid fa-book");
 
              const anchor = document.createElement("a");
              anchor.setAttribute("href","wiki.html?r=" + roleIdea.key);
@@ -195,6 +195,9 @@ document.addEventListener("DOMContentLoaded",function () {
         const array = [];
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
+            if (key === "page") {
+                continue;
+            }
             const value = localStorage.getItem(key);
             const input = characterTypSelection.value;
             const role = JSON.parse(value);
@@ -226,5 +229,28 @@ document.addEventListener("DOMContentLoaded",function () {
             return -1;
         }
         return 0;
+    }
+
+    showPages();
+
+    function showPages() {
+        const pages = (localStorage.length - 1) / 10;
+        for (let i = 0; i < pages; i++) {
+            const button = document.createElement("button");
+            button.textContent = (i + 1).toString();
+            button.classList.remove("blue");
+            if (localStorage.getItem("page") === button.textContent) {
+                button.setAttribute("class", "blue");
+            }
+            button.addEventListener("click",function () {
+                localStorage.setItem("page",button.textContent);
+                document.querySelectorAll(".blue").forEach(element => element.classList.remove("blue"));
+                if (localStorage.getItem("page") === button.textContent) {
+                    button.setAttribute("class", "blue");
+                }
+                displayRoles(sortingDropDownMenu.value);
+            });
+            document.getElementById("role-idea-page-selection").append(button);
+        }
     }
 });
