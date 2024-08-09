@@ -2,7 +2,12 @@ document.addEventListener("DOMContentLoaded",function () {
 
     document.querySelector('.js-add-role').addEventListener('click', addRole);
 
-    displayRoles();
+    const roleSearch = document.getElementById("role-search");
+    const characterTypSelection = document.getElementById("character-typ-selection");
+    const sortingDropDownMenu = document.getElementById("sorting");
+    sortingDropDownMenu.value = "Neuste zuerst";
+
+    displayRoles("Neuste zuerst");
     displayRatings();
 
     function addRole(event) {
@@ -22,21 +27,25 @@ document.addEventListener("DOMContentLoaded",function () {
         localStorage.setItem(key, JSON.stringify(role));
         roleNameInput.value = "";
         abilityTextInput.value = "";
-        displayRoles();
+        displayRoles("Neuste zuerst");
     }
 
-    function displayRoles() {
-        const roleIdeaArray = [];
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            const value = localStorage.getItem(key);
-            roleIdeaArray.push({key,value});
+    function displayRoles(input) {
+        const roleIdeaArray = createTempLocalStorage();
+        roleIdeaArray.sort((a, b) => a.key - b.key);
+        if (input === "Neuste zuerst") {
+            roleIdeaArray.reverse();
         }
-        roleIdeaArray.sort((a,b) => a.key.replace("-role-idea","") - b.key.replace("-role-idea",""));
+        if (input === "Alphabet A-Z") {
+            roleIdeaArray.sort((a,b) => sortAlphabetically(a["role"],b["role"],true));
+        }
+        if (input === "Alphabet Z-A") {
+            roleIdeaArray.sort((a,b) => sortAlphabetically(a["role"],b["role"],false));
+        }
         document.getElementById("homebrewroles").innerHTML = "";
 
         const table = document.createElement("table");
-        table.setAttribute("class","role-idea-table");
+        table.setAttribute("class","border-spacing-10");
 
         const tableBody = document.createElement("tbody");
 
@@ -133,6 +142,10 @@ document.addEventListener("DOMContentLoaded",function () {
                  input.value = "";
              });
          }
+
+         if (roleIdeaArray.length === 0) {
+             document.getElementById("homebrewroles").innerHTML = "Es gibt noch keine Rollen die deiner Suche entsprechen";
+         }
     }
 
     function setEmptyListContent() {
@@ -165,5 +178,53 @@ document.addEventListener("DOMContentLoaded",function () {
             roleIdeaRatingsString = roleIdeaRatingsString.concat("<li>" + role["name"] + " wurde mit " + role["rating"] + " bewertet" + "</li>");
         }
         document.getElementById("rate-history").innerHTML = roleIdeaRatingsString;
+    }
+
+    sortingDropDownMenu.addEventListener("change",function () {
+        displayRoles(sortingDropDownMenu.value);
+    });
+
+    characterTypSelection.addEventListener("change",function () {
+        displayRoles(sortingDropDownMenu.value);
+    });
+
+    roleSearch.addEventListener("input",function () {
+        displayRoles(sortingDropDownMenu.value);
+    });
+    function createTempLocalStorage() {
+        const array = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            const value = localStorage.getItem(key);
+            const input = characterTypSelection.value;
+            const role = JSON.parse(value);
+            if (role["characterType"] !== input && input !== "All") {
+                continue;
+            }
+            if (roleSearch.value !== "" &&
+                !role["name"].toUpperCase().includes(roleSearch.value.toUpperCase()) &&
+                !role["characterType"].toUpperCase().includes(roleSearch.value.toUpperCase()) &&
+                !role["abilityText"].toUpperCase().includes(roleSearch.value.toUpperCase())) {
+                continue;
+            }
+            array.push({key,role});
+        }
+        return array;
+    }
+
+    function sortAlphabetically(a, b, alphabetically) {
+        if (a["name"].toUpperCase() < b["name"].toUpperCase()) {
+            if (alphabetically) {
+                return -1;
+            }
+            return 1;
+        }
+        if (a["name"].toUpperCase() > b["name"].toUpperCase()) {
+            if (alphabetically) {
+                return 1;
+            }
+            return -1;
+        }
+        return 0;
     }
 });

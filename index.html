@@ -16,7 +16,7 @@
         <img src="BotC.webp" width="200px">
     </div>
     <br>
-    <div class="rolesidea">
+    <div class="rolesidea center">
         Schreibe hier eine Rollenidee<br>
         <form>
             <label for="role-name">Rollenname</label>
@@ -40,12 +40,37 @@
             </button>
         </form>
         <h2>Rollen Ideen</h2>
-        <div class="role-idea-content">
-            <ul id="homebrewroles">Die Rollenliste ist leer</ul>
+    </div>
+    <div class="filter">
+        <div>
+            Suche
+            <input id="role-search" type="text" class="height-20">
+            CharacterTyp
+            <select id="character-typ-selection">
+                <option value="All">All</option>
+                <option value="Townsfolk">Townsfolk</option>
+                <option value="Outsider">Outsider</option>
+                <option value="Minion">Minion</option>
+                <option value="Demon">Demon</option>
+                <option value="Traveller">Traveller</option>
+            </select>
+        </div>
+        <div>
+            Sortierung
+            <select id="sorting">
+                <option value="Alphabet A-Z">Alphabet A-Z</option>
+                <option value="Alphabet Z-A">Alphabet Z-A</option>
+                <option value="Neuste zuerst">Neuste zuerst</option>
+                <option value="Älteste zuerst">Älteste zuerst</option>
+            </select>
         </div>
     </div>
-
     <div class="center">
+        <div id="homebrewroles" class="homebrewroles center margin-top-20">Die Rollenliste ist leer</div>
+    </div>
+
+
+    <div class="center margin-top-30">
         <a href="https://script.bloodontheclocktower.com/" target="_blank">Rollen die es schon gibt</a>
     </div>
 
