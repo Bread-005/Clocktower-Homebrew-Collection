@@ -12,16 +12,15 @@ document.addEventListener("DOMContentLoaded",function () {
     if (role["howtorun"] === undefined) {
         role["howtorun"] = "";
     }
+    role["inEditMode"] = false;
 
     const uploadButton = document.getElementById("upload-button");
 
-    if (role["image"] !== "") {
+    if (role["image"]) {
         document.getElementById("wiki-role-image").setAttribute("src", role["image"]);
     }
 
-    document.getElementById("role-name").textContent = role["name"];
-    document.getElementById("character-type").textContent = "Charaktertyp: " + role["characterType"];
-    document.getElementById("ability-text").textContent = "Fähigkeit: " + role["name"];
+    displayRole();
 
     const roleRating = document.getElementById("role-rating");
     roleRating.textContent = "Bewertung: " + role["rating"];
@@ -48,7 +47,6 @@ document.addEventListener("DOMContentLoaded",function () {
     howToRunInput.value = role["howtorun"] ?? '';
 
     const howToRunChangeButton = document.getElementById("howtorun-button");
-    howToRunChangeButton.textContent = "Change Text";
 
     const editButton = document.getElementById("edit-button-how-to-run");
 
@@ -70,13 +68,11 @@ document.addEventListener("DOMContentLoaded",function () {
     const ul = document.createElement("ul");
     ul.setAttribute("id", "comments-list");
 
-    if (!role["howtorun"]) {
-        editButton.style.display = "none";
-    }
-    if (role["howtorun"]) {
-        howToRunInput.style.display = "none";
-        howToRunChangeButton.style.display = "none";
-    }
+    howToRunInput.style.display = "none";
+    howToRunChangeButton.style.display = "none";
+    const imageSubmission =document.getElementById("image-submission");
+    imageSubmission.style.display = "none";
+
     commentForm.append(inputComment);
     commentForm.append(commentButton);
     comments.append(commentForm);
@@ -87,12 +83,7 @@ document.addEventListener("DOMContentLoaded",function () {
 
     const howToRunText = document.getElementById("howtorun-text");
 
-    editButton.addEventListener("click", function (event) {
-        event.preventDefault();
-        editButton.style.display = "none";
-        howToRunInput.style.display = "block";
-        howToRunChangeButton.style.display = "block";
-    });
+    document.getElementById("edit-role-field").style.display = "none";
 
     howToRunChangeButton.addEventListener("click", function (event) {
         event.preventDefault();
@@ -148,6 +139,48 @@ document.addEventListener("DOMContentLoaded",function () {
         displayComments();
     });
 
+    const editRoleNameInput = document.getElementById("edit-role-name");
+    const editCharacterTypeInput = document.getElementById("edit-character-type");
+    const editAbilityTextInput = document.getElementById("edit-ability-text");
+
+    document.getElementById("edit-button").addEventListener("click",function (event) {
+        event.preventDefault();
+        role["inEditMode"] = !role["inEditMode"];
+
+        if (role["inEditMode"]) {
+            //edit role text etc
+            document.getElementById("edit-role-field").style.display = "flex";
+            editRoleNameInput.value = role["name"];
+            editCharacterTypeInput.value = role["characterType"];
+            editAbilityTextInput.value = role["abilityText"];
+
+            //edit How to Run
+            howToRunInput.style.display = "block";
+            howToRunChangeButton.style.display = "block";
+
+            //image submission
+            imageSubmission.style.display = "block";
+        }
+        if (!role["inEditMode"]) {
+            document.getElementById("edit-role-field").style.display = "none";
+            howToRunInput.style.display = "none";
+            howToRunChangeButton.style.display = "none";
+            imageSubmission.style.display = "none";
+        }
+    });
+
+    document.getElementById("submit-edit-role-button").addEventListener("click",function (event) {
+        event.preventDefault();
+        if (editRoleNameInput.value === "" || editCharacterTypeInput.value === "" || editAbilityTextInput.value === "") {
+            return;
+        }
+        role["name"] = editRoleNameInput.value;
+        role["characterType"] = editCharacterTypeInput.value;
+        role["abilityText"] = editAbilityTextInput.value;
+        localStorage.setItem(key,JSON.stringify(role));
+        displayRole();
+    });
+
     function displayComments() {
         ul.innerHTML = "";
         for (let i = 0; i < role["comments"].length; i++) {
@@ -171,5 +204,11 @@ document.addEventListener("DOMContentLoaded",function () {
                 displayComments();
             });
         }
+    }
+
+    function displayRole() {
+        document.getElementById("role-name").textContent = role["name"];
+        document.getElementById("character-type").textContent = "Charaktertyp: " + role["characterType"];
+        document.getElementById("ability-text").textContent = "Fähigkeit: " + role["abilityText"];
     }
 })

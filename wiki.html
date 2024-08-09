@@ -13,29 +13,53 @@
 
 <div class="page-top">
     <img src="placeholder-icon.png" id="wiki-role-image" class="clocktower-icon wiki-clocktower-icon"/>
-    <div class="center">
+    <div class="center margin-left-100">
         <h1 id="role-name" class="center"></h1>
         <h2 id="character-type" class="center"></h2>
         <h2 id="ability-text" class="center"></h2>
     </div>
-    <div>
-        <button id="edit-button-role" class="icon-button center" type="reset"><i class="fa-solid fa-pen fa-pen-to-square"></i></button>
+    <div class="center margin-left-30">
+        <button id="edit-button" class="icon-button center" type="reset"><i class="fa-solid fa-pen fa-pen-to-square"></i></button>
     </div>
 </div>
 
+<div id="edit-role-field" class="center">
+    <form>
+        <label for="edit-role-name">Rollenname</label>
+        <input class="input" id="edit-role-name" type="text"/>
+        <br>
+        <div class="character-type-dropdown">
+            <label for="edit-character-type">Charaktertyp</label>
+            <select class="character-types" id="edit-character-type">
+                <option value="Townsfolk">Townsfolk</option>
+                <option value="Outsider">Outsider</option>
+                <option value="Minion">Minion</option>
+                <option value="Demon">Demon</option>
+                <option value="Traveller">Traveller</option>
+            </select>
+        </div>
+        <label for="edit-ability-text">Fähigkeitentext</label>
+        <input class="input" id="edit-ability-text" type="text"/>
+        <br>
+        <button id="submit-edit-role-button" name="click" type="reset">
+            Rolle bearbeiten
+        </button>
+    </form>
+</div>
+
 <div id="image-submission">
+    <h2>Ändere Rollen Icon</h2>
     <input type="file" id="image-input-file">
     <input type="url" id="image-input-url">
     <button id="upload-button">Setze Bild für die Rolle</button>
 </div>
 
-<div class="center">
+<div class="center margin-top-30">
     <h2>How To Run</h2>
     <p id="howtorun-text"></p>
-    <button id="edit-button-how-to-run" class="icon-button" type="reset"><i class="fa-solid fa-pen fa-pen-to-square" id="edit-button-icon"></i></button>
-    <form>
-        <textarea class="howtorun-input" id="howtorun-input" cols="60" rows="6" placeholder="How To Run Text"></textarea>
-        <button id="howtorun-button" class="howtorun-button center" type="submit">Change Text</button>
+    <form class="center">
+        <textarea id="howtorun-input" class="text-area-input" cols="60" rows="6" placeholder="How To Run Text"></textarea>
+        <button id="howtorun-button" class="howtorun-button" type="submit">Ändere How To Run Text</button>
     </form>
 </div>
 
