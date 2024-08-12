@@ -1,7 +1,17 @@
 document.addEventListener("DOMContentLoaded",function () {
     const searchParameters = new URLSearchParams(window.location.search);
     const key = searchParameters.get("r");
-    const role = JSON.parse(localStorage.getItem(key));
+    let role;
+    let roleIndex;
+    const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
+    const roleIdeas = websiteStorage["roleIdeas"];
+    for (let i = 0; i < roleIdeas.length; i++) {
+        if (roleIdeas[i]["key"] === key) {
+            role = roleIdeas[i];
+            roleIndex = i;
+        }
+    }
+    const websiteStorageString = "websiteStorage1";
 
     if (role["comments"] === undefined) {
         role["comments"] = [];
@@ -41,15 +51,15 @@ document.addEventListener("DOMContentLoaded",function () {
         grayStarIcon.setAttribute("class", "fa-regular fa-star");
         roleRating.append(grayStarIcon);
     }
-    roleRating.append(" " + role["rating"] + "/10");
+    if (role["rating"] !== undefined) {
+        roleRating.append(" " + role["rating"] + "/10");
+    }
     const halfStarIcon = document.createElement("i");
 
     const howToRunInput = document.getElementById("howtorun-input");
     howToRunInput.value = role["howtorun"] ?? '';
 
     const howToRunChangeButton = document.getElementById("howtorun-button");
-
-    const editButton = document.getElementById("edit-button-how-to-run");
 
     document.getElementById("howtorun-text").innerHTML = role["howtorun"];
 
@@ -91,10 +101,7 @@ document.addEventListener("DOMContentLoaded",function () {
         const input = document.getElementById("howtorun-input");
         howToRunText.textContent = input.value;
         role["howtorun"] = howToRunText.textContent;
-        localStorage.setItem(key, JSON.stringify(role));
-        editButton.style.display = "block";
-        howToRunInput.style.display = "none";
-        howToRunChangeButton.style.display = "none";
+        localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
     });
 
     uploadButton.addEventListener("click", function (event) {
@@ -113,8 +120,8 @@ document.addEventListener("DOMContentLoaded",function () {
         if (imageString === "") {
             return;
         }
-        role["image"] = imageString;
-        localStorage.setItem(key, JSON.stringify(role));
+        websiteStorage["roleIdeas"][roleIndex]["image"] = imageString;
+        localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
         document.getElementById("wiki-role-image").setAttribute("src", role["image"]);
     });
 
@@ -133,8 +140,8 @@ document.addEventListener("DOMContentLoaded",function () {
             message: inputComment.value,
             key: commentKey
         }
-        role["comments"].push(comment);
-        localStorage.setItem(key, JSON.stringify(role));
+        websiteStorage["roleIdeas"][roleIndex]["comments"].push(comment);
+        localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
         inputComment.value = "";
         displayComments();
     });
@@ -177,7 +184,7 @@ document.addEventListener("DOMContentLoaded",function () {
         role["name"] = editRoleNameInput.value;
         role["characterType"] = editCharacterTypeInput.value;
         role["abilityText"] = editAbilityTextInput.value;
-        localStorage.setItem(key,JSON.stringify(role));
+        localStorage.setItem(websiteStorageString,JSON.stringify(websiteStorage));
         displayRole();
     });
 
@@ -200,7 +207,7 @@ document.addEventListener("DOMContentLoaded",function () {
 
             deleteButton.addEventListener("click", function () {
                 role["comments"].splice(i, 1);
-                localStorage.setItem(key, JSON.stringify(role));
+                localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
                 displayComments();
             });
         }

@@ -1,14 +1,28 @@
 document.addEventListener("DOMContentLoaded",function () {
 
+    const websiteStorageString = "websiteStorage1";
+
     document.getElementById("js-add-role").addEventListener("click",addRole);
+
+    if (localStorage.getItem(websiteStorageString) === null) {
+        const storage = {
+            roleIdeas: [],
+            page: "1"
+        }
+        localStorage.setItem(websiteStorageString,JSON.stringify(storage));
+    }
+
+    const webSiteStorage1 = JSON.parse(localStorage.getItem(websiteStorageString));
 
     const roleSearch = document.getElementById("role-search");
     const characterTypSelection = document.getElementById("character-typ-selection");
     const sortingDropDownMenu = document.getElementById("sorting");
     sortingDropDownMenu.value = "Neuste zuerst";
 
-    displayRoles("Neuste zuerst");
+    displayRoles(sortingDropDownMenu.value);
     displayRatings();
+    setEmptyListContent();
+    showPages();
 
     function addRole(event) {
         event.preventDefault();
@@ -18,31 +32,33 @@ document.addEventListener("DOMContentLoaded",function () {
         if (roleNameInput.value === "" || characterTypeInput.value === "" || abilityTextInput.value === "") {
             return;
         }
-        const key = Date.now().toString();
+
         const role = {
             name: roleNameInput.value,
             characterType: characterTypeInput.value,
-            abilityText: abilityTextInput.value
+            abilityText: abilityTextInput.value,
+            key: Date.now().toString()
         }
-        localStorage.setItem(key, JSON.stringify(role));
+        webSiteStorage1["roleIdeas"].push(role);
+        localStorage.setItem(websiteStorageString, JSON.stringify(webSiteStorage1));
         roleNameInput.value = "";
         abilityTextInput.value = "";
-        displayRoles("Neuste zuerst");
+        displayRoles(sortingDropDownMenu.value);
+        showPages();
     }
 
     function displayRoles(input) {
         const array = createTempLocalStorage();
-        array.sort((a, b) => a.key - b.key);
         if (input === "Neuste zuerst") {
             array.reverse();
         }
         if (input === "Alphabet A-Z") {
-            array.sort((a,b) => sortAlphabetically(a["role"],b["role"],true));
+            array.sort((a,b) => sortAlphabetically(a["name"],b["name"],true));
         }
         if (input === "Alphabet Z-A") {
-            array.sort((a,b) => sortAlphabetically(a["role"],b["role"],false));
+            array.sort((a,b) => sortAlphabetically(a["name"],b["name"],false));
         }
-        const roleIdeaArray = array.slice((Number.parseInt(localStorage.getItem("page")) - 1) * 10,Number.parseInt(localStorage.getItem("page")) * 10);
+        const roleIdeaArray = array.slice((Number.parseInt(webSiteStorage1["page"]) - 1) * 10,Number.parseInt(webSiteStorage1["page"]) * 10);
         document.getElementById("homebrewroles").innerHTML = "";
 
         const table = document.createElement("table");
@@ -50,9 +66,10 @@ document.addEventListener("DOMContentLoaded",function () {
 
         const tableBody = document.createElement("tbody");
 
-         for (let roleIdea of roleIdeaArray) {
+         for (let i = 0; i < roleIdeaArray.length; i++) {
 
-             const role = JSON.parse(localStorage.getItem(roleIdea.key));
+             const role = roleIdeaArray[i];
+             const key = role["key"].toString();
 
              const columnRoleIdea = document.createElement("td");
              columnRoleIdea.setAttribute("class","column-role-idea");
@@ -62,7 +79,7 @@ document.addEventListener("DOMContentLoaded",function () {
              tableRow.setAttribute("class","table-row-role-idea");
 
              const list = document.createElement("li");
-             list.setAttribute("id",roleIdea.key);
+             list.setAttribute("id",key);
              list.setAttribute("class","role-idea-list");
 
              const image = document.createElement("img");
@@ -75,28 +92,29 @@ document.addEventListener("DOMContentLoaded",function () {
 
              const deleteButton = document.createElement("button");
              deleteButton.setAttribute("class","js-delete-button icon-button");
-             deleteButton.setAttribute("id",roleIdea.key);
-             deleteButton.setAttribute("data-key",roleIdea.key);
+             deleteButton.setAttribute("id",key);
+             deleteButton.setAttribute("data-key",key);
 
              const deleteButtonIcon = document.createElement("i");
              deleteButtonIcon.setAttribute("class","js-delete-button fa-solid fa-trash");
-             deleteButtonIcon.setAttribute("data-key",roleIdea.key);
+             deleteButtonIcon.setAttribute("data-key",key);
 
              const input = document.createElement("input");
-             input.setAttribute("id",roleIdea.key + "-rate-field");
+             input.setAttribute("id",key + "-rate-field");
              input.setAttribute("class","rate-field");
              input.setAttribute("type","number");
-             input.setAttribute("name","rating" + roleIdea.key);
+             input.setAttribute("name","rating" + key);
              input.setAttribute("min","0");
              input.setAttribute("max","10");
 
              const rateButton = document.createElement("button");
              rateButton.setAttribute("class","rate-button icon-button");
-             rateButton.setAttribute("data-key",roleIdea.key);
+             rateButton.setAttribute("id",key + "-rate-field");
+             rateButton.setAttribute("data-key",key);
 
              const rateButtonIcon = document.createElement("i");
              rateButtonIcon.setAttribute("class","rate fa-sharp fa-regular fa-star");
-             rateButtonIcon.setAttribute("data-key",roleIdea.key);
+             rateButtonIcon.setAttribute("data-key",key);
 
              const wikiButton = document.createElement("button");
 
@@ -104,7 +122,7 @@ document.addEventListener("DOMContentLoaded",function () {
              wikiButtonIcon.setAttribute("class","fa-solid fa-book");
 
              const anchor = document.createElement("a");
-             anchor.setAttribute("href","wiki.html?r=" + roleIdea.key);
+             anchor.setAttribute("href","wiki.html?r=" + key);
 
              rateButton.append(rateButtonIcon);
              deleteButton.append(deleteButtonIcon);
@@ -123,23 +141,33 @@ document.addEventListener("DOMContentLoaded",function () {
              document.getElementById("homebrewroles").append(table);
 
              deleteButton.addEventListener("click",function () {
-                 localStorage.removeItem(roleIdea.key);
+                 for (let j = 0; j < webSiteStorage1.roleIdeas.length; j++) {
+                     if (webSiteStorage1.roleIdeas[j].key === key) {
+                         webSiteStorage1.roleIdeas.splice(j,1);
+                     }
+                 }
+                 localStorage.setItem(websiteStorageString,JSON.stringify(webSiteStorage1));
                  tableRow.remove();
-                 displayRoles();
-                 displayRatings();
+                 displayRatings(sortingDropDownMenu.value);
                  setEmptyListContent();
+                 showPages();
              });
 
              rateButton.addEventListener("click",function () {
-                 const input = document.getElementById(roleIdea.key + "-rate-field");
-                 if (input.value === "" || input.value < 0 || input.value > 10) {
-                     input.value = "";
-                     return;
+                 for (let j = 0; j < webSiteStorage1.roleIdeas.length; j++) {
+                     if (webSiteStorage1.roleIdeas[j].key === key) {
+                         const input = document.getElementById(webSiteStorage1.roleIdeas[j].key + "-rate-field");
+                         if (input.value === "" || input.value < 0 || input.value > 10) {
+                             input.value = "";
+                             return;
+                         }
+                         webSiteStorage1["roleIdeas"][j]["rating"] = input.value;
+                         localStorage.setItem(websiteStorageString,JSON.stringify(webSiteStorage1));
+                         displayRatings();
+                         input.value = "";
+                         break;
+                     }
                  }
-                 role["rating"] = input.value;
-                 localStorage.setItem(roleIdea.key,JSON.stringify(role));
-                 displayRatings();
-                 input.value = "";
              });
          }
 
@@ -151,12 +179,12 @@ document.addEventListener("DOMContentLoaded",function () {
     function setEmptyListContent() {
         let roleIdeaCount = 0;
         let ratingCount = 0;
-        for (let i = 0; i < localStorage.length; i++) {
-            const role = localStorage.getItem(localStorage.key(i));
-            if (role["name"] !== null) {
+        for (let i = 0; i < webSiteStorage1["roleIdeas"].length; i++) {
+            const role = webSiteStorage1["roleIdeas"][i];
+            if (role["name"] !== undefined) {
                 roleIdeaCount++;
             }
-            if (role["rating"] !== null) {
+            if (role["rating"] !== undefined) {
                 ratingCount++;
             }
         }
@@ -164,14 +192,14 @@ document.addEventListener("DOMContentLoaded",function () {
             document.getElementById("homebrewroles").innerHTML = "Die Rollenliste ist leer";
         }
         if (ratingCount === 0) {
-            document.getElementById("role-history").innerHTML = "Niemand hat bisher eine Rolle bewertet";
+            document.getElementById("rate-history").innerHTML = "Niemand hat bisher eine Rolle bewertet";
         }
     }
 
     function displayRatings() {
         let roleIdeaRatingsString = "";
-        for (let i = 0; i < localStorage.length; i++) {
-            const role = JSON.parse(localStorage.getItem(localStorage.key(i)));
+        for (let i = 0; i < webSiteStorage1["roleIdeas"].length; i++) {
+            const role = webSiteStorage1["roleIdeas"][i];
             if (role["rating"] === undefined) {
                 continue;
             }
@@ -193,14 +221,9 @@ document.addEventListener("DOMContentLoaded",function () {
     });
     function createTempLocalStorage() {
         const array = [];
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            if (key === "page") {
-                continue;
-            }
-            const value = localStorage.getItem(key);
+        for (let i = 0; i < webSiteStorage1["roleIdeas"].length; i++) {
+            const role = webSiteStorage1["roleIdeas"][i];
             const input = characterTypSelection.value;
-            const role = JSON.parse(value);
             if (role["characterType"] !== input && input !== "All") {
                 continue;
             }
@@ -210,19 +233,19 @@ document.addEventListener("DOMContentLoaded",function () {
                 !role["abilityText"].toUpperCase().includes(roleSearch.value.toUpperCase())) {
                 continue;
             }
-            array.push({key,role});
+            array.push(role);
         }
         return array;
     }
 
     function sortAlphabetically(a, b, alphabetically) {
-        if (a["name"].toUpperCase() < b["name"].toUpperCase()) {
+        if (a.toUpperCase() < b.toUpperCase()) {
             if (alphabetically) {
                 return -1;
             }
             return 1;
         }
-        if (a["name"].toUpperCase() > b["name"].toUpperCase()) {
+        if (a.toUpperCase() > b.toUpperCase()) {
             if (alphabetically) {
                 return 1;
             }
@@ -231,21 +254,21 @@ document.addEventListener("DOMContentLoaded",function () {
         return 0;
     }
 
-    showPages();
-
     function showPages() {
-        const pages = (localStorage.length - 1) / 10;
+        const pages = (webSiteStorage1["roleIdeas"].length - 1) / 10;
+        document.getElementById("role-idea-page-selection").innerHTML = "";
         for (let i = 0; i < pages; i++) {
             const button = document.createElement("button");
             button.textContent = (i + 1).toString();
             button.classList.remove("blue");
-            if (localStorage.getItem("page") === button.textContent) {
+            if (webSiteStorage1["page"] === button.textContent) {
                 button.setAttribute("class", "blue");
             }
             button.addEventListener("click",function () {
-                localStorage.setItem("page",button.textContent);
+                webSiteStorage1["page"] = button.textContent;
+                localStorage.setItem(websiteStorageString,JSON.stringify(webSiteStorage1));
                 document.querySelectorAll(".blue").forEach(element => element.classList.remove("blue"));
-                if (localStorage.getItem("page") === button.textContent) {
+                if (webSiteStorage1["page"] === button.textContent) {
                     button.setAttribute("class", "blue");
                 }
                 displayRoles(sortingDropDownMenu.value);
