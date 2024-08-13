@@ -54,7 +54,6 @@ document.addEventListener("DOMContentLoaded",function () {
     if (role["rating"] !== undefined) {
         roleRating.append(" " + role["rating"] + "/10");
     }
-    const halfStarIcon = document.createElement("i");
 
     const howToRunInput = document.getElementById("howtorun-input");
     howToRunInput.value = role["howtorun"] ?? '';
@@ -63,32 +62,12 @@ document.addEventListener("DOMContentLoaded",function () {
 
     document.getElementById("howtorun-text").innerHTML = role["howtorun"];
 
-    const comments = document.createElement("div");
-    comments.setAttribute("class", "center margin-top-30");
-
-    const commentForm = document.createElement("form");
-
-    const inputComment = document.createElement("input");
-    inputComment.setAttribute("type", "text");
-    inputComment.setAttribute("placeholder", "Kommentar schreiben");
-
-    const commentButton = document.createElement("button");
-    commentButton.setAttribute("class", "howtorun-button");
-    commentButton.textContent = "Kommentar hinzufügen";
-
-    const ul = document.createElement("ul");
-    ul.setAttribute("id", "comments-list");
+    const inputComment = document.getElementById("input-comment");
 
     howToRunInput.style.display = "none";
     howToRunChangeButton.style.display = "none";
-    const imageSubmission =document.getElementById("image-submission");
+    const imageSubmission = document.getElementById("image-submission");
     imageSubmission.style.display = "none";
-
-    commentForm.append(inputComment);
-    commentForm.append(commentButton);
-    comments.append(commentForm);
-    comments.append(ul);
-    document.body.append(comments);
 
     displayComments();
 
@@ -125,7 +104,7 @@ document.addEventListener("DOMContentLoaded",function () {
         document.getElementById("wiki-role-image").setAttribute("src", role["image"]);
     });
 
-    commentButton.addEventListener("click", function (event) {
+    document.getElementById("comment-button").addEventListener("click", function (event) {
         event.preventDefault();
         if (inputComment.value === "") {
             return;
@@ -189,9 +168,10 @@ document.addEventListener("DOMContentLoaded",function () {
     });
 
     function displayComments() {
-        ul.innerHTML = "";
+        document.getElementById("comments-list").innerHTML = "";
         for (let i = 0; i < role["comments"].length; i++) {
             const list = document.createElement("li");
+            list.setAttribute("class","max-width comment");
             list.textContent = role["comments"][i]["message"];
             const deleteButton = document.createElement("button");
             deleteButton.setAttribute("class", "icon-button");
@@ -203,7 +183,7 @@ document.addEventListener("DOMContentLoaded",function () {
 
             deleteButton.append(deleteButtonIcon);
             list.append(deleteButton);
-            ul.append(list);
+            document.getElementById("comments-list").append(list);
 
             deleteButton.addEventListener("click", function () {
                 role["comments"].splice(i, 1);

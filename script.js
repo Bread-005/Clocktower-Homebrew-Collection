@@ -7,7 +7,8 @@ document.addEventListener("DOMContentLoaded",function () {
     if (localStorage.getItem(websiteStorageString) === null) {
         const storage = {
             roleIdeas: [],
-            page: "1"
+            page: "1",
+            users: []
         }
         localStorage.setItem(websiteStorageString,JSON.stringify(storage));
     }
@@ -76,7 +77,6 @@ document.addEventListener("DOMContentLoaded",function () {
              const columnDeleteAndRate = document.createElement("td");
              columnDeleteAndRate.setAttribute("class","column-delete-and-rate");
              const tableRow = document.createElement("tr");
-             tableRow.setAttribute("class","table-row-role-idea");
 
              const list = document.createElement("li");
              list.setAttribute("id",key);
@@ -148,7 +148,8 @@ document.addEventListener("DOMContentLoaded",function () {
                  }
                  localStorage.setItem(websiteStorageString,JSON.stringify(webSiteStorage1));
                  tableRow.remove();
-                 displayRatings(sortingDropDownMenu.value);
+                 displayRoles(sortingDropDownMenu.value);
+                 displayRatings();
                  setEmptyListContent();
                  showPages();
              });
