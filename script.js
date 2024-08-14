@@ -14,11 +14,13 @@ document.addEventListener("DOMContentLoaded",function () {
     webSiteStorage1.page = 1;
     localStorage.setItem(websiteStorageString,JSON.stringify(webSiteStorage1));
 
+    const currentUser = document.cookie.split(":")[0];
+
     displayRoles();
     displayRatings();
     setEmptyListContent();
 
-    document.getElementById("username-display-main-page").append(document.cookie.split(":")[0]);
+    document.getElementById("username-display-main-page").append(currentUser);
 
     function addRole(event) {
         event.preventDefault();
@@ -34,7 +36,7 @@ document.addEventListener("DOMContentLoaded",function () {
             characterType: characterTypeInput.value,
             abilityText: abilityTextInput.value,
             key: Date.now().toString(),
-            owner: document.cookie.split(":")[0],
+            owner: currentUser,
             image: "",
             howtorun: "",
             comments: [],
@@ -92,14 +94,6 @@ document.addEventListener("DOMContentLoaded",function () {
              }
              list.textContent = role["name"] + " (" + role["characterType"] + "): " + role["abilityText"];
 
-             const deleteButton = document.createElement("button");
-             deleteButton.setAttribute("id",key);
-             deleteButton.setAttribute("data-key",key);
-
-             const deleteButtonIcon = document.createElement("i");
-             deleteButtonIcon.setAttribute("class","fa-solid fa-trash");
-             deleteButtonIcon.setAttribute("data-key",key);
-
              const input = document.createElement("input");
              input.setAttribute("id",key + "-rate-field");
              input.setAttribute("class","rate-field");
@@ -125,7 +119,6 @@ document.addEventListener("DOMContentLoaded",function () {
              anchor.setAttribute("href","wiki.html?r=" + key);
 
              rateButton.append(rateButtonIcon);
-             deleteButton.append(deleteButtonIcon);
              wikiButton.append(wikiButtonIcon);
              anchor.append(wikiButton);
              list.prepend(image);
@@ -133,9 +126,6 @@ document.addEventListener("DOMContentLoaded",function () {
              columnDeleteAndRate.append(input);
              columnDeleteAndRate.append(rateButton);
              columnDeleteAndRate.append(anchor);
-             if (owner === document.cookie.split(":")[0]) {
-                 columnDeleteAndRate.append(deleteButton);
-             }
              tableRow.append(columnRoleIdea);
              tableRow.append(columnDeleteAndRate);
              tableBody.append(tableRow);
@@ -145,19 +135,6 @@ document.addEventListener("DOMContentLoaded",function () {
              if (roleIdeaArray.length === 0) {
                  document.getElementById("homebrewroles").innerHTML = "There is no role, that matches your search";
              }
-
-             deleteButton.addEventListener("click",function () {
-                 for (let j = 0; j < webSiteStorage1.roleIdeas.length; j++) {
-                     if (webSiteStorage1.roleIdeas[j].key === key) {
-                         webSiteStorage1.roleIdeas.splice(j,1);
-                     }
-                 }
-                 localStorage.setItem(websiteStorageString,JSON.stringify(webSiteStorage1));
-                 tableRow.remove();
-                 displayRoles();
-                 displayRatings();
-                 setEmptyListContent();
-             });
 
              rateButton.addEventListener("click",function () {
                  for (let j = 0; j < webSiteStorage1.roleIdeas.length; j++) {
@@ -169,11 +146,11 @@ document.addEventListener("DOMContentLoaded",function () {
                          }
                          const rating = {
                              rating: input.value,
-                             owner: document.cookie.split(":")[0]
+                             owner: currentUser
                          }
                          input.value = "";
                          for (let k = 0; k < role.rating.length; k++) {
-                             if (role.rating[k].owner === document.cookie.split(":")[0]) {
+                             if (role.rating[k].owner === currentUser) {
                                  webSiteStorage1.roleIdeas[j].rating[k] = rating;
                                  localStorage.setItem(websiteStorageString,JSON.stringify(webSiteStorage1));
                                  displayRatings();
@@ -222,7 +199,7 @@ document.addEventListener("DOMContentLoaded",function () {
                 if (role["rating"][j]["rating"] === undefined) {
                     continue;
                 }
-                if (role.rating[j].owner !== document.cookie.split(":")[0]) {
+                if (role.rating[j].owner !== currentUser) {
                     continue;
                 }
                 roleIdeaRatingsString = roleIdeaRatingsString.concat("<li>" + " You rated " + role["name"] + " with " + role["rating"][j]["rating"] + "</li>");
@@ -242,6 +219,10 @@ document.addEventListener("DOMContentLoaded",function () {
     roleSearch.addEventListener("input",function () {
         displayRoles();
     });
+
+    document.getElementById("only-my-roles").addEventListener("change",function () {
+        displayRoles();
+    });
     function createTempLocalStorage() {
         const array = [];
         for (let i = 0; i < webSiteStorage1["roleIdeas"].length; i++) {
@@ -249,6 +230,11 @@ document.addEventListener("DOMContentLoaded",function () {
             const input = characterTypSelection.value;
             if (role["characterType"] !== input && input !== "All") {
                 continue;
+            }
+            if (document.getElementById("only-my-roles").checked) {
+                if (webSiteStorage1.roleIdeas[i].owner !== currentUser) {
+                    continue;
+                }
             }
             if (roleSearch.value !== "" &&
                 !role["name"].toUpperCase().includes(roleSearch.value.toUpperCase()) &&

@@ -16,9 +16,9 @@ button {
 }
 
 .center {
-    align-items: center;
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: center;
 }
 
@@ -227,4 +227,33 @@ textarea {
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-end;
+}
+
+.font-size-18 {
+    font-size: 18px;
+}
+
+.margin-top-10 {
+    margin-top: 10px;
+}
+
+.delete-popup-background {
+    background-color: rgba(150,150,150,0.7);
+    top: 0;
+    left: 0;
+    width: 100%;
+    position: fixed;
+    height: 100%;
+}
+
+.space-between {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.delete-confirmation-popup {
+    background-color: white;
+    width: 40%;
 }

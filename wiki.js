@@ -2,33 +2,33 @@ document.addEventListener("DOMContentLoaded",function () {
     const searchParameters = new URLSearchParams(window.location.search);
     const key = searchParameters.get("r");
     let role;
-    let roleIndex;
     const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
     const roleIdeas = websiteStorage["roleIdeas"];
     for (let i = 0; i < roleIdeas.length; i++) {
         if (roleIdeas[i]["key"] === key) {
             role = roleIdeas[i];
-            roleIndex = i;
         }
     }
     const websiteStorageString = "websiteStorage1";
     role["inEditMode"] = false;
 
-    const uploadButton = document.getElementById("upload-button");
+    document.getElementById("edit-role-field").style.display = "none";
 
     if (role["image"] !== "") {
         document.getElementById("wiki-role-image").setAttribute("src", role["image"]);
     }
 
+    const currentUser = document.cookie.split(":")[0];
+
     displayRole();
-    if (document.cookie.split(":")[0] !== role.owner) {
+    if (currentUser !== role.owner) {
         document.getElementById("edit-button").style.display = "none";
     }
-    document.getElementById("username-display-wiki-page").append(document.cookie.split(":")[0]);
+    document.getElementById("username-display-wiki-page").append(currentUser);
 
     const personalRoleRating = document.getElementById("personal-role-rating");
     for (let i = 0; i < role["rating"].length; i++) {
-        if (role["rating"][i]["owner"] === document.cookie.split(":")[0]) {
+        if (role["rating"][i]["owner"] === currentUser) {
             personalRoleRating.textContent = "Your rating: ";
             if (role["rating"][i]["rating"] === undefined) {
                 personalRoleRating.textContent = "You have not rated this role";
@@ -80,7 +80,14 @@ document.addEventListener("DOMContentLoaded",function () {
 
     const howToRunText = document.getElementById("howtorun-text");
 
-    document.getElementById("edit-role-field").style.display = "none";
+    const deleteRoleDiv = document.getElementById("delete-role-div");
+    deleteRoleDiv.style.display = "none";
+
+    const deleteConfirmationYesButton = document.getElementById("delete-confirmation-yes-button");
+    const deleteConfirmationCancelButton = document.getElementById("delete-confirmation-cancel-button");
+
+    const deletePopupBackground = document.getElementById("delete-popup-background");
+    deletePopupBackground.style.display = "none";
 
     howToRunChangeButton.addEventListener("click", function (event) {
         event.preventDefault();
@@ -90,7 +97,7 @@ document.addEventListener("DOMContentLoaded",function () {
         localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
     });
 
-    uploadButton.addEventListener("click", function (event) {
+    document.getElementById("upload-button").addEventListener("click", function (event) {
         event.preventDefault();
         const uploadImage = document.getElementById("image-input-file");
         const uploadImageURL = document.getElementById("image-input-url");
@@ -106,7 +113,11 @@ document.addEventListener("DOMContentLoaded",function () {
         if (imageString === "") {
             return;
         }
-        websiteStorage["roleIdeas"][roleIndex]["image"] = imageString;
+        for (let i = 0; i < websiteStorage.roleIdeas.length; i++) {
+            if (websiteStorage.roleIdeas[i].key === key) {
+                websiteStorage.roleIdeas[i].image = imageString;
+            }
+        }
         localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
         document.getElementById("wiki-role-image").setAttribute("src", role["image"]);
     });
@@ -116,18 +127,18 @@ document.addEventListener("DOMContentLoaded",function () {
         if (inputComment.value === "") {
             return;
         }
-        if (inputComment.value.includes("beleidigung")) {
-            inputComment.value = "";
-            return;
-        }
         const commentKey = Date.now().toString();
 
         const comment = {
             message: inputComment.value,
             key: commentKey,
-            owner: document.cookie.split(":")[0]
+            owner: currentUser
         }
-        websiteStorage["roleIdeas"][roleIndex]["comments"].push(comment);
+        for (let i = 0; i < websiteStorage.roleIdeas.length; i++) {
+            if (websiteStorage.roleIdeas[i].key === key) {
+                websiteStorage.roleIdeas[i].comments.push(comment);
+            }
+        }
         localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
         inputComment.value = "";
         displayComments();
@@ -142,24 +153,24 @@ document.addEventListener("DOMContentLoaded",function () {
         role["inEditMode"] = !role["inEditMode"];
 
         if (role["inEditMode"]) {
-            //edit role text etc
             document.getElementById("edit-role-field").style.display = "flex";
             editRoleNameInput.value = role["name"];
             editCharacterTypeInput.value = role["characterType"];
             editAbilityTextInput.value = role["abilityText"];
 
-            //edit How to Run
             howToRunInput.style.display = "block";
             howToRunChangeButton.style.display = "block";
 
-            //image submission
             imageSubmission.style.display = "block";
+
+            deleteRoleDiv.style.display = "flex";
         }
         if (!role["inEditMode"]) {
             document.getElementById("edit-role-field").style.display = "none";
             howToRunInput.style.display = "none";
             howToRunChangeButton.style.display = "none";
             imageSubmission.style.display = "none";
+            deleteRoleDiv.style.display = "none";
         }
     });
 
@@ -173,6 +184,26 @@ document.addEventListener("DOMContentLoaded",function () {
         role["abilityText"] = editAbilityTextInput.value;
         localStorage.setItem(websiteStorageString,JSON.stringify(websiteStorage));
         displayRole();
+    });
+
+    document.getElementById("delete-role-button").addEventListener("click",function (event) {
+        event.preventDefault();
+        deletePopupBackground.style.display = "flex";
+    });
+
+    deleteConfirmationYesButton.addEventListener("click",function (event) {
+        event.preventDefault();
+        for (let i = 0; i < websiteStorage.roleIdeas.length; i++) {
+            if (websiteStorage.roleIdeas[i].key === key) {
+                websiteStorage.roleIdeas.splice(i,1);
+            }
+        }
+        localStorage.setItem(websiteStorageString,JSON.stringify(websiteStorage));
+        window.location = "index.html";
+    });
+
+    deleteConfirmationCancelButton.addEventListener("click",function () {
+        deletePopupBackground.style.display = "none";
     });
 
     function displayComments() {
@@ -189,7 +220,7 @@ document.addEventListener("DOMContentLoaded",function () {
             deleteButtonIcon.setAttribute("class", "js-delete-button fa-solid fa-trash");
             deleteButtonIcon.setAttribute("data-key", role["comments"][i]["key"]);
 
-            if (role["comments"][i].owner === document.cookie.split(":")[0] || role.owner === document.cookie.split(":")[0]) {
+            if (role["comments"][i].owner === currentUser || role.owner === currentUser) {
                 deleteButton.append(deleteButtonIcon);
                 list.append(deleteButton);
             }
