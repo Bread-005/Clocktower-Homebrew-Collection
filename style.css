@@ -163,8 +163,9 @@ textarea {
 .edit-button-container {
     width: 200px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
 .height-20 {
@@ -212,4 +213,18 @@ textarea {
 
 .comment {
     overflow-wrap: break-word;
+}
+
+.flex-end {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.top-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-end;
 }

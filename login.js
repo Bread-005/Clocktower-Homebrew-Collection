@@ -6,12 +6,28 @@ document.addEventListener("DOMContentLoaded",function () {
     const loginButton = document.getElementById("login-button");
     const websiteStorage = JSON.parse(localStorage.getItem(websiteStorageString));
 
-    if (websiteStorage["users"] === undefined) {
-        websiteStorage["users"] = [];
+    if (localStorage.getItem(websiteStorageString) === null) {
+        const storage = {
+            roleIdeas: [],
+            page: 1,
+            users: []
+        }
+        localStorage.setItem(websiteStorageString,JSON.stringify(storage));
+    }
+
+    if (document.cookie === "") {
+        document.cookie = "iajrhugairopiarjoairjk138174590015mf,sloivohgwr18514";
     }
 
     userNameInput.value = "";
     passwordInput.value = "";
+
+    for (let i = 0; i < websiteStorage["users"].length; i++) {
+        if (websiteStorage.users[i].name === document.cookie.split(":")[0] && websiteStorage.users[i].password === document.cookie.split(":")[1]) {
+            window.location = "index.html";
+        }
+    }
+
     loginButton.addEventListener("click",function () {
         if (userNameInput.value === "") {
             document.getElementById("message").innerHTML = "You have to provide a username";
@@ -26,8 +42,10 @@ document.addEventListener("DOMContentLoaded",function () {
             if (userNameInput.value === websiteStorage.users[i].name) {
                 if (passwordInput.value !== websiteStorage.users[i].password) {
                     document.getElementById("message").innerHTML = "You provided the wrong password";
+                    passwordInput.value = "";
                     return;
                 }
+                document.cookie = userNameInput.value + ":" + passwordInput.value;
                 window.location = "index.html";
                 return;
             }

@@ -7,29 +7,30 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" crossorigin="anonymous" href="https://core.ontavio.de/font-awesome/6.4.0/css/all.min.css"/>
-    <title>Clocktower Ideen Sammlung</title>
+    <title>Clocktower Roleidea Collection</title>
 </head>
 <body>
-    <h1 class="center">Clocktower Ideen Sammlung</h1>
+    <h1 class="center">Clocktower Roleidea Collection</h1>
 
     <div class="filter">
         <div></div>
-        <div>
-            <a href="login.html"><button id="logout" class="flex-end">Logout</button></a>
+        <div class="flex-end">
+            <p id="username-display-main-page">Your Username: </p>
+            <button id="logout">Logout</button>
         </div>
     </div>
     <div class="center">
         <img src="BotC.webp" width="200px">
     </div>
     <div class="rolesidea center margin-top-20">
-        Schreibe hier eine Rollenidee
+        Write your roleidea here
         <form class="flex-start">
             <div>
-                <label class="margin" for="role-name">Rollenname</label>
+                <label class="margin" for="role-name">Rolename</label>
                 <input class="input" id="role-name" type="text"/>
             </div>
             <div class="margin">
-                <label for="character-types">Charaktertyp</label>
+                <label for="character-types">Charactertype</label>
                 <select class="character-types" id="character-types">
                     <option value="Townsfolk">Townsfolk</option>
                     <option value="Outsider">Outsider</option>
@@ -38,18 +39,18 @@
                     <option value="Traveller">Traveller</option>
                 </select>
             </div>
-            <textarea class="text-area-input margin" id="ability-text" cols="30" rows="4" placeholder="Fähigkeitentext"></textarea>
+            <textarea class="text-area-input margin" id="ability-text" cols="30" rows="4" placeholder="Abilitytext"></textarea>
             <button id="js-add-role" class="button" name="click" type="reset">
-                Rolle absenden
+                Submit Role
             </button>
         </form>
-        <h2>Rollen Ideen</h2>
+        <h2>Role Ideas</h2>
     </div>
     <div class="filter">
         <div>
-            Suche
+            Search
             <input id="role-search" type="text" class="padding">
-            CharacterTyp
+            CharacterType
             <select id="character-typ-selection" class="padding">
                 <option value="All">All</option>
                 <option value="Townsfolk">Townsfolk</option>
@@ -60,17 +61,17 @@
             </select>
         </div>
         <div>
-            Sortierung
+            Sorting
             <select id="sorting" class="padding">
                 <option value="Alphabet A-Z">Alphabet A-Z</option>
                 <option value="Alphabet Z-A">Alphabet Z-A</option>
-                <option value="Neuste zuerst">Neuste zuerst</option>
-                <option value="Älteste zuerst">Älteste zuerst</option>
+                <option value="Newest first">Newest first</option>
+                <option value="Oldest first">Oldest first</option>
             </select>
         </div>
     </div>
     <div class="center">
-        <div id="homebrewroles" class="homebrewroles center margin-top-20">Die Rollenliste ist leer</div>
+        <div id="homebrewroles" class="homebrewroles center margin-top-20">No Roleideas yet</div>
     </div>
     <div id="role-idea-page-selection" class="next-to-each-other">
 
@@ -78,11 +79,11 @@
 
 
     <div class="center margin-top-30">
-        <a href="https://script.bloodontheclocktower.com/" target="_blank">Rollen die es schon gibt</a>
+        <a href="https://script.bloodontheclocktower.com/" target="_blank">Already existing roles</a>
     </div>
 
     <div class="rate-history center">
-        <ul id="rate-history">Niemand hat bisher eine Rolle bewertet</ul>
+        <ul id="rate-history">Noone rated a role so far</ul>
     </div>
 
     <script src="script.js" defer></script>

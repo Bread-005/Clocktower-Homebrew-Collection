@@ -12,47 +12,54 @@ document.addEventListener("DOMContentLoaded",function () {
         }
     }
     const websiteStorageString = "websiteStorage1";
-
-    if (role["comments"] === undefined) {
-        role["comments"] = [];
-    }
-    if (role["image"] === undefined) {
-        role["image"] = "";
-    }
-    if (role["howtorun"] === undefined) {
-        role["howtorun"] = "";
-    }
     role["inEditMode"] = false;
 
     const uploadButton = document.getElementById("upload-button");
 
-    if (role["image"]) {
+    if (role["image"] !== "") {
         document.getElementById("wiki-role-image").setAttribute("src", role["image"]);
     }
 
     displayRole();
-
-    const roleRating = document.getElementById("role-rating");
-    roleRating.textContent = "Bewertung: ";
-    if (role["rating"] === undefined) {
-        roleRating.textContent = "Niemand hat diese Rolle bisher bewertet";
+    if (document.cookie.split(":")[0] !== role.owner) {
+        document.getElementById("edit-button").style.display = "none";
     }
+    document.getElementById("username-display-wiki-page").append(document.cookie.split(":")[0]);
 
-    let yellowStarCount = Math.round(Number.parseInt(role["rating"]));
+    const personalRoleRating = document.getElementById("personal-role-rating");
+    for (let i = 0; i < role["rating"].length; i++) {
+        if (role["rating"][i]["owner"] === document.cookie.split(":")[0]) {
+            personalRoleRating.textContent = "Your rating: ";
+            if (role["rating"][i]["rating"] === undefined) {
+                personalRoleRating.textContent = "You have not rated this role";
+            }
+            displayRating(i,personalRoleRating);
+        }
+    }
+    const averageRoleRating = document.getElementById("average-role-rating");
+    averageRoleRating.textContent = "Average Rating: ";
+    let ratingSum = 0.0;
+    for (let i = 0; i < role.rating.length; i++) {
+        ratingSum += Number.parseFloat(role.rating[i].rating);
+    }
+    const averageRating = ratingSum / role.rating.length;
+    let yellowStarCount = Math.round(averageRating);
     let grayStarCount = 10 - yellowStarCount;
     for (let i = 0; i < yellowStarCount; i++) {
         const yellowStarIcon = document.createElement("i");
         yellowStarIcon.setAttribute("class", "fa-solid fa-star");
         yellowStarIcon.setAttribute("style","color: #FFD43B");
-        roleRating.append(yellowStarIcon);
+        averageRoleRating.append(yellowStarIcon);
     }
     for (let i = 0; i < grayStarCount; i++) {
         const grayStarIcon = document.createElement("i");
         grayStarIcon.setAttribute("class", "fa-regular fa-star");
-        roleRating.append(grayStarIcon);
+        averageRoleRating.append(grayStarIcon);
     }
-    if (role["rating"] !== undefined) {
-        roleRating.append(" " + role["rating"] + "/10");
+    averageRoleRating.append(" " + averageRating.toFixed(2) + "/10");
+
+    if (role["rating"].length === 0) {
+        averageRoleRating.textContent = "Nobody rated this role so far";
     }
 
     const howToRunInput = document.getElementById("howtorun-input");
@@ -117,7 +124,8 @@ document.addEventListener("DOMContentLoaded",function () {
 
         const comment = {
             message: inputComment.value,
-            key: commentKey
+            key: commentKey,
+            owner: document.cookie.split(":")[0]
         }
         websiteStorage["roleIdeas"][roleIndex]["comments"].push(comment);
         localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
@@ -181,8 +189,10 @@ document.addEventListener("DOMContentLoaded",function () {
             deleteButtonIcon.setAttribute("class", "js-delete-button fa-solid fa-trash");
             deleteButtonIcon.setAttribute("data-key", role["comments"][i]["key"]);
 
-            deleteButton.append(deleteButtonIcon);
-            list.append(deleteButton);
+            if (role["comments"][i].owner === document.cookie.split(":")[0] || role.owner === document.cookie.split(":")[0]) {
+                deleteButton.append(deleteButtonIcon);
+                list.append(deleteButton);
+            }
             document.getElementById("comments-list").append(list);
 
             deleteButton.addEventListener("click", function () {
@@ -195,7 +205,26 @@ document.addEventListener("DOMContentLoaded",function () {
 
     function displayRole() {
         document.getElementById("role-name").textContent = role["name"];
-        document.getElementById("character-type").textContent = "Charaktertyp: " + role["characterType"];
-        document.getElementById("ability-text").textContent = "Fähigkeit: " + role["abilityText"];
+        document.getElementById("character-type").textContent = "Charactertype: " + role["characterType"];
+        document.getElementById("ability-text").textContent = "Ability: " + role["abilityText"];
+    }
+
+    function displayRating(index,htmlElement) {
+        let yellowStarCount = Math.round(Number.parseInt(role["rating"][index]["rating"]));
+        let grayStarCount = 10 - yellowStarCount;
+        for (let i = 0; i < yellowStarCount; i++) {
+            const yellowStarIcon = document.createElement("i");
+            yellowStarIcon.setAttribute("class", "fa-solid fa-star");
+            yellowStarIcon.setAttribute("style","color: #FFD43B");
+            htmlElement.append(yellowStarIcon);
+        }
+        for (let i = 0; i < grayStarCount; i++) {
+            const grayStarIcon = document.createElement("i");
+            grayStarIcon.setAttribute("class", "fa-regular fa-star");
+            htmlElement.append(grayStarIcon);
+        }
+        if (role["rating"][index]["rating"] !== undefined) {
+            htmlElement.append(" " + role["rating"][index]["rating"] + "/10");
+        }
     }
 })

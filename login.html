@@ -6,19 +6,21 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="next-to-each-other">
-        <div>
+    <div>
+        <div class="next-to-each-other">
             <div>
-                <label for="username-input">Username</label>
-                <input id="username-input" type="text">
-            </div>
-            <div>
-                <label for="password-input">Password</label>
-                <input id="password-input" type="text">
+                <div>
+                    <label for="username-input">Username</label>
+                    <input id="username-input" type="text">
                 </div>
+                <div>
+                    <label for="password-input">Password</label>
+                    <input id="password-input" type="password">
+                    </div>
+            </div>
+            <button id="login-button">Login</button>
         </div>
-        <button id="login-button">Login</button>
-        <h2 id="message"></h2>
+        <p id="message" class="center"></p>
     </div>
 
     <script src="login.js">
