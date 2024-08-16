@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded",function () {
 
     for (let i = 0; i < websiteStorage["users"].length; i++) {
         if (websiteStorage.users[i].name === document.cookie.split(":")[0] && websiteStorage.users[i].password === document.cookie.split(":")[1]) {
-            window.location = "index.html";
+            window.location = "role_idea.html";
         }
     }
 
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded",function () {
                     return;
                 }
                 document.cookie = userNameInput.value + ":" + passwordInput.value;
-                window.location = "index.html";
+                window.location = "role_idea.html";
                 return;
             }
         }

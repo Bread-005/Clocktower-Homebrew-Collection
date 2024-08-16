@@ -337,6 +337,6 @@ document.addEventListener("DOMContentLoaded",function () {
     document.getElementById("logout").addEventListener("click",function (event) {
         event.preventDefault();
         document.cookie = "abdgetevqhjhbjarjaor10298ujka8954rfvjutreewqadhklknvxdrz";
-        window.location = "login.html";
+        window.location = "index.html";
     })
 });

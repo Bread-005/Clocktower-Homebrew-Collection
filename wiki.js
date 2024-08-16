@@ -261,7 +261,7 @@ document.addEventListener("DOMContentLoaded",function () {
             }
         }
         localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
-        window.location = "index.html";
+        window.location = "role_idea.html";
     });
 
     deleteConfirmationCancelButton.addEventListener("click", function () {
