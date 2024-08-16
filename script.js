@@ -243,12 +243,6 @@ document.addEventListener("DOMContentLoaded",function () {
         document.getElementById("rate-history").innerHTML = roleIdeaRatingsString;
     }
 
-    //favorite roles ✔✔✔
-    //credits des rollen owners ✔✔✔
-    //filtern nach Autor ✔✔✔
-    //Herunterladen der Rollen -> json wie bei clocktower ✔✔✔
-    //night Order für Rollen
-
     sortingDropDownMenu.addEventListener("change",displayRoles);
     characterTypSelection.addEventListener("change",displayRoles);
     roleSearch.addEventListener("input",displayRoles);
