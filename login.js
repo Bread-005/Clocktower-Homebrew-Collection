@@ -52,7 +52,8 @@ document.addEventListener("DOMContentLoaded",function () {
         }
         const user = {
             name: userNameInput.value,
-            password: passwordInput.value
+            password: passwordInput.value,
+            favoriteRoles: []
         }
         websiteStorage.users.push(user);
         localStorage.setItem(websiteStorageString,JSON.stringify(websiteStorage));

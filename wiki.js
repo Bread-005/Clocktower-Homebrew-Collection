@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded",function () {
             role = roleIdeas[i];
         }
     }
+    document.title = role.name;
+
     const websiteStorageString = "websiteStorage1";
     role["inEditMode"] = false;
 
@@ -33,7 +35,7 @@ document.addEventListener("DOMContentLoaded",function () {
             if (role["rating"][i]["rating"] === undefined) {
                 personalRoleRating.textContent = "You have not rated this role";
             }
-            displayRating(i,personalRoleRating);
+            displayRating(i, personalRoleRating);
         }
     }
     const averageRoleRating = document.getElementById("average-role-rating");
@@ -48,7 +50,7 @@ document.addEventListener("DOMContentLoaded",function () {
     for (let i = 0; i < yellowStarCount; i++) {
         const yellowStarIcon = document.createElement("i");
         yellowStarIcon.setAttribute("class", "fa-solid fa-star");
-        yellowStarIcon.setAttribute("style","color: #FFD43B");
+        yellowStarIcon.setAttribute("style", "color: #FFD43B");
         averageRoleRating.append(yellowStarIcon);
     }
     for (let i = 0; i < grayStarCount; i++) {
@@ -76,9 +78,12 @@ document.addEventListener("DOMContentLoaded",function () {
     const imageSubmission = document.getElementById("image-submission");
     imageSubmission.style.display = "none";
 
-    displayComments();
+    showNightOrder();
+    document.querySelectorAll(".edit-night-order").forEach(element => element.style.display = "none");
 
     const howToRunText = document.getElementById("howtorun-text");
+
+    displayComments();
 
     const deleteRoleDiv = document.getElementById("delete-role-div");
     deleteRoleDiv.style.display = "none";
@@ -89,37 +94,95 @@ document.addEventListener("DOMContentLoaded",function () {
     const deletePopupBackground = document.getElementById("delete-popup-background");
     deletePopupBackground.style.display = "none";
 
+    document.getElementById("edit-button").addEventListener("click", function (event) {
+        event.preventDefault();
+        role["inEditMode"] = !role["inEditMode"];
+
+        if (role["inEditMode"]) {
+            document.getElementById("edit-role-field").style.display = "flex";
+            editRoleNameInput.value = role["name"];
+            editCharacterTypeInput.value = role["characterType"];
+            editAbilityTextInput.value = role["abilityText"];
+
+            howToRunInput.style.display = "block";
+            howToRunChangeButton.style.display = "block";
+
+            imageSubmission.style.display = "block";
+
+            deleteRoleDiv.style.display = "flex";
+
+            document.querySelectorAll(".edit-night-order").forEach(element => element.style.display = "flex");
+            document.getElementById("edit-night-order-text").style.display = "none";
+            document.getElementById("first-night-input").value = role.firstNight;
+            document.getElementById("first-night-reminder-input").value = role.firstNightReminder;
+            document.getElementById("other-night-input").value = role.otherNight;
+            document.getElementById("other-night-reminder-input").value = role.otherNightReminder;
+            resetNightOrderTexts();
+        }
+        if (!role["inEditMode"]) {
+            document.getElementById("edit-role-field").style.display = "none";
+            howToRunInput.style.display = "none";
+            howToRunChangeButton.style.display = "none";
+            imageSubmission.style.display = "none";
+            deleteRoleDiv.style.display = "none";
+            document.querySelectorAll(".edit-night-order").forEach(element => element.style.display = "none");
+            showNightOrder();
+        }
+    });
+
+    document.getElementById("upload-button").addEventListener("click", function (event) {
+        event.preventDefault();
+        const uploadImageURL = document.getElementById("image-input-url");
+        if (uploadImageURL.value === "") {
+            return;
+        }
+        for (let i = 0; i < websiteStorage.roleIdeas.length; i++) {
+            if (websiteStorage.roleIdeas[i].key === key) {
+                websiteStorage.roleIdeas[i].image = uploadImageURL.value;
+            }
+        }
+        uploadImageURL.value = "";
+        localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
+        document.getElementById("wiki-role-image").setAttribute("src", role["image"]);
+    });
+
+    document.getElementById("edit-night-order-button").addEventListener("click", function (event) {
+        event.preventDefault();
+        const nightOrderText = document.getElementById("edit-night-order-text");
+        nightOrderText.style.display = "flex";
+        if (document.getElementById("first-night-input").value === "") {
+            document.getElementById("first-night-input").value = 0;
+        }
+        if (document.getElementById("other-night-input").value === "") {
+            document.getElementById("other-night-input").value = 0;
+        }
+        if (isNaN(document.getElementById("first-night-input").value)) {
+            nightOrderText.textContent = "firstNight has to be a number e.g.: 12.6";
+            return;
+        }
+        if (isNaN(document.getElementById("other-night-input").value)) {
+            nightOrderText.textContent = "otherNight has to be a number e.g.: 16.4";
+            return;
+        }
+        nightOrderText.style.display = "none";
+        for (const role of websiteStorage.roleIdeas) {
+            if (role.key === key) {
+                role.firstNight = Number.parseFloat(document.getElementById("first-night-input").value);
+                role.firstNightReminder = document.getElementById("first-night-reminder-input").value;
+                role.otherNight = Number.parseFloat(document.getElementById("other-night-input").value);
+                role.otherNightReminder = document.getElementById("other-night-reminder-input").value;
+                localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
+                resetNightOrderTexts();
+            }
+        }
+    });
+
     howToRunChangeButton.addEventListener("click", function (event) {
         event.preventDefault();
         const input = document.getElementById("howtorun-input");
         howToRunText.textContent = input.value;
         role["howtorun"] = howToRunText.textContent;
         localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
-    });
-
-    document.getElementById("upload-button").addEventListener("click", function (event) {
-        event.preventDefault();
-        const uploadImage = document.getElementById("image-input-file");
-        const uploadImageURL = document.getElementById("image-input-url");
-        let imageString = "";
-        if (uploadImageURL.value !== "") {
-            imageString = uploadImageURL.value;
-            uploadImageURL.value = "";
-        }
-        if (uploadImage.value !== "") {
-            imageString = uploadImage.value.replace("C:\\fakepath\\", "");
-            uploadImage.value = "";
-        }
-        if (imageString === "") {
-            return;
-        }
-        for (let i = 0; i < websiteStorage.roleIdeas.length; i++) {
-            if (websiteStorage.roleIdeas[i].key === key) {
-                websiteStorage.roleIdeas[i].image = imageString;
-            }
-        }
-        localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
-        document.getElementById("wiki-role-image").setAttribute("src", role["image"]);
     });
 
     document.getElementById("comment-button").addEventListener("click", function (event) {
@@ -148,33 +211,7 @@ document.addEventListener("DOMContentLoaded",function () {
     const editCharacterTypeInput = document.getElementById("edit-character-type");
     const editAbilityTextInput = document.getElementById("edit-ability-text");
 
-    document.getElementById("edit-button").addEventListener("click",function (event) {
-        event.preventDefault();
-        role["inEditMode"] = !role["inEditMode"];
-
-        if (role["inEditMode"]) {
-            document.getElementById("edit-role-field").style.display = "flex";
-            editRoleNameInput.value = role["name"];
-            editCharacterTypeInput.value = role["characterType"];
-            editAbilityTextInput.value = role["abilityText"];
-
-            howToRunInput.style.display = "block";
-            howToRunChangeButton.style.display = "block";
-
-            imageSubmission.style.display = "block";
-
-            deleteRoleDiv.style.display = "flex";
-        }
-        if (!role["inEditMode"]) {
-            document.getElementById("edit-role-field").style.display = "none";
-            howToRunInput.style.display = "none";
-            howToRunChangeButton.style.display = "none";
-            imageSubmission.style.display = "none";
-            deleteRoleDiv.style.display = "none";
-        }
-    });
-
-    document.getElementById("submit-edit-role-button").addEventListener("click",function (event) {
+    document.getElementById("submit-edit-role-button").addEventListener("click", function (event) {
         event.preventDefault();
         if (editRoleNameInput.value === "" || editCharacterTypeInput.value === "" || editAbilityTextInput.value === "") {
             return;
@@ -182,27 +219,52 @@ document.addEventListener("DOMContentLoaded",function () {
         role["name"] = editRoleNameInput.value;
         role["characterType"] = editCharacterTypeInput.value;
         role["abilityText"] = editAbilityTextInput.value;
-        localStorage.setItem(websiteStorageString,JSON.stringify(websiteStorage));
+        localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
         displayRole();
     });
 
-    document.getElementById("delete-role-button").addEventListener("click",function (event) {
+    const downloadJsonButton = document.getElementById("download-json-button");
+    downloadJsonButton.addEventListener("click", function () {
+        const jsonRole = {
+            id: role.name.toLowerCase().replace(" ", "_"),
+            name: role.name,
+            characterType: role.characterType,
+            abilityText: role.abilityText,
+            image: role.image
+        }
+        if (role.firstNight !== 0) {
+            jsonRole.firstNight = role.firstNight;
+        }
+        if (role.firstNightReminder !== "") {
+            jsonRole.firstNightReminder = role.firstNightReminder;
+        }
+        if (role.otherNight !== 0) {
+            jsonRole.otherNight = role.otherNight;
+        }
+        if (role.otherNightReminder !== "") {
+            jsonRole.otherNightReminder = role.otherNightReminder;
+        }
+        const jsonString = JSON.stringify(jsonRole).replace("{", "{\n").replaceAll(",", ",\n").replace("}", "\n}");
+        navigator.clipboard.writeText(jsonString);
+    });
+
+    document.getElementById("delete-role-button").addEventListener("click", function (event) {
         event.preventDefault();
         deletePopupBackground.style.display = "flex";
     });
 
-    deleteConfirmationYesButton.addEventListener("click",function (event) {
+    deleteConfirmationYesButton.addEventListener("click", function (event) {
         event.preventDefault();
         for (let i = 0; i < websiteStorage.roleIdeas.length; i++) {
             if (websiteStorage.roleIdeas[i].key === key) {
-                websiteStorage.roleIdeas.splice(i,1);
+                websiteStorage.roleIdeas.splice(i, 1);
             }
         }
-        localStorage.setItem(websiteStorageString,JSON.stringify(websiteStorage));
+        localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
         window.location = "index.html";
     });
 
-    deleteConfirmationCancelButton.addEventListener("click",function () {
+    deleteConfirmationCancelButton.addEventListener("click", function () {
         deletePopupBackground.style.display = "none";
     });
 
@@ -210,7 +272,7 @@ document.addEventListener("DOMContentLoaded",function () {
         document.getElementById("comments-list").innerHTML = "";
         for (let i = 0; i < role["comments"].length; i++) {
             const list = document.createElement("li");
-            list.setAttribute("class","max-width comment");
+            list.setAttribute("class", "max-width comment");
             list.textContent = role["comments"][i]["message"];
             const deleteButton = document.createElement("button");
             deleteButton.setAttribute("class", "icon-button");
@@ -238,15 +300,16 @@ document.addEventListener("DOMContentLoaded",function () {
         document.getElementById("role-name").textContent = role["name"];
         document.getElementById("character-type").textContent = "Charactertype: " + role["characterType"];
         document.getElementById("ability-text").textContent = "Ability: " + role["abilityText"];
+        document.getElementById("credits-text").textContent = "Created by " + role.owner;
     }
 
-    function displayRating(index,htmlElement) {
+    function displayRating(index, htmlElement) {
         let yellowStarCount = Math.round(Number.parseInt(role["rating"][index]["rating"]));
         let grayStarCount = 10 - yellowStarCount;
         for (let i = 0; i < yellowStarCount; i++) {
             const yellowStarIcon = document.createElement("i");
             yellowStarIcon.setAttribute("class", "fa-solid fa-star");
-            yellowStarIcon.setAttribute("style","color: #FFD43B");
+            yellowStarIcon.setAttribute("style", "color: #FFD43B");
             htmlElement.append(yellowStarIcon);
         }
         for (let i = 0; i < grayStarCount; i++) {
@@ -258,4 +321,18 @@ document.addEventListener("DOMContentLoaded",function () {
             htmlElement.append(" " + role["rating"][index]["rating"] + "/10");
         }
     }
-})
+
+    function showNightOrder() {
+        document.getElementById("first-night").textContent = "firstNight: " + role.firstNight;
+        document.getElementById("first-night-reminder").textContent = "firstNightReminder: " + role.firstNightReminder;
+        document.getElementById("other-night").textContent = "otherNight: " + role.otherNight;
+        document.getElementById("other-night-reminder").textContent = "otherNightReminder: " + role.otherNightReminder;
+    }
+
+    function resetNightOrderTexts() {
+        document.getElementById("first-night").textContent = "firstNight: ";
+        document.getElementById("first-night-reminder").textContent = "firstNightReminder: ";
+        document.getElementById("other-night").textContent = "otherNight: ";
+        document.getElementById("other-night-reminder").textContent = "otherNightReminder: ";
+    }
+});

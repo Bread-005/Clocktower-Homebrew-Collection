@@ -190,7 +190,7 @@ textarea {
 }
 
 .padding {
-    padding: 5px;
+    padding: 6px;
 }
 
 .flex-start {
@@ -204,7 +204,6 @@ textarea {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
 }
 
 .blue {
@@ -219,13 +218,6 @@ textarea {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-end;
-}
-
-.top-right {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
     align-items: flex-end;
 }
 
@@ -256,4 +248,16 @@ textarea {
 .delete-confirmation-popup {
     background-color: white;
     width: 40%;
+}
+
+.red {
+    color: #cc0f0f;
+}
+
+.margin-top-5 {
+    margin-top: 5px;
+}
+
+.margin-left-10 {
+    margin-left: 10px;
 }

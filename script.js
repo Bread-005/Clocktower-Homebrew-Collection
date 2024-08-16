@@ -41,7 +41,12 @@ document.addEventListener("DOMContentLoaded",function () {
             howtorun: "",
             comments: [],
             inEditMode: false,
-            rating: []
+            rating: [],
+            favoriteList: [],
+            firstNight: 0,
+            firstNightReminder: "",
+            otherNight: 0,
+            otherNightReminder: ""
         }
         webSiteStorage1["roleIdeas"].push(role);
         localStorage.setItem(websiteStorageString, JSON.stringify(webSiteStorage1));
@@ -74,12 +79,11 @@ document.addEventListener("DOMContentLoaded",function () {
 
              const role = roleIdeaArray[i];
              const key = role["key"].toString();
-             const owner = role["owner"];
 
              const columnRoleIdea = document.createElement("td");
              columnRoleIdea.setAttribute("class","column-role-idea");
-             const columnDeleteAndRate = document.createElement("td");
-             columnDeleteAndRate.setAttribute("class","column-delete-and-rate");
+             const columnButtons = document.createElement("td");
+             columnButtons.setAttribute("class","column-delete-and-rate");
              const tableRow = document.createElement("tr");
 
              const list = document.createElement("li");
@@ -88,7 +92,7 @@ document.addEventListener("DOMContentLoaded",function () {
 
              const image = document.createElement("img");
              image.setAttribute("class","clocktower-icon clocktower-icon-role-idea");
-             image.setAttribute("src","placeholder-icon.png");
+             image.setAttribute("src","https://i.postimg.cc/qM09f8cD/placeholder-icon.png");
              if (role["image"]) {
                  image.setAttribute("src",role["image"]);
              }
@@ -118,16 +122,27 @@ document.addEventListener("DOMContentLoaded",function () {
              const anchor = document.createElement("a");
              anchor.setAttribute("href","wiki.html?r=" + key);
 
+             const favoriteButton = document.createElement("button");
+             const favoriteIcon = document.createElement("i");
+             favoriteIcon.classList.remove("red");
+             favoriteIcon.setAttribute("class","fa-light fa-heart");
+             if (role.favoriteList.includes(currentUser)) {
+                 favoriteIcon.setAttribute("class","fa-solid fa-heart");
+                 favoriteIcon.classList.add("red");
+             }
+
              rateButton.append(rateButtonIcon);
              wikiButton.append(wikiButtonIcon);
+             favoriteButton.append(favoriteIcon);
              anchor.append(wikiButton);
              list.prepend(image);
              columnRoleIdea.append(list);
-             columnDeleteAndRate.append(input);
-             columnDeleteAndRate.append(rateButton);
-             columnDeleteAndRate.append(anchor);
+             columnButtons.append(input);
+             columnButtons.append(rateButton);
+             columnButtons.append(anchor);
+             columnButtons.append(favoriteButton);
              tableRow.append(columnRoleIdea);
-             tableRow.append(columnDeleteAndRate);
+             tableRow.append(columnButtons);
              tableBody.append(tableRow);
              table.append(tableBody);
              document.getElementById("homebrewroles").append(table);
@@ -163,6 +178,26 @@ document.addEventListener("DOMContentLoaded",function () {
                          break;
                      }
                  }
+             });
+
+             favoriteButton.addEventListener("click",function () {
+                 if (role.favoriteList.includes(currentUser)) {
+                     for (let j = 0; j < role.favoriteList.length; j++) {
+                         if (role.favoriteList[j] === currentUser) {
+                             role.favoriteList.splice(j,1);
+                             favoriteIcon.setAttribute("class","fa-light fa-heart");
+                             favoriteIcon.classList.remove("red");
+                             localStorage.setItem(websiteStorageString,JSON.stringify(webSiteStorage1));
+                             return;
+                         }
+                     }
+                 }
+                 if (!role.favoriteList.includes(currentUser)) {
+                     role.favoriteList.push(currentUser);
+                     favoriteIcon.setAttribute("class","fa-solid fa-heart");
+                     favoriteIcon.classList.add("red");
+                 }
+                 localStorage.setItem(websiteStorageString,JSON.stringify(webSiteStorage1));
              });
          }
         showPages(array);
@@ -208,21 +243,19 @@ document.addEventListener("DOMContentLoaded",function () {
         document.getElementById("rate-history").innerHTML = roleIdeaRatingsString;
     }
 
-    sortingDropDownMenu.addEventListener("change",function () {
-        displayRoles();
-    });
+    //favorite roles ✔✔✔
+    //credits des rollen owners ✔✔✔
+    //filtern nach Autor ✔✔✔
+    //Herunterladen der Rollen -> json wie bei clocktower ✔✔✔
+    //night Order für Rollen
 
-    characterTypSelection.addEventListener("change",function () {
-        displayRoles();
-    });
+    sortingDropDownMenu.addEventListener("change",displayRoles);
+    characterTypSelection.addEventListener("change",displayRoles);
+    roleSearch.addEventListener("input",displayRoles);
+    document.getElementById("only-my-ideas").addEventListener("change",displayRoles);
+    document.getElementById("only-my-favorites").addEventListener("change",displayRoles);
+    document.getElementById("author-search").addEventListener("input",displayRoles);
 
-    roleSearch.addEventListener("input",function () {
-        displayRoles();
-    });
-
-    document.getElementById("only-my-roles").addEventListener("change",function () {
-        displayRoles();
-    });
     function createTempLocalStorage() {
         const array = [];
         for (let i = 0; i < webSiteStorage1["roleIdeas"].length; i++) {
@@ -231,8 +264,13 @@ document.addEventListener("DOMContentLoaded",function () {
             if (role["characterType"] !== input && input !== "All") {
                 continue;
             }
-            if (document.getElementById("only-my-roles").checked) {
+            if (document.getElementById("only-my-ideas").checked) {
                 if (webSiteStorage1.roleIdeas[i].owner !== currentUser) {
+                    continue;
+                }
+            }
+            if (document.getElementById("only-my-favorites").checked) {
+                if (!webSiteStorage1.roleIdeas[i].favoriteList.includes(currentUser)) {
                     continue;
                 }
             }
@@ -241,6 +279,11 @@ document.addEventListener("DOMContentLoaded",function () {
                 !role["characterType"].toUpperCase().includes(roleSearch.value.toUpperCase()) &&
                 !role["abilityText"].toUpperCase().includes(roleSearch.value.toUpperCase())) {
                 continue;
+            }
+            if (document.getElementById("author-search").value !== "") {
+                if (!role.owner.toUpperCase().includes(document.getElementById("author-search").value.toUpperCase())) {
+                    continue;
+                }
             }
             array.push(role);
         }
