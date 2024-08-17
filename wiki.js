@@ -237,7 +237,7 @@ document.addEventListener("DOMContentLoaded",function () {
         if (role.otherNightReminder !== "") {
             jsonRole.otherNightReminder = role.otherNightReminder;
         }
-        const jsonString = JSON.stringify(jsonRole).replace("{", "{\n    ").replaceAll('",', '",\n    ').replace("}", "\n}");
+        const jsonString = JSON.stringify(jsonRole).replace("{", "{\n    ").replaceAll(',"', ',\n    "').replace("}", "\n}");
         navigator.clipboard.writeText(jsonString);
     });
 
