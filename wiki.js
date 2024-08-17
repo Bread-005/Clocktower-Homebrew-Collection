@@ -83,6 +83,7 @@ document.addEventListener("DOMContentLoaded",function () {
 
     const howToRunText = document.getElementById("howtorun-text");
 
+    document.getElementById("private-comments-checkbox-div").style.display = "none";
     displayComments();
 
     const deleteRoleDiv = document.getElementById("delete-role-div");
@@ -118,6 +119,10 @@ document.addEventListener("DOMContentLoaded",function () {
             document.getElementById("other-night-input").value = role.otherNight;
             document.getElementById("other-night-reminder-input").value = role.otherNightReminder;
             resetNightOrderTexts();
+            if (role.onlyPrivateComments) {
+                document.getElementById("only-private-comments-checkbox-input").checked = true;
+            }
+            document.getElementById("private-comments-checkbox-div").style.display = "flex";
         }
         if (!role["inEditMode"]) {
             document.getElementById("edit-role-field").style.display = "none";
@@ -127,6 +132,7 @@ document.addEventListener("DOMContentLoaded",function () {
             deleteRoleDiv.style.display = "none";
             document.querySelectorAll(".edit-night-order").forEach(element => element.style.display = "none");
             showNightOrder();
+            document.getElementById("private-comments-checkbox-div").style.display = "none";
         }
     });
 
@@ -185,26 +191,13 @@ document.addEventListener("DOMContentLoaded",function () {
         localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
     });
 
-    document.getElementById("comment-button").addEventListener("click", function (event) {
+    document.getElementById("add-public-comment-button").addEventListener("click", function (event) {
         event.preventDefault();
-        if (inputComment.value === "") {
-            return;
-        }
-        const commentKey = Date.now().toString();
-
-        const comment = {
-            message: inputComment.value,
-            key: commentKey,
-            owner: currentUser
-        }
-        for (let i = 0; i < websiteStorage.roleIdeas.length; i++) {
-            if (websiteStorage.roleIdeas[i].key === key) {
-                websiteStorage.roleIdeas[i].comments.push(comment);
-            }
-        }
-        localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
-        inputComment.value = "";
-        displayComments();
+        addComment(false);
+    });
+    document.getElementById("add-private-comment-button").addEventListener("click",function (event) {
+        event.preventDefault();
+        addComment(true);
     });
 
     const editRoleNameInput = document.getElementById("edit-role-name");
@@ -257,6 +250,7 @@ document.addEventListener("DOMContentLoaded",function () {
         event.preventDefault();
         for (let i = 0; i < websiteStorage.roleIdeas.length; i++) {
             if (websiteStorage.roleIdeas[i].key === key) {
+                websiteStorage.archive.push(websiteStorage.roleIdeas[i]);
                 websiteStorage.roleIdeas.splice(i, 1);
             }
         }
@@ -270,28 +264,42 @@ document.addEventListener("DOMContentLoaded",function () {
 
     function displayComments() {
         document.getElementById("comments-list").innerHTML = "";
-        for (let i = 0; i < role["comments"].length; i++) {
+        if (role.owner !== currentUser || !role.inEditMode) {
+            document.getElementById("private-comments-checkbox-div").style.display = "none";
+        }
+        if (role.onlyPrivateComments) {
+            document.getElementById("add-public-comment-button").style.display = "none";
+        }
+        for (const comment of role.comments) {
+            if (comment.isPrivate && currentUser !== role.owner && currentUser !== comment.owner) {
+                continue;
+            }
             const list = document.createElement("li");
             list.setAttribute("class", "max-width comment");
-            list.textContent = role["comments"][i]["message"];
+            list.textContent = comment.message;
             const deleteButton = document.createElement("button");
             deleteButton.setAttribute("class", "icon-button");
-            deleteButton.setAttribute("data-key", role["comments"][i]["key"]);
+            deleteButton.setAttribute("data-key", comment["key"]);
 
             const deleteButtonIcon = document.createElement("i");
             deleteButtonIcon.setAttribute("class", "js-delete-button fa-solid fa-trash");
-            deleteButtonIcon.setAttribute("data-key", role["comments"][i]["key"]);
+            deleteButtonIcon.setAttribute("data-key", comment["key"]);
 
-            if (role["comments"][i].owner === currentUser || role.owner === currentUser) {
+            if (comment.owner === currentUser || role.owner === currentUser) {
                 deleteButton.append(deleteButtonIcon);
                 list.append(deleteButton);
             }
             document.getElementById("comments-list").append(list);
 
             deleteButton.addEventListener("click", function () {
-                role["comments"].splice(i, 1);
-                localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
-                displayComments();
+                for (let i = 0; i < role.comments.length; i++) {
+                    if (role.comments[i].key === deleteButton.getAttribute("data-key")) {
+                        role.comments.splice(i, 1);
+                        localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
+                        displayComments();
+                        break;
+                    }
+                }
             });
         }
     }
@@ -334,5 +342,34 @@ document.addEventListener("DOMContentLoaded",function () {
         document.getElementById("first-night-reminder").textContent = "firstNightReminder: ";
         document.getElementById("other-night").textContent = "otherNight: ";
         document.getElementById("other-night-reminder").textContent = "otherNightReminder: ";
+    }
+
+    document.getElementById("only-private-comments-checkbox-input").addEventListener("click",function () {
+       role.onlyPrivateComments = !role.onlyPrivateComments;
+       localStorage.setItem(websiteStorageString,JSON.stringify(websiteStorage));
+       document.getElementById("add-public-comment-button").style.display = "flex";
+       displayComments();
+    });
+
+    function addComment(isPrivate) {
+        if (inputComment.value === "") {
+            return;
+        }
+        const commentKey = Date.now().toString();
+
+        const comment = {
+            message: inputComment.value,
+            key: commentKey,
+            owner: currentUser,
+            isPrivate: isPrivate
+        }
+        for (let i = 0; i < websiteStorage.roleIdeas.length; i++) {
+            if (websiteStorage.roleIdeas[i].key === key) {
+                websiteStorage.roleIdeas[i].comments.push(comment);
+            }
+        }
+        localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
+        inputComment.value = "";
+        displayComments();
     }
 });

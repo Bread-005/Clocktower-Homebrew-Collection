@@ -261,3 +261,10 @@ textarea {
 .margin-left-10 {
     margin-left: 10px;
 }
+
+.comments {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}

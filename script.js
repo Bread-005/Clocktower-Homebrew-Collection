@@ -12,6 +12,16 @@ document.addEventListener("DOMContentLoaded",function () {
     sortingDropDownMenu.value = "Newest first";
 
     webSiteStorage1.page = 1;
+
+    if (webSiteStorage1.archive === undefined) {
+        webSiteStorage1.archive = [];
+    }
+    for (const role of webSiteStorage1.roleIdeas) {
+        if (role.onlyPrivateComments === undefined) {
+            role.onlyPrivateComments = false;
+        }
+    }
+
     localStorage.setItem(websiteStorageString,JSON.stringify(webSiteStorage1));
 
     const currentUser = document.cookie.split(":")[0];
@@ -46,7 +56,8 @@ document.addEventListener("DOMContentLoaded",function () {
             firstNight: 0,
             firstNightReminder: "",
             otherNight: 0,
-            otherNightReminder: ""
+            otherNightReminder: "",
+            onlyPrivateComments: false
         }
         webSiteStorage1["roleIdeas"].push(role);
         localStorage.setItem(websiteStorageString, JSON.stringify(webSiteStorage1));

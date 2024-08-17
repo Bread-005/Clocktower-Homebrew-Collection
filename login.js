@@ -4,13 +4,17 @@ document.addEventListener("DOMContentLoaded",function () {
     const userNameInput = document.getElementById("username-input");
     const passwordInput = document.getElementById("password-input");
     const loginButton = document.getElementById("login-button");
+
+    //const data = fetch("./websiteStorage.json").then((response) => response.json()).then((json) => console.log(json));
+
     const websiteStorage = JSON.parse(localStorage.getItem(websiteStorageString));
 
     if (localStorage.getItem(websiteStorageString) === null) {
         const storage = {
             roleIdeas: [],
             page: 1,
-            users: []
+            users: [],
+            archive: []
         }
         localStorage.setItem(websiteStorageString,JSON.stringify(storage));
     }
