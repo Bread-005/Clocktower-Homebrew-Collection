@@ -221,8 +221,8 @@ document.addEventListener("DOMContentLoaded",function () {
         const jsonRole = {
             id: role.name.toLowerCase().replace(" ", "_"),
             name: role.name,
-            characterType: role.characterType,
-            abilityText: role.abilityText,
+            ability: role.abilityText,
+            team: role.characterType,
             image: role.image
         }
         if (role.firstNight !== 0) {
@@ -237,7 +237,7 @@ document.addEventListener("DOMContentLoaded",function () {
         if (role.otherNightReminder !== "") {
             jsonRole.otherNightReminder = role.otherNightReminder;
         }
-        const jsonString = JSON.stringify(jsonRole).replace("{", "{\n").replaceAll(",", ",\n").replace("}", "\n}");
+        const jsonString = JSON.stringify(jsonRole).replace("{", "{\n    ").replaceAll('",', '",\n    ').replace("}", "\n}");
         navigator.clipboard.writeText(jsonString);
     });
 

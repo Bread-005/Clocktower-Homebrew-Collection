@@ -1,13 +1,17 @@
 document.addEventListener("DOMContentLoaded",function () {
 
     const websiteStorageString = "websiteStorage1";
+    const signUpUserNameInput = document.getElementById("sign-up-username-input");
+    const signUpPasswordInput = document.getElementById("sign-up-password-input");
+    const signUpConfirmPasswordInput = document.getElementById("sign-up-confirm-password-input")
+    const signUpButton = document.getElementById("sign-up-button");
+    const signUpMessage = document.getElementById("sign-up-message");
     const userNameInput = document.getElementById("username-input");
     const passwordInput = document.getElementById("password-input");
     const loginButton = document.getElementById("login-button");
+    const loginMessage = document.getElementById("login-message");
 
     //const data = fetch("./websiteStorage.json").then((response) => response.json()).then((json) => console.log(json));
-
-    const websiteStorage = JSON.parse(localStorage.getItem(websiteStorageString));
 
     if (localStorage.getItem(websiteStorageString) === null) {
         const storage = {
@@ -19,6 +23,13 @@ document.addEventListener("DOMContentLoaded",function () {
         localStorage.setItem(websiteStorageString,JSON.stringify(storage));
     }
 
+    const websiteStorage = JSON.parse(localStorage.getItem(websiteStorageString));
+
+    if (websiteStorage.archive === undefined) {
+        websiteStorage.archive = [];
+        localStorage.setItem(websiteStorageString,JSON.stringify(websiteStorage));
+    }
+
     if (document.cookie === "") {
         document.cookie = "iajrhugairopiarjoairjk138174590015mf,sloivohgwr18514";
     }
@@ -26,22 +37,33 @@ document.addEventListener("DOMContentLoaded",function () {
     userNameInput.value = "";
     passwordInput.value = "";
 
-    for (let i = 0; i < websiteStorage["users"].length; i++) {
-        if (websiteStorage.users[i].name === document.cookie.split(":")[0] && websiteStorage.users[i].password === document.cookie.split(":")[1]) {
+    for (const user of websiteStorage.users) {
+        if (user.name === document.cookie.split(":")[0] && user.password === document.cookie.split(":")[1]) {
             window.location = "role_idea.html";
         }
     }
 
-    loginButton.addEventListener("click",function () {
+    loginButton.addEventListener("click",function (event) {
+        event.preventDefault();
         if (userNameInput.value === "") {
-            document.getElementById("message").innerHTML = "You have to provide a username";
+            loginMessage.textContent = "You have to provide a username";
+            return;
+        }
+        let userNameExists = false;
+        for (const user of websiteStorage.users) {
+            if (user.name === userNameInput.value) {
+                userNameExists = true;
+            }
+        }
+        if (!userNameExists) {
+            loginMessage.textContent = "This username does not exist. Please create a new account in the Sign Up section";
             return;
         }
         if (passwordInput.value === "") {
-            document.getElementById("message").innerHTML = "You have to provide a password";
+            loginMessage.textContent = "You have to provide a password";
             return;
         }
-        document.getElementById("message").innerHTML = "";
+        loginMessage.textContent = "";
         for (let i = 0; i < websiteStorage["users"].length; i++) {
             if (userNameInput.value === websiteStorage.users[i].name) {
                 if (passwordInput.value !== websiteStorage.users[i].password) {
@@ -54,14 +76,41 @@ document.addEventListener("DOMContentLoaded",function () {
                 return;
             }
         }
+    });
+
+    signUpButton.addEventListener("click",function (event) {
+        event.preventDefault();
+        if (signUpUserNameInput.value === "") {
+            signUpMessage.textContent = "You have to provide a username";
+            return;
+        }
+        for (const user of websiteStorage.users) {
+            if (user.name === signUpUserNameInput.value) {
+                signUpMessage.textContent = "This username is already taken";
+                return;
+            }
+        }
+        if (signUpPasswordInput.value === "") {
+            signUpMessage.textContent = "You have to provide a password";
+            return;
+        }
+        if (signUpConfirmPasswordInput.value === "") {
+            signUpMessage.textContent = "You have to confirm your password";
+            return;
+        }
+        if (signUpPasswordInput.value !== signUpConfirmPasswordInput.value) {
+            signUpMessage.textContent = "The password does not match the confirmation";
+            return;
+        }
         const user = {
-            name: userNameInput.value,
-            password: passwordInput.value,
-            favoriteRoles: []
+            name: signUpUserNameInput.value,
+            password: signUpPasswordInput.value,
         }
         websiteStorage.users.push(user);
         localStorage.setItem(websiteStorageString,JSON.stringify(websiteStorage));
-        document.getElementById("message").innerHTML = "You created a new account. Enter your password again to proceed";
-        passwordInput.value = "";
+        signUpUserNameInput.value = "";
+        signUpPasswordInput.value = "";
+        signUpConfirmPasswordInput.value = "";
+        signUpMessage.textContent = "You have created a new account. Login in the login section to login into your account";
     });
 });
