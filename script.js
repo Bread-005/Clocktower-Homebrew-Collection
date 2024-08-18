@@ -127,7 +127,13 @@ document.addEventListener("DOMContentLoaded",function () {
 
              const rateButtonIcon = document.createElement("i");
              rateButtonIcon.setAttribute("class","fa-sharp fa-regular fa-star");
-             rateButtonIcon.setAttribute("data-key",key);
+             for (const rating of role.rating) {
+                 if (rating.owner === currentUser) {
+                     rateButtonIcon.setAttribute("class","fa-solid fa-star");
+                     rateButtonIcon.setAttribute("style","color: #FFD43B;");
+                 }
+             }
+             rateButtonIcon.setAttribute("data-key", key);
 
              const wikiButton = document.createElement("button");
 
@@ -189,6 +195,7 @@ document.addEventListener("DOMContentLoaded",function () {
                          }
                          webSiteStorage1.roleIdeas[j]["rating"].push(rating);
                          localStorage.setItem(websiteStorageString,JSON.stringify(webSiteStorage1));
+                         displayRoles();
                          displayRatings();
                          break;
                      }
