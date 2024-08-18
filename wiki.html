@@ -17,7 +17,7 @@
 
     <div class="page-top">
         <img src="https://i.postimg.cc/qM09f8cD/placeholder-icon.png" id="wiki-role-image" class="clocktower-icon margin-top-20"/>
-        <div class="center">
+        <div class="center padding-50">
             <h1 id="role-name"></h1>
             <h2 id="character-type"></h2>
             <h2 id="ability-text"></h2>
@@ -28,35 +28,52 @@
                 <p id="username-display-wiki-page">Your Username: </p>
             </div>
             <button id="edit-button" class="margin-left-30"><i class="fa-solid fa-pen fa-pen-to-square"></i></button>
+            <div></div>
         </div>
     </div>
 
-    <div id="edit-role-field" class="center">
-        <form>
-            <label for="edit-role-name" class="margin">Rolename</label>
-            <input class="input" id="edit-role-name" type="text"/>
-            <div class="character-type-dropdown margin">
-                <label for="edit-character-type">Charactertype</label>
-                <select class="character-types" id="edit-character-type">
-                    <option value="Townsfolk">Townsfolk</option>
-                    <option value="Outsider">Outsider</option>
-                    <option value="Minion">Minion</option>
-                    <option value="Demon">Demon</option>
-                    <option value="Traveller">Traveller</option>
-                </select>
-            </div>
-            <textarea class="text-area-input margin" id="edit-ability-text" cols="30" rows="4" placeholder="Abilitytext"></textarea>
-            <br>
-            <button id="submit-edit-role-button" name="click" type="reset">
-                Submit Role Change
-            </button>
-        </form>
+    <div class="center">
+        <p id="tag-display"></p>
+        <div id="edit-tags" class="center max-width-800">
+            <div>Misinformation<input type="checkbox" class="tag" name="Misinformation"></div>
+            <div>Death<input type="checkbox" class="tag" name="Death"></div>
+            <div>Protection<input type="checkbox" class="tag" name="Protection"></div>
+            <div>Wincondition<input type="checkbox" class="tag" name="Wincondition"></div>
+            <div>Drunkness<input type="checkbox" class="tag" name="Drunkness"></div>
+            <div>Poisoning<input type="checkbox" class="tag" name="Poisoning"></div>
+            <div>Character Change<input type="checkbox" class="tag" name="Character Change"></div>
+        </div>
     </div>
 
-    <div id="image-submission">
-        <h2>Change Role Icon</h2>
-        <input type="url" id="image-input-url">
-        <button id="upload-button">Set Image for Role</button>
+    <div class="space-between">
+        <div id="image-submission">
+            <h2>Change Role Icon</h2>
+            <input type="url" id="image-input-url">
+            <button id="upload-button">Set Image for Role</button>
+        </div>
+
+        <div id="edit-role-field" class="center">
+            <form>
+                <label for="edit-role-name" class="margin">Rolename</label>
+                <input class="input" id="edit-role-name" type="text"/>
+                <div class="character-type-dropdown margin">
+                    <label for="edit-character-type">Charactertype</label>
+                    <select class="character-types" id="edit-character-type">
+                        <option value="Townsfolk">Townsfolk</option>
+                        <option value="Outsider">Outsider</option>
+                        <option value="Minion">Minion</option>
+                        <option value="Demon">Demon</option>
+                        <option value="Traveller">Traveller</option>
+                    </select>
+                </div>
+                <textarea class="text-area-input margin" id="edit-ability-text" cols="30" rows="4" placeholder="Abilitytext"></textarea>
+                <br>
+                <button id="submit-edit-role-button" name="click" type="reset">
+                    Submit Role Change
+                </button>
+            </form>
+        </div>
+        <div class="width-290"></div>
     </div>
 
     <div class="center">

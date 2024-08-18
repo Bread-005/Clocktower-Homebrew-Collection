@@ -11,8 +11,6 @@ document.addEventListener("DOMContentLoaded",function () {
     const loginButton = document.getElementById("login-button");
     const loginMessage = document.getElementById("login-message");
 
-    //const data = fetch("./websiteStorage.json").then((response) => response.json()).then((json) => console.log(json));
-
     if (localStorage.getItem(websiteStorageString) === null) {
         const storage = {
             roleIdeas: [],
@@ -113,4 +111,12 @@ document.addEventListener("DOMContentLoaded",function () {
         signUpConfirmPasswordInput.value = "";
         signUpMessage.textContent = "You have created a new account. Login in the login section to login into your account";
     });
+
+    function getDataFile(string) {
+        const data = fetch("./data.json").then((response) => response.json()).then((json) => console.log(json));
+        fetch("./data.json").then((response) => response.json()).then((json) => {
+            json.id = "ok";
+            console.log(json);
+        });
+    }
 });

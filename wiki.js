@@ -14,6 +14,10 @@ document.addEventListener("DOMContentLoaded",function () {
     const websiteStorageString = "websiteStorage1";
     role["inEditMode"] = false;
 
+    const tagDisplay = document.getElementById("tag-display");
+    const editTags = document.getElementById("edit-tags");
+    editTags.style.display = "none";
+    showTags();
     document.getElementById("edit-role-field").style.display = "none";
 
     if (role["image"] !== "") {
@@ -119,10 +123,18 @@ document.addEventListener("DOMContentLoaded",function () {
             document.getElementById("other-night-input").value = role.otherNight;
             document.getElementById("other-night-reminder-input").value = role.otherNightReminder;
             resetNightOrderTexts();
+
             if (role.onlyPrivateComments) {
                 document.getElementById("only-private-comments-checkbox-input").checked = true;
             }
             document.getElementById("private-comments-checkbox-div").style.display = "flex";
+
+            editTags.style.display = "flex";
+            document.querySelectorAll(".tag").forEach(element => {
+                if (role.tags.includes(element.name)) {
+                    element.checked = true;
+                }
+            });
         }
         if (!role["inEditMode"]) {
             document.getElementById("edit-role-field").style.display = "none";
@@ -133,6 +145,7 @@ document.addEventListener("DOMContentLoaded",function () {
             document.querySelectorAll(".edit-night-order").forEach(element => element.style.display = "none");
             showNightOrder();
             document.getElementById("private-comments-checkbox-div").style.display = "none";
+            editTags.style.display = "none";
         }
     });
 
@@ -151,6 +164,17 @@ document.addEventListener("DOMContentLoaded",function () {
         localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
         document.getElementById("wiki-role-image").setAttribute("src", role["image"]);
     });
+
+    document.querySelectorAll(".tag").forEach(element => element.addEventListener("change", function () {
+        role.tags = [];
+        document.querySelectorAll(".tag").forEach(element => {
+            if (element.checked) {
+                role.tags.push(element.name);
+            }
+        });
+        localStorage.setItem(websiteStorageString,JSON.stringify(websiteStorage));
+        showTags();
+    }));
 
     document.getElementById("edit-night-order-button").addEventListener("click", function (event) {
         event.preventDefault();
@@ -371,5 +395,15 @@ document.addEventListener("DOMContentLoaded",function () {
         localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
         inputComment.value = "";
         displayComments();
+    }
+
+    function showTags() {
+        tagDisplay.textContent = "Tags: ";
+        for (let i = 0; i < role.tags.length; i++) {
+            tagDisplay.textContent = tagDisplay.textContent.concat(role.tags[i]);
+            if (i < role.tags.length - 1) {
+                tagDisplay.textContent = tagDisplay.textContent.concat(", ");
+            }
+        }
     }
 });
