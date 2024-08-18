@@ -20,6 +20,9 @@ document.addEventListener("DOMContentLoaded",function () {
         if (role.onlyPrivateComments === undefined) {
             role.onlyPrivateComments = false;
         }
+        if (role.tags === undefined) {
+            role.tags = [];
+        }
     }
 
     localStorage.setItem(websiteStorageString,JSON.stringify(webSiteStorage1));
@@ -57,7 +60,8 @@ document.addEventListener("DOMContentLoaded",function () {
             firstNightReminder: "",
             otherNight: 0,
             otherNightReminder: "",
-            onlyPrivateComments: false
+            onlyPrivateComments: false,
+            tags: []
         }
         webSiteStorage1["roleIdeas"].push(role);
         localStorage.setItem(websiteStorageString, JSON.stringify(webSiteStorage1));
