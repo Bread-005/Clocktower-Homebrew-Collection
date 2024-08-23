@@ -1,4 +1,6 @@
-document.addEventListener("DOMContentLoaded",function () {
+import {sendXMLHttpRequest} from "./functions.js";
+
+document.addEventListener("DOMContentLoaded", function () {
     const searchParameters = new URLSearchParams(window.location.search);
     const key = searchParameters.get("r");
     let role;
@@ -172,7 +174,7 @@ document.addEventListener("DOMContentLoaded",function () {
                 role.tags.push(element.name);
             }
         });
-        localStorage.setItem(websiteStorageString,JSON.stringify(websiteStorage));
+        localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
         showTags();
     }));
 
@@ -219,7 +221,7 @@ document.addEventListener("DOMContentLoaded",function () {
         event.preventDefault();
         addComment(false);
     });
-    document.getElementById("add-private-comment-button").addEventListener("click",function (event) {
+    document.getElementById("add-private-comment-button").addEventListener("click", function (event) {
         event.preventDefault();
         addComment(true);
     });
@@ -279,7 +281,7 @@ document.addEventListener("DOMContentLoaded",function () {
             }
         }
         localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
-        window.location = "role_idea.html";
+        window.location = "role_idea.php";
     });
 
     deleteConfirmationCancelButton.addEventListener("click", function () {
@@ -300,7 +302,7 @@ document.addEventListener("DOMContentLoaded",function () {
             }
             const list = document.createElement("li");
             list.setAttribute("class", "max-width comment");
-            list.textContent = comment.message;
+            list.textContent = comment.message + (comment.isPrivate ? " (private)" : "");
             const deleteButton = document.createElement("button");
             deleteButton.setAttribute("class", "icon-button");
             deleteButton.setAttribute("data-key", comment["key"]);
@@ -368,11 +370,11 @@ document.addEventListener("DOMContentLoaded",function () {
         document.getElementById("other-night-reminder").textContent = "otherNightReminder: ";
     }
 
-    document.getElementById("only-private-comments-checkbox-input").addEventListener("click",function () {
-       role.onlyPrivateComments = !role.onlyPrivateComments;
-       localStorage.setItem(websiteStorageString,JSON.stringify(websiteStorage));
-       document.getElementById("add-public-comment-button").style.display = "flex";
-       displayComments();
+    document.getElementById("only-private-comments-checkbox-input").addEventListener("click", function () {
+        role.onlyPrivateComments = !role.onlyPrivateComments;
+        localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
+        document.getElementById("add-public-comment-button").style.display = "flex";
+        displayComments();
     });
 
     function addComment(isPrivate) {

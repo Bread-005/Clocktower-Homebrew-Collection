@@ -1,9 +1,11 @@
-document.addEventListener("DOMContentLoaded",function () {
+import {sendXMLHttpRequest} from "./functions.js";
+
+document.addEventListener("DOMContentLoaded", function () {
 
     const websiteStorageString = "websiteStorage1";
     const signUpUserNameInput = document.getElementById("sign-up-username-input");
     const signUpPasswordInput = document.getElementById("sign-up-password-input");
-    const signUpConfirmPasswordInput = document.getElementById("sign-up-confirm-password-input")
+    const signUpConfirmPasswordInput = document.getElementById("sign-up-confirm-password-input");
     const signUpButton = document.getElementById("sign-up-button");
     const signUpMessage = document.getElementById("sign-up-message");
     const userNameInput = document.getElementById("username-input");
@@ -18,14 +20,14 @@ document.addEventListener("DOMContentLoaded",function () {
             users: [],
             archive: []
         }
-        localStorage.setItem(websiteStorageString,JSON.stringify(storage));
+        localStorage.setItem(websiteStorageString, JSON.stringify(storage));
     }
 
     const websiteStorage = JSON.parse(localStorage.getItem(websiteStorageString));
 
     if (websiteStorage.archive === undefined) {
         websiteStorage.archive = [];
-        localStorage.setItem(websiteStorageString,JSON.stringify(websiteStorage));
+        localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
     }
 
     if (document.cookie === "") {
@@ -37,11 +39,11 @@ document.addEventListener("DOMContentLoaded",function () {
 
     for (const user of websiteStorage.users) {
         if (user.name === document.cookie.split(":")[0] && user.password === document.cookie.split(":")[1]) {
-            window.location = "role_idea.html";
+            window.location = "role_idea.php";
         }
     }
 
-    loginButton.addEventListener("click",function (event) {
+    loginButton.addEventListener("click", function (event) {
         event.preventDefault();
         if (userNameInput.value === "") {
             loginMessage.textContent = "You have to provide a username";
@@ -70,13 +72,13 @@ document.addEventListener("DOMContentLoaded",function () {
                     return;
                 }
                 document.cookie = userNameInput.value + ":" + passwordInput.value;
-                window.location = "role_idea.html";
+                window.location = "role_idea.php";
                 return;
             }
         }
     });
 
-    signUpButton.addEventListener("click",function (event) {
+    signUpButton.addEventListener("click", function (event) {
         event.preventDefault();
         if (signUpUserNameInput.value === "") {
             signUpMessage.textContent = "You have to provide a username";
@@ -105,18 +107,10 @@ document.addEventListener("DOMContentLoaded",function () {
             password: signUpPasswordInput.value,
         }
         websiteStorage.users.push(user);
-        localStorage.setItem(websiteStorageString,JSON.stringify(websiteStorage));
+        localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
         signUpUserNameInput.value = "";
         signUpPasswordInput.value = "";
         signUpConfirmPasswordInput.value = "";
         signUpMessage.textContent = "You have created a new account. Login in the login section to login into your account";
     });
-
-    function getDataFile(string) {
-        const data = fetch("./data.json").then((response) => response.json()).then((json) => console.log(json));
-        fetch("./data.json").then((response) => response.json()).then((json) => {
-            json.id = "ok";
-            console.log(json);
-        });
-    }
 });
