@@ -3,6 +3,7 @@ import {sendXMLHttpRequest} from "./functions.js";
 document.addEventListener("DOMContentLoaded", function () {
 
     const websiteStorageString = "websiteStorage1";
+    const signUpEmailInput = document.getElementById("sign-up-email-input");
     const signUpUserNameInput = document.getElementById("sign-up-username-input");
     const signUpPasswordInput = document.getElementById("sign-up-password-input");
     const signUpConfirmPasswordInput = document.getElementById("sign-up-confirm-password-input");
@@ -49,46 +50,33 @@ document.addEventListener("DOMContentLoaded", function () {
             loginMessage.textContent = "You have to provide a username";
             return;
         }
-        let userNameExists = false;
-        for (const user of websiteStorage.users) {
-            if (user.name === userNameInput.value) {
-                userNameExists = true;
-            }
-        }
-        if (!userNameExists) {
-            loginMessage.textContent = "This username does not exist. Please create a new account in the Sign Up section";
-            return;
-        }
         if (passwordInput.value === "") {
             loginMessage.textContent = "You have to provide a password";
             return;
         }
-        loginMessage.textContent = "";
-        for (let i = 0; i < websiteStorage["users"].length; i++) {
-            if (userNameInput.value === websiteStorage.users[i].name) {
-                if (passwordInput.value !== websiteStorage.users[i].password) {
-                    document.getElementById("message").innerHTML = "You provided the wrong password";
-                    passwordInput.value = "";
-                    return;
-                }
-                document.cookie = userNameInput.value + ":" + passwordInput.value;
-                window.location = "role_idea.php";
-                return;
-            }
+        const user = {
+            name: userNameInput.value,
+            password: passwordInput.value,
         }
+        sendXMLHttpRequest("POST", "/api/user/login.php", "", JSON.stringify(user), function (data) {
+            loginMessage.textContent = "";
+            document.cookie = user.name + ":" + user.password;
+            window.location = "role_idea.php";
+        }, function () {
+            loginMessage.textContent = "You provided the wrong password";
+            passwordInput.value = "";
+        });
     });
 
     signUpButton.addEventListener("click", function (event) {
         event.preventDefault();
+        if (signUpEmailInput.value === "") {
+            signUpMessage.textContent = "You have to provide an email";
+            return;
+        }
         if (signUpUserNameInput.value === "") {
             signUpMessage.textContent = "You have to provide a username";
             return;
-        }
-        for (const user of websiteStorage.users) {
-            if (user.name === signUpUserNameInput.value) {
-                signUpMessage.textContent = "This username is already taken";
-                return;
-            }
         }
         if (signUpPasswordInput.value === "") {
             signUpMessage.textContent = "You have to provide a password";
@@ -105,12 +93,22 @@ document.addEventListener("DOMContentLoaded", function () {
         const user = {
             name: signUpUserNameInput.value,
             password: signUpPasswordInput.value,
+            email: signUpEmailInput.value,
+            blocked: 0,
+            createdAt: Date()
         }
+
+        sendXMLHttpRequest("POST", "/api/user/create.php", "", JSON.stringify(user), function () {
+            signUpMessage.textContent = "You have created a new account. Login in the login section to login into your account";
+        }, function () {
+            signUpMessage.textContent = "The username or email is already taken";
+        });
+
         websiteStorage.users.push(user);
         localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
+        signUpEmailInput.value = "";
         signUpUserNameInput.value = "";
         signUpPasswordInput.value = "";
         signUpConfirmPasswordInput.value = "";
-        signUpMessage.textContent = "You have created a new account. Login in the login section to login into your account";
     });
 });

@@ -188,40 +188,34 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             rateButton.addEventListener("click", function () {
-                // for (let j = 0; j < webSiteStorage1.roleIdeas.length; j++) {
-                //     if (webSiteStorage1.roleIdeas[j].key === key) {
-                //         const input = document.getElementById(webSiteStorage1.roleIdeas[j].key + "-rate-field");
-                //         if (input.value === "" || input.value < 0 || input.value > 10) {
-                //             for (const rating of webSiteStorage1.roleIdeas[j].rating) {
-                //                 if (rating.owner === currentUser) {
-                //                     input.value = rating.rating;
-                //                 }
-                //             }
-                //             return;
-                //         }
-                //         const rating = {
-                //             rating: input.value,
-                //             owner: currentUser
-                //         }
-                //         for (let k = 0; k < role.rating.length; k++) {
-                //             if (role.rating[k].owner === currentUser) {
-                //                 webSiteStorage1.roleIdeas[j].rating[k] = rating;
-                //                 localStorage.setItem(websiteStorageString,JSON.stringify(webSiteStorage1));
-                //                 return;
-                //             }
-                //         }
-                //         webSiteStorage1.roleIdeas[j]["rating"].push(rating);
-                //         localStorage.setItem(websiteStorageString,JSON.stringify(webSiteStorage1));
-                //         displayRoles();
-                //         break;
-                //     }
-                // }
-                const test = {
-                    "id": 1
+                for (let j = 0; j < webSiteStorage1.roleIdeas.length; j++) {
+                    if (webSiteStorage1.roleIdeas[j].key === key) {
+                        const input = document.getElementById(webSiteStorage1.roleIdeas[j].key + "-rate-field");
+                        if (input.value === "" || input.value < 0 || input.value > 10) {
+                            for (const rating of webSiteStorage1.roleIdeas[j].rating) {
+                                if (rating.owner === currentUser) {
+                                    input.value = rating.rating;
+                                }
+                            }
+                            return;
+                        }
+                        const rating = {
+                            rating: input.value,
+                            owner: currentUser
+                        }
+                        for (let k = 0; k < role.rating.length; k++) {
+                            if (role.rating[k].owner === currentUser) {
+                                webSiteStorage1.roleIdeas[j].rating[k] = rating;
+                                localStorage.setItem(websiteStorageString, JSON.stringify(webSiteStorage1));
+                                return;
+                            }
+                        }
+                        webSiteStorage1.roleIdeas[j]["rating"].push(rating);
+                        localStorage.setItem(websiteStorageString, JSON.stringify(webSiteStorage1));
+                        displayRoles();
+                        break;
+                    }
                 }
-                sendXMLHttpRequest("POST", "/api/roleIdeas.php", "", JSON.stringify(test), function (data) {
-                    console.log(data);
-                });
             });
 
             favoriteButton.addEventListener("click", function () {

@@ -9,7 +9,7 @@
 <?php include 'partials/signUp.php'; ?>
 <?php include 'partials/login.php'; ?>
 
-<script src="../JavaScript/login.js" type="module" defer>
+<script src="JavaScript/login.js" type="module" defer>
 
 </script>
 </body>
