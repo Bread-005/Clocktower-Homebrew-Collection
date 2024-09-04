@@ -14,34 +14,22 @@ document.addEventListener("DOMContentLoaded", function () {
     const loginButton = document.getElementById("login-button");
     const loginMessage = document.getElementById("login-message");
 
-    if (localStorage.getItem(websiteStorageString) === null) {
-        const storage = {
-            roleIdeas: [],
-            page: 1,
-            users: [],
-            archive: []
-        }
-        localStorage.setItem(websiteStorageString, JSON.stringify(storage));
-    }
-
-    const websiteStorage = JSON.parse(localStorage.getItem(websiteStorageString));
-
-    if (websiteStorage.archive === undefined) {
-        websiteStorage.archive = [];
-        localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
-    }
-
     if (document.cookie === "") {
-        document.cookie = "iajrhugairopiarjoairjk138174590015mf,sloivohgwr18514";
+        document.cookie = "iajrhugairopiarjoairjk138174590015mf7sloivohgwr18514";
     }
 
     userNameInput.value = "";
     passwordInput.value = "";
 
-    for (const user of websiteStorage.users) {
-        if (user.name === document.cookie.split(":")[0] && user.password === document.cookie.split(":")[1]) {
-            window.location = "role_idea.php";
+    if (document.cookie.includes(":")) {
+        const cookie = {
+            name: document.cookie.split(":")[0],
+            password: document.cookie.split(":")[1]
         }
+
+        sendXMLHttpRequest("POST", "/api/user/cookie.php", "", JSON.stringify(cookie), function () {
+            window.location = "../role_idea.php";
+        });
     }
 
     loginButton.addEventListener("click", function (event) {
@@ -58,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
             name: userNameInput.value,
             password: passwordInput.value,
         }
-        sendXMLHttpRequest("POST", "/api/user/login.php", "", JSON.stringify(user), function (data) {
+        sendXMLHttpRequest("POST", "/api/user/login.php", "", JSON.stringify(user), function () {
             loginMessage.textContent = "";
             document.cookie = user.name + ":" + user.password;
             window.location = "role_idea.php";
@@ -103,9 +91,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }, function () {
             signUpMessage.textContent = "The username or email is already taken";
         });
-
-        websiteStorage.users.push(user);
-        localStorage.setItem(websiteStorageString, JSON.stringify(websiteStorage));
         signUpEmailInput.value = "";
         signUpUserNameInput.value = "";
         signUpPasswordInput.value = "";

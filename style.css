@@ -1,4 +1,4 @@
-:root{
+:root {
     --primary: #8c839e;
 }
 
@@ -226,7 +226,7 @@ textarea {
 }
 
 .delete-popup-background {
-    background-color: rgba(150,150,150,0.7);
+    background-color: rgba(150, 150, 150, 0.7);
     top: 0;
     left: 0;
     width: 100%;
@@ -275,4 +275,8 @@ textarea {
 
 .margin-left-6 {
     margin-left: 6px;
+}
+
+.margin-left-2 {
+    margin-left: 2px;
 }

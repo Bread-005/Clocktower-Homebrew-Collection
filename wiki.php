@@ -13,7 +13,6 @@
 </div>
 
 <?php include "partials/wikiPageTop.php" ?>
-<?php include "partials/tags.php" ?>
 
 <div class="space-between">
     <div id="image-submission">
@@ -47,6 +46,7 @@
     <div class="width-290"></div>
 </div>
 
+<?php include "partials/tags.php" ?>
 <?php include "partials/nightOrder.php" ?>
 <?php include "partials/howToRun.php" ?>
 

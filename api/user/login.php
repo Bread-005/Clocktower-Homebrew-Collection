@@ -17,3 +17,8 @@ foreach ($getUsers as $user1) {
 }
 
 http_response_code(409);
+
+function helloWorld()
+{
+    echo "Hello World";
+}
