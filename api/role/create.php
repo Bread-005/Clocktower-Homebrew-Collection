@@ -25,6 +25,19 @@ foreach ($tagArray as $tagName) {
     $statement1->execute(["name" => $tagName, "roleId" => $currentRoleId]);
 }
 
+//$statement3 = $pdo->prepare("SELECT DISTINCT roleId FROM tags");
+//$statement3->execute();
+//$roleIds = $statement3->fetchAll(PDO::FETCH_ASSOC);
+//
+//foreach ($roleIds as $roleId) {
+//    $statement4 = $pdo->prepare("SELECT name FROM tags where roleId = :roleId");
+//    $statement4->execute(["roleId" => $roleId]);
+//}
+//
+//foreach ($tagArray as $tagName) {
+//    $statement5 = $pdo->prepare("INSERT INTO tags (name, roleId) VALUES (:name, :roleId) WHERE NOT EXISTS (SELECT 1 FROM tags where roleId = :roleId)");
+//}
+
 //$statement3 = $pdo->prepare("SELECT id FROM roles");
 //$statement3->execute();
 //$roleIds = $statement3->fetchAll(PDO::FETCH_COLUMN);

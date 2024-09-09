@@ -280,3 +280,11 @@ textarea {
 .margin-left-2 {
     margin-left: 2px;
 }
+
+.margin-0-auto {
+    margin: 0 auto;
+}
+
+.max-width-800 {
+    max-width: 800px;
+}

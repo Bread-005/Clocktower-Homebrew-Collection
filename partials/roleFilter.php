@@ -43,6 +43,11 @@
                             <input id="character-changing-checkbox" type="checkbox" class="tag-filter-checkbox"
                                    name="Character Changing">
                         </div>
+                        <div>
+                            <label for="charactertype-modification-checkbox">Charactertype Modification</label>
+                            <input id="charactertype-modification-checkbox" type="checkbox" class="tag-filter-checkbox"
+                                   name="Charactertype Modification">
+                        </div>
                     </div>
                 </div>
             </div>

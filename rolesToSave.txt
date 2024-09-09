@@ -67,18 +67,6 @@
 //   },
 
 {
-//     "name": "Hannibal",
-//     "characterType": "Demon",
-//     "abilityText": "Du denkst du bist eine gute Rolle, bist es aber nicht. Die Minions kennen 3 bluffs. Jede Nacht*, kann ein Spieler sterben. Der erste Hannibal, der stirbt wird gut. [+1 Hannibal]",
-//     "comments": [],
-//     "howtorun": "",
-//     "inEditMode": true,
-//     "rating": "8",
-//     "image": "https://wiki.bloodontheclocktower.com/images/1/1f/Icon_shabaloth.png",
-//     "key": "1723202682478"
-//   },
-
-{
 //     "name": "Sheriff",
 //     "characterType": "Townsfolk",
 //     "abilityText": "Jede Nacht*, wähle einen Spieler: das erste Minion, das du wählst, stirbt.",
@@ -89,3 +77,17 @@
 //     "image": "https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F88d26018-fa1a-4b92-a8b9-d8ed3f9e178e_3840x2160.png",
 //     "key": "1723017715136"
 //   },
+
+{
+    "id":"santa_claus",
+    "name":"Santa Claus",
+    "ability":"On your 1st night, you see the Grimoire & choose all players. Each night*, your next alive unprotected choice dies.",
+    "team":"demon",
+    "firstNight":9.5,
+    "firstNightReminder":"Show Santa Claus the Grimoire. They choose an order for all players. Place the reminder tokens with the order.",
+    "otherNight":45.5,
+    "otherNightReminder":"Kill the next alive unprotected choice, the Santa Claus chose.",
+    "reminders":["Dead","1","2","3","4","5","6","7","8","9","10","11","12"],
+    "jinxes":[{"id":"poppy_grower","reason":"When Santa Claus sees the Grimoire and there is a Poppy Grower in play, they don´t see reminder tokens. Minions & the Poppy Grower are replaced with other good tokens."},
+              {"id":"magician","reason":"When Santa Claus sees the Grimoire the Minion´s and Magician´s token are removed."}]
+}

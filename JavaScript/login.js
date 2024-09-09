@@ -2,7 +2,6 @@ import {sendXMLHttpRequest} from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    const websiteStorageString = "websiteStorage1";
     const signUpEmailInput = document.getElementById("sign-up-email-input");
     const signUpUserNameInput = document.getElementById("sign-up-username-input");
     const signUpPasswordInput = document.getElementById("sign-up-password-input");

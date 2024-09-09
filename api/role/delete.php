@@ -19,3 +19,6 @@ $statement->execute(["roleId" => $id]);
 
 $statement = $pdo->prepare("DELETE FROM tags WHERE roleId = :roleId");
 $statement->execute(["roleId" => $id]);
+
+$statement = $pdo->prepare("DELETE FROM jinxes WHERE roleId = :roleId");
+$statement->execute(["roleId" => $id]);

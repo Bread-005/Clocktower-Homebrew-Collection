@@ -9,8 +9,11 @@ document.addEventListener("DOMContentLoaded", function () {
     sendXMLHttpRequest("POST", "/api/user/getIdByName.php", "", currentUser, function (userId) {
         currentUserId = Number.parseInt(userId);
 
+        const allUsers = [];
+
         const tagCheckbox = document.getElementById("tag-checkbox");
         const tagCheckboxes = document.getElementById("tag-checkboxes");
+        const authorSearch = document.getElementById("author-search");
         const onlyMyIdeasCheckBox = document.getElementById("only-my-ideas");
         const onlyMyFavoritesCheckBox = document.getElementById("only-my-favorites");
 
@@ -24,6 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
         sortingDropDownMenu.value = "Newest first";
 
         displayRoles();
+        getAllUsers();
 
         document.getElementById("username-display-main-page").append(currentUser);
 
@@ -179,8 +183,8 @@ document.addEventListener("DOMContentLoaded", function () {
         characterTypSelection.addEventListener("change", displayRoles);
         roleSearch.addEventListener("input", displayRoles);
         tagCheckboxes.style.display = "none";
-        document.getElementById("tag-div").style.display = "none";
-        document.getElementById("author-search").addEventListener("input", displayRoles);
+        //document.getElementById("tag-div").style.display = "none";
+        authorSearch.addEventListener("input", displayRoles);
         document.getElementById("only-my-ideas").addEventListener("change", displayRoles);
         document.getElementById("only-my-favorites").addEventListener("change", displayRoles);
 
@@ -273,13 +277,22 @@ document.addEventListener("DOMContentLoaded", function () {
             const filter = {
                 onlyMyFavorites: onlyMyFavoritesCheckBox.checked,
                 onlyMyIdeas: onlyMyIdeasCheckBox.checked,
-                ownerId: currentUserId,
-                author: document.getElementById("author-search").value
+                ownerId: currentUserId
             }
-            sendXMLHttpRequest("POST", "/api/role/filterFavorites.php", "", JSON.stringify(filter), function (data) {
-                if (!tagCheckbox.checked) {
+            sendXMLHttpRequest("POST", "/api/role/filterFavorites.php", "", JSON.stringify(filter), function (favorites) {
+                let tagString = "";
+                document.querySelectorAll(".tag-filter-checkbox").forEach(element => {
+                    if (element.checked) {
+                        tagString += element.name + " ";
+                    }
+                });
+                sendXMLHttpRequest("POST", "/api/tag/getTagsByName.php", "", tagString, function () {
+                    if (authorSearch.value !== "") {
+                        const userIds = allUsers.filter(user => user.name.toUpperCase().includes(authorSearch.value.toUpperCase())).map(user => user.id);
+                        roles = roles.filter(role => userIds.includes(role.ownerId));
+                    }
                     if (onlyMyFavoritesCheckBox.checked) {
-                        const onlyMyFavorites = JSON.parse(data);
+                        const onlyMyFavorites = JSON.parse(favorites);
                         const favoriteRoleIds = onlyMyFavorites.map(favorite => favorite.roleId);
                         roles = roles.filter(role => favoriteRoleIds.includes(role.id));
                     }
@@ -295,17 +308,6 @@ document.addEventListener("DOMContentLoaded", function () {
                             role.characterType.toUpperCase().includes(roleSearch.value.toUpperCase()) ||
                             role.abilityText.toUpperCase().includes(roleSearch.value.toUpperCase()));
                     }
-                    doneCallBack(roles);
-                    return;
-                }
-                const list = [];
-                document.querySelectorAll(".tag-filter-checkbox").forEach(element => {
-                    if (element.checked) {
-                        list.push(element.name);
-                    }
-                });
-                sendXMLHttpRequest("POST", "/api/tag/getTagsByName.php", "", list, function (data) {
-                    const tags = JSON.parse(data);
                     doneCallBack(roles);
                 });
             });
@@ -352,5 +354,14 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         document.querySelectorAll(".tag-filter-checkbox").forEach(element => element.addEventListener("click", displayRoles));
+
+        function getAllUsers() {
+            sendXMLHttpRequest("POST", "/api/user/getAll.php", "", "", function (data) {
+                const users = JSON.parse(data);
+                for (const user of users) {
+                    allUsers.push(user);
+                }
+            });
+        }
     });
 });

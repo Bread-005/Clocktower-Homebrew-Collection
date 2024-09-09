@@ -7,5 +7,7 @@
         <div>Wincondition<input type="checkbox" class="tag" name="Wincondition" id="wincondition-tag"></div>
         <div>Character Changing<input type="checkbox" class="tag" name="Character Changing" id="character-changing-tag">
         </div>
+        <div>Charactertype Modification<input type="checkbox" class="tag" name="Charactertype Modification"
+                                              id="charactertype-modification-tag"></div>
     </div>
 </div>

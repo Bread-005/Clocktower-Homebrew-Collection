@@ -9,7 +9,7 @@ $roleId = $rating->roleId;
 $pdo = new PDO("sqlite:../ClocktowerData.sqlite");
 
 $statement2 = $pdo->prepare("SELECT * FROM ratings WHERE ownerId = :ownerId AND roleId = :roleId");
-$statement2->execute(array(':ownerId' => $ownerId, ':roleId' => $roleId));
+$statement2->execute(array('ownerId' => $ownerId, 'roleId' => $roleId));
 $alreadyRatings = $statement2->fetchAll();
 foreach ($alreadyRatings as $alreadyRating) {
     if ($alreadyRating['roleId'] == $roleId && $alreadyRating['ownerId'] == $ownerId) {
