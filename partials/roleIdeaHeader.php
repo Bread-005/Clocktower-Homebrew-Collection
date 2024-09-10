@@ -1,9 +1,11 @@
-<h1 class="center">Clocktower Homebrew Collection</h1>
-
+<div class="space-between">
+    <div class="width-115"></div>
+    <h1 class="center">Clocktower Homebrew Collection</h1>
+    <p id="username-display-main-page" class="center">Your Username:<br></p>
+</div>
 <div class="filter">
     <div></div>
     <div class="flex-end">
-        <p id="username-display-main-page">Your Username: </p>
         <button id="logout">Logout</button>
     </div>
 </div>

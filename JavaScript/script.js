@@ -283,7 +283,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 let tagString = "";
                 document.querySelectorAll(".tag-filter-checkbox").forEach(element => {
                     if (element.checked) {
-                        tagString += element.name + " ";
+                        tagString += element.name + ",";
                     }
                 });
                 sendXMLHttpRequest("POST", "/api/tag/getTagsByName.php", "", tagString, function () {

@@ -1,4 +1,5 @@
 <div class="center max-width-800 margin-0-auto">
+    <h2>Night Order</h2>
     <div class="next-to-each-other">
         <p id="first-night">firstNight: </p>
         <input id="first-night-input" class="margin-left-10 edit-night-order" type="text">

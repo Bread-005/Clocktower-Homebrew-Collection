@@ -11,10 +11,12 @@ document.addEventListener("DOMContentLoaded", function () {
         let currentUserId = 1;
         sendXMLHttpRequest("POST", "/api/user/getIdByName.php", "", currentUser, function (userId) {
 
-            const imageSubmission = document.getElementById("image-submission");
+            const mainRoleDisplay = document.getElementById("main-role-display");
+            const editRoleFieldDiv = document.getElementById("edit-role-field");
             const editRoleNameInput = document.getElementById("edit-role-name");
             const editCharacterTypeInput = document.getElementById("edit-character-type");
             const editAbilityTextInput = document.getElementById("edit-ability-text");
+            const imageSubmission = document.getElementById("image-submission");
             const tagDisplay = document.getElementById("tag-display");
             const editTags = document.getElementById("edit-tags");
             const firstNightInput = document.getElementById("first-night-input");
@@ -38,6 +40,13 @@ document.addEventListener("DOMContentLoaded", function () {
             const reminderTokenInput = document.getElementById("reminder-token-input");
             const editReminderTokenDiv = document.getElementById("edit-reminder-token-div");
             const reminderTokenList = document.getElementById("reminder-token-list");
+            const specialDisplay = document.getElementById("special-display");
+            const specialEditDiv = document.getElementById("special-edit-div");
+            const specialTypeSelection = document.getElementById("special-type-selection");
+            const specialNameSelection = document.getElementById("special-name-selection");
+            const specialValueInput = document.getElementById("special-value-input");
+            const specialTimeSelection = document.getElementById("special-time-selection");
+            const specialAddButton = document.getElementById("special-add-button");
             const personalRoleRating = document.getElementById("personal-role-rating");
             const averageRoleRating = document.getElementById("average-role-rating");
             const inputComment = document.getElementById("input-comment");
@@ -80,6 +89,8 @@ document.addEventListener("DOMContentLoaded", function () {
             editJinxes();
             showReminderTokens();
             editReminderTokens();
+            showSpecial();
+            addSpecial();
             showPersonalRating();
             showAverageRating();
             displayComments();
@@ -237,7 +248,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     inEditMode = !inEditMode;
 
                     if (inEditMode) {
-                        document.getElementById("edit-role-field").style.display = "flex";
+                        editRoleFieldDiv.style.display = "flex";
+                        mainRoleDisplay.style.display = "none";
                         editRoleNameInput.value = role["name"];
                         editCharacterTypeInput.value = role["characterType"];
                         editAbilityTextInput.value = role["abilityText"];
@@ -251,10 +263,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         document.querySelectorAll(".edit-night-order").forEach(element => element.style.display = "flex");
                         document.getElementById("edit-night-order-text").style.display = "none";
-                        document.getElementById("first-night-input").value = role.firstNight;
-                        document.getElementById("first-night-reminder-input").value = role.firstNightReminder;
-                        document.getElementById("other-night-input").value = role.otherNight;
-                        document.getElementById("other-night-reminder-input").value = role.otherNightReminder;
+                        firstNightInput.value = role.firstNight;
+                        firstNightReminderInput.value = role.firstNightReminder;
+                        otherNightInput.value = role.otherNight;
+                        otherNightReminderInput.value = role.otherNightReminder;
                         showNightOrder();
 
                         if (role.onlyPrivateComments === 1) {
@@ -269,6 +281,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         jinxEditDiv.style.display = "flex";
                         showJinxes();
                         editReminderTokenDiv.style.display = "flex";
+                        specialEditDiv.style.display = "flex";
                     }
                     if (!inEditMode) {
                         hideEditStuff();
@@ -360,55 +373,85 @@ document.addEventListener("DOMContentLoaded", function () {
                 downloadJsonButton.addEventListener("click", function () {
                     sendXMLHttpRequest("POST", "/api/jinx/get.php", "", role.id, function (jinxData) {
                         sendXMLHttpRequest("POST", "/api/reminderToken/getByRoleId.php", "", role.id, function (reminderTokenData) {
-                            const jsonRole = {
-                                id: role.name.toLowerCase().replace(" ", "_"),
-                                name: role.name,
-                                ability: role.abilityText,
-                                team: role.characterType.toLowerCase(),
-                                image: role.image
-                            }
-                            if (role.firstNight !== 0) {
-                                jsonRole.firstNight = role.firstNight;
-                            }
-                            if (role.firstNightReminder !== "") {
-                                jsonRole.firstNightReminder = role.firstNightReminder;
-                            }
-                            if (role.otherNight !== 0) {
-                                jsonRole.otherNight = role.otherNight;
-                            }
-                            if (role.otherNightReminder !== "") {
-                                jsonRole.otherNightReminder = role.otherNightReminder;
-                            }
-                            if (reminderTokenData.includes("id")) {
-                                const reminderTokens = JSON.parse(reminderTokenData);
-                                jsonRole.reminders = [];
-                                for (const reminderToken of reminderTokens) {
-                                    jsonRole.reminders.push(reminderToken.name);
+                            sendXMLHttpRequest("POST", "/api/special/get.php", "", role.id, function (specialData) {
+                                const jsonRole = {
+                                    id: role.name.toLowerCase().replace(" ", "_"),
+                                    name: role.name,
+                                    ability: role.abilityText,
+                                    team: role.characterType.toLowerCase(),
+                                    image: role.image
                                 }
-                                jsonRole.reminders = "xyRemovexy[" + '"' + jsonRole.reminders.toString().replaceAll(",", "xyReminderTokenxy") + '"' + "]xyRemove1xy";
-                            }
-                            if (role.abilityText.includes("[") && role.abilityText.includes("]")) {
-                                jsonRole.setup = true;
-                            }
-                            if (jinxData.includes("id")) {
-                                const jinxes = JSON.parse(jinxData);
-                                jsonRole.jinxes = [];
-                                for (const jinx of jinxes) {
-                                    const tempJinx = {
-                                        id: jinx.jinxedRole.toLowerCase().replace(" ", "_"),
-                                        reason: jinx.text
+                                if (role.firstNight !== 0) {
+                                    jsonRole.firstNight = role.firstNight;
+                                }
+                                if (role.firstNightReminder !== "") {
+                                    jsonRole.firstNightReminder = role.firstNightReminder;
+                                }
+                                if (role.otherNight !== 0) {
+                                    jsonRole.otherNight = role.otherNight;
+                                }
+                                if (role.otherNightReminder !== "") {
+                                    jsonRole.otherNightReminder = role.otherNightReminder;
+                                }
+                                if (reminderTokenData.includes("id")) {
+                                    const reminderTokens = JSON.parse(reminderTokenData);
+                                    jsonRole.reminders = [];
+                                    for (const reminderToken of reminderTokens) {
+                                        jsonRole.reminders.push(reminderToken.name);
                                     }
-                                    jsonRole.jinxes.push(tempJinx);
+                                    jsonRole.reminders = "xyRemovexy[" + '"' + jsonRole.reminders.toString().replaceAll(",", "xyReminderTokenxy") + '"' + "]xyRemove1xy";
                                 }
-                            }
-                            const preString = JSON.stringify(jsonRole) + "xyEndxy";
-                            const jsonString = preString.replaceAll("},{", "},\n              {")
-                                .replaceAll(',"reason"', "xyReasonxy").replace("{", "{\n    ")
-                                .replaceAll(',"', ',\n    "').replace("}xyEndxy", "\n}")
-                                .replaceAll("xyReasonxy", ',"reason"').replaceAll("xyCommaxy", ",")
-                                .replaceAll("xyReminderTokenxy", '","').replace('"xyRemovexy', "")
-                                .replace('xyRemove1xy"', "").replaceAll("\\", "");
-                            navigator.clipboard.writeText(jsonString);
+                                if (role.abilityText.includes("[") && role.abilityText.includes("]")) {
+                                    jsonRole.setup = true;
+                                }
+                                if (jinxData.includes("id")) {
+                                    const jinxes = JSON.parse(jinxData);
+                                    jsonRole.jinxes = [];
+                                    for (const jinx of jinxes) {
+                                        const tempJinx = {
+                                            id: jinx.jinxedRole.toLowerCase().replace(" ", "_"),
+                                            reason: jinx.text
+                                        }
+                                        jsonRole.jinxes.push(tempJinx);
+                                    }
+                                }
+                                if (specialData.includes("type")) {
+                                    const specials = JSON.parse(specialData);
+                                    jsonRole.special = [];
+                                    for (const special of specials) {
+                                        const tempSpecial = {
+                                            name: special.name,
+                                            type: special.type,
+                                        }
+                                        if (special.value !== "") {
+                                            tempSpecial.value = special.value;
+                                        }
+                                        if (special.time !== "") {
+                                            tempSpecial.time = special.time;
+                                        }
+                                        jsonRole.special.push(tempSpecial);
+                                    }
+                                }
+                                const preString = JSON.stringify(jsonRole) + "xyEndxy";
+                                const jsonString = preString.replaceAll("},{", "},\n              {")
+                                    .replaceAll(',"reason"', "xyReasonxy")
+                                    .replaceAll(',"type"', "xyTypexy")
+                                    .replaceAll(',"value"', "xyValuexy")
+                                    .replaceAll(',"time"', "xyTimexy")
+                                    .replace("{", "{\n    ")
+                                    .replaceAll(',"', ',\n    "')
+                                    .replace("}xyEndxy", "\n}")
+                                    .replaceAll("xyReasonxy", ',"reason"')
+                                    .replaceAll("xyTypexy", ',"type"')
+                                    .replaceAll("xyValuexy", ',"value"')
+                                    .replaceAll("xyTimexy", ',"time"')
+                                    .replaceAll("xyCommaxy", ",")
+                                    .replaceAll("xyReminderTokenxy", '","')
+                                    .replace('"xyRemovexy', "")
+                                    .replace('xyRemove1xy"', "")
+                                    .replaceAll("\\", "");
+                                navigator.clipboard.writeText(jsonString);
+                            });
                         });
                     });
                 });
@@ -577,8 +620,9 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             function hideEditStuff() {
+                mainRoleDisplay.style.display = "flex";
+                editRoleFieldDiv.style.display = "none";
                 imageSubmission.style.display = "none";
-                document.getElementById("edit-role-field").style.display = "none";
                 editTags.style.display = "none";
                 firstNightInfoButton.style.display = "none";
                 firstNightInfoText.style.display = "none";
@@ -589,9 +633,55 @@ document.addEventListener("DOMContentLoaded", function () {
                 howToRunChangeButton.style.display = "none";
                 jinxEditDiv.style.display = "none";
                 editReminderTokenDiv.style.display = "none";
+                specialEditDiv.style.display = "none";
                 document.getElementById("private-comments-checkbox-div").style.display = "none";
                 deleteRoleDiv.style.display = "none";
                 deletePopupBackground.style.display = "none";
+            }
+
+            function showSpecial() {
+                sendXMLHttpRequest("POST", "/api/special/get.php", "", role.id, function (data) {
+                    const specials = JSON.parse(data);
+                    specialDisplay.textContent = "";
+                    for (const special of specials) {
+                        const list = document.createElement("li");
+                        list.textContent = special.type + " " + special.name + " " + special.value + " " + special.time;
+                        const deleteButton = document.createElement("button");
+                        const deleteIcon = document.createElement("i");
+                        deleteIcon.setAttribute("class", "fa-solid fa-trash");
+                        deleteButton.append(deleteIcon);
+                        list.append(deleteButton);
+                        specialDisplay.append(list);
+
+                        deleteButton.addEventListener("click", function () {
+                            sendXMLHttpRequest("POST", "/api/special/delete.php", "", special.id, function () {
+                                showSpecial();
+                            });
+                        });
+                    }
+                });
+            }
+
+            function addSpecial() {
+                specialAddButton.addEventListener("click", function () {
+                    if (specialTypeSelection.value === "" || specialNameSelection.value === "") {
+                        return;
+                    }
+                    const special = {
+                        roleId: role.id,
+                        type: specialTypeSelection.value,
+                        name: specialNameSelection.value,
+                        value: specialValueInput.value,
+                        time: specialTimeSelection.value === "none" ? "" : specialTimeSelection.value
+                    }
+                    sendXMLHttpRequest("POST", "/api/special/create.php", "", JSON.stringify(special), function () {
+                        specialTypeSelection.value = "selection";
+                        specialNameSelection.value = "grimoire";
+                        specialValueInput.value = "";
+                        specialTimeSelection.value = "none";
+                        showSpecial();
+                    });
+                });
             }
         });
     });

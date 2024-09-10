@@ -91,3 +91,15 @@
     "jinxes":[{"id":"poppy_grower","reason":"When Santa Claus sees the Grimoire and there is a Poppy Grower in play, they don´t see reminder tokens. Minions & the Poppy Grower are replaced with other good tokens."},
               {"id":"magician","reason":"When Santa Claus sees the Grimoire the Minion´s and Magician´s token are removed."}]
 }
+{
+    "id":"sheriff",
+    "name":"Sheriff",
+    "ability":"Each night*, choose a player: the 1st Minion you choose, dies.",
+    "team":"townsfolk",
+    "otherNight":28.2,
+    "otherNightReminder":"The Sheriff chooses a player. If that player is the 1st Minion the Sheriff chooses, mark that Minion with "Dead"",
+    "reminders":["Dead"],
+    "jinxes":[{"id":"vizier","reason":"The Sheriff cannot kill the Vizier. If there are 9 or less players playing, the Sheriff´s ability drunks the Demon the 1st first time, the Sheriff chooses the Demon."}],
+    "special":[{"name":"grimoire","type":"selection"},
+              {"name":"player","type":"signal"}]
+}

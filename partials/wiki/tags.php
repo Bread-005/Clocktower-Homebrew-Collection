@@ -1,4 +1,5 @@
 <div id="tags-div" class="center">
+    <h2>Tags</h2>
     <p id="tag-display"></p>
     <div id="edit-tags" class="center max-width-800">
         <div>Misinformation<input type="checkbox" class="tag" name="Misinformation" id="misinformation-tag"></div>
