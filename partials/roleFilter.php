@@ -1,73 +1,62 @@
 <div class="filter">
     <div>
-        <div>
-            <div class="next-to-each-other">
+        <div class="next-to-each-other">
+            <div class="center">
                 <input id="role-search" type="text" class="padding" placeholder="Search">
-                <label for="character-typ-selection" class="margin-left-6">CharacterType</label>
-                <select id="character-typ-selection" class="padding margin-left-2">
-                    <option value="All">All</option>
-                    <option value="Townsfolk">Townsfolk</option>
-                    <option value="Outsider">Outsider</option>
-                    <option value="Minion">Minion</option>
-                    <option value="Demon">Demon</option>
-                    <option value="Traveller">Traveller</option>
-                </select>
-                <div id="tag-div" class="center">
-                    <div>
-                        <label for="tag-checkbox" class="margin-left-6">Tags</label>
-                        <input id="tag-checkbox" type="checkbox">
-                    </div>
-                    <div id="tag-checkboxes" class="center">
-                        <div>
-                            <label for="misinformation-checkbox">Misinformation</label>
-                            <input id="misinformation-checkbox" type="checkbox" class="tag-filter-checkbox"
-                                   name="Misinformation">
-                        </div>
-                        <div>
-                            <label for="extra-deaths-checkbox">Extra Deaths</label>
-                            <input id="extra-deaths-checkbox" type="checkbox" class="tag-filter-checkbox"
-                                   name="Extra Deaths">
-                        </div>
-                        <div>
-                            <label for="protection-checkbox">Protection</label>
-                            <input id="protection-checkbox" type="checkbox" class="tag-filter-checkbox"
-                                   name="Protection">
-                        </div>
-                        <div>
-                            <label for="wincondition-checkbox">Wincondition</label>
-                            <input id="wincondition-checkbox" type="checkbox" class="tag-filter-checkbox"
-                                   name="Wincondition">
-                        </div>
-                        <div>
-                            <label for="character-changing-checkbox">Character Changing</label>
-                            <input id="character-changing-checkbox" type="checkbox" class="tag-filter-checkbox"
-                                   name="Character Changing">
-                        </div>
-                        <div>
-                            <label for="charactertype-modification-checkbox">Charactertype Modification</label>
-                            <input id="charactertype-modification-checkbox" type="checkbox" class="tag-filter-checkbox"
-                                   name="Charactertype Modification">
-                        </div>
-                    </div>
+                <input id="author-search" type="text" class="padding margin-top-5" placeholder="Author">
+                <div class="font-size-18 margin-top-10 space-between">
+                    <label for="only-my-ideas">Only my Ideas</label>
+                    <input id="only-my-ideas" class="padding" type="checkbox">
+                </div>
+                <div>
+                    <label for="script-filter-selection">Script</label>
+                    <select id="script-filter-selection" class="padding">
+                        <option value="All">All</option>
+                    </select>
+                </div>
+            </div>
+            <div class="center">
+                <div class="next-to-each-other">
+                    <label for="character-typ-selection" class="margin-left-6">CharacterType</label>
+                    <select id="character-typ-selection" class="padding margin-left-2">
+                        <option value="All">All</option>
+                        <option value="Townsfolk">Townsfolk</option>
+                        <option value="Outsider">Outsider</option>
+                        <option value="Minion">Minion</option>
+                        <option value="Demon">Demon</option>
+                        <option value="Traveller">Traveller</option>
+                    </select>
+                </div>
+                <div id="tag-div" class="margin-left-6 margin-top-5">
+                    <label for="tag-filter-selection">Tags filter</label>
+                    <select id="tag-filter-selection" class="padding">
+                        <option value="None">None</option>
+                        <option value="Misinformation">Misinformation</option>
+                        <option value="Extra Death">Extra Death</option>
+                        <option value="Protection">Protection</option>
+                        <option value="Wincondition">Wincondition</option>
+                        <option value="Character Changing">Character Changing</option>
+                        <option value="Setup">Setup</option>
+                        <option value="Madness">Madness</option>
+                        <option value="Noms Votes Exes">Noms Votes Exes</option>
+                        <option value="Does Not Wake">Does Not Wake</option>
+                        <option value="ST Consult">ST Consult</option>
+                        <option value="When You Die">When You Die</option>
+                        <option value="Resurrection">Resurrection</option>
+                    </select>
+                </div>
+                <div class="font-size-18 margin-top-10 space-between">
+                    <label for="only-my-favorites">Only my Favorites</label>
+                    <input id="only-my-favorites" type="checkbox">
+                </div>
+                <div class="center">
+                    <button id="clear-searches-button">Clear Searches</button>
                 </div>
             </div>
         </div>
-        <div class="margin-top-5">
-            <input id="author-search" type="text" class="padding" placeholder="Author">
-        </div>
-        <div class="font-size-18 margin-top-10 space-between">
-            <div>
-                Only my Ideas
-                <input id="only-my-ideas" class="padding" type="checkbox">
-            </div>
-            <div>
-                Only my Favorites
-                <input id="only-my-favorites" type="checkbox">
-            </div>
-        </div>
     </div>
-    <div>
-        Sorting
+    <div class="font-size-18">
+        <label for="sorting">Sorting</label>
         <select id="sorting" class="padding">
             <option value="Alphabet A-Z">Alphabet A-Z</option>
             <option value="Alphabet Z-A">Alphabet Z-A</option>

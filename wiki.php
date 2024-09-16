@@ -32,6 +32,7 @@
 <?php include "partials/wiki/jinxes.php" ?>
 <?php include "partials/wiki/reminderToken.php" ?>
 <?php include "partials/wiki/special.php" ?>
+<?php include "partials/wiki/script.php" ?>
 <?php include "partials/wiki/rating.php" ?>
 <?php include "partials/wiki/comments.php" ?>
 <?php include "partials/wiki/downloadJson.php" ?>

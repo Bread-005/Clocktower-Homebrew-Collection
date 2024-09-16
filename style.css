@@ -292,3 +292,17 @@ textarea {
 .width-115 {
     width: 115px;
 }
+
+.night-order-info-text {
+    position: absolute;
+    background-color: gray;
+    overflow: scroll;
+    right: -190px;
+    width: 180px;
+    height: 250px;
+    padding: 4px;
+}
+
+.night-order-container {
+    position: relative;
+}

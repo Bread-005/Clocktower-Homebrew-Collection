@@ -7,9 +7,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     sendXMLHttpRequest("POST", "/api/role/getById.php", "", id, function (data) {
 
-        const currentUser = document.cookie.split(":")[0];
+        const currentUserName = document.cookie.split(":")[0];
         let currentUserId = 1;
-        sendXMLHttpRequest("POST", "/api/user/getIdByName.php", "", currentUser, function (userId) {
+        sendXMLHttpRequest("POST", "/api/user/getByName.php", "", currentUserName, function (userData) {
+            const currentUser = JSON.parse(userData);
+            currentUserId = currentUser.id;
 
             const mainRoleDisplay = document.getElementById("main-role-display");
             const editRoleFieldDiv = document.getElementById("edit-role-field");
@@ -47,6 +49,9 @@ document.addEventListener("DOMContentLoaded", function () {
             const specialValueInput = document.getElementById("special-value-input");
             const specialTimeSelection = document.getElementById("special-time-selection");
             const specialAddButton = document.getElementById("special-add-button");
+            const scriptText = document.getElementById("script-text");
+            const scriptEditButton = document.getElementById("script-edit-button");
+            const scriptEditInput = document.getElementById("script-edit-input");
             const personalRoleRating = document.getElementById("personal-role-rating");
             const averageRoleRating = document.getElementById("average-role-rating");
             const inputComment = document.getElementById("input-comment");
@@ -59,7 +64,6 @@ document.addEventListener("DOMContentLoaded", function () {
             const deleteConfirmationCancelButton = document.getElementById("delete-confirmation-cancel-button");
             const deletePopupBackground = document.getElementById("delete-popup-background");
 
-            currentUserId = Number.parseInt(userId);
             const role = JSON.parse(data);
             document.title = role.name;
             let inEditMode = false;
@@ -71,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (currentUserId !== role.ownerId) {
                 document.getElementById("edit-button").style.display = "none";
             }
-            document.getElementById("username-display-wiki-page").append(currentUser);
+            document.getElementById("username-display-wiki-page").append(currentUserName);
 
             hideEditStuff();
             toggleEditMode();
@@ -79,9 +83,11 @@ document.addEventListener("DOMContentLoaded", function () {
             displayRole();
             editMainRole();
             showTags();
-            showNightOrder();
             changeTags();
+            showNightOrder();
             editNightOrder();
+            fillFirstNightInfoTextArea();
+            fillOtherNightInfoTextArea();
             editHowToRun();
             howToRunInput.value = role.howToRun;
             document.getElementById("howtorun-text").innerHTML = role.howToRun;
@@ -91,6 +97,8 @@ document.addEventListener("DOMContentLoaded", function () {
             editReminderTokens();
             showSpecial();
             addSpecial();
+            showScript();
+            editScript();
             showPersonalRating();
             showAverageRating();
             displayComments();
@@ -166,6 +174,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             });
 
+            function changeTags() {
+                document.querySelectorAll(".tag").forEach(element => element.addEventListener("click", function () {
+                    const tempTag = {
+                        roleId: role.id,
+                        name: element.name,
+                        isActive: element.checked ? 1 : 0
+                    }
+                    sendXMLHttpRequest("POST", "/api/tag/create.php", "", JSON.stringify(tempTag), function () {
+                        showTags();
+                    });
+                }));
+            }
+
             function showTags() {
                 sendXMLHttpRequest("POST", "/api/tag/getTagsByRoleId.php", "", role.id, function (data) {
                     const tags = JSON.parse(data);
@@ -181,7 +202,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                     for (let i = 0; i < activeTags.length; i++) {
                         tagDisplay.textContent += activeTags[i].name;
-                        document.getElementById(activeTags[i].name.replace(" ", "-").toLowerCase() + "-tag").checked = true;
+                        document.getElementById(activeTags[i].name.replaceAll(" ", "-").toLowerCase() + "-tag").checked = true;
                         if (i < activeTags.length - 1) {
                             tagDisplay.textContent += ", ";
                         }
@@ -281,12 +302,15 @@ document.addEventListener("DOMContentLoaded", function () {
                         jinxEditDiv.style.display = "flex";
                         showJinxes();
                         editReminderTokenDiv.style.display = "flex";
-                        specialEditDiv.style.display = "flex";
+                        scriptEditInput.style.display = "flex";
+                        scriptEditButton.style.display = "flex";
+                        showScript();
                     }
                     if (!inEditMode) {
                         hideEditStuff();
                         showNightOrder();
                         showJinxes();
+                        showScript();
                     }
                 });
             }
@@ -374,83 +398,85 @@ document.addEventListener("DOMContentLoaded", function () {
                     sendXMLHttpRequest("POST", "/api/jinx/get.php", "", role.id, function (jinxData) {
                         sendXMLHttpRequest("POST", "/api/reminderToken/getByRoleId.php", "", role.id, function (reminderTokenData) {
                             sendXMLHttpRequest("POST", "/api/special/get.php", "", role.id, function (specialData) {
-                                const jsonRole = {
-                                    id: role.name.toLowerCase().replace(" ", "_"),
-                                    name: role.name,
-                                    ability: role.abilityText,
-                                    team: role.characterType.toLowerCase(),
-                                    image: role.image
-                                }
-                                if (role.firstNight !== 0) {
-                                    jsonRole.firstNight = role.firstNight;
-                                }
-                                if (role.firstNightReminder !== "") {
-                                    jsonRole.firstNightReminder = role.firstNightReminder;
-                                }
-                                if (role.otherNight !== 0) {
-                                    jsonRole.otherNight = role.otherNight;
-                                }
-                                if (role.otherNightReminder !== "") {
-                                    jsonRole.otherNightReminder = role.otherNightReminder;
-                                }
-                                if (reminderTokenData.includes("id")) {
-                                    const reminderTokens = JSON.parse(reminderTokenData);
-                                    jsonRole.reminders = [];
-                                    for (const reminderToken of reminderTokens) {
-                                        jsonRole.reminders.push(reminderToken.name);
+                                sendXMLHttpRequest("POST", "/api/tag/getSetupTag.php", "", role.id, function (tagData) {
+                                    const jsonRole = {
+                                        id: role.name.toLowerCase().replace(" ", "_"),
+                                        name: role.name,
+                                        ability: role.abilityText,
+                                        team: role.characterType.toLowerCase(),
+                                        image: role.image
                                     }
-                                    jsonRole.reminders = "xyRemovexy[" + '"' + jsonRole.reminders.toString().replaceAll(",", "xyReminderTokenxy") + '"' + "]xyRemove1xy";
-                                }
-                                if (role.abilityText.includes("[") && role.abilityText.includes("]")) {
-                                    jsonRole.setup = true;
-                                }
-                                if (jinxData.includes("id")) {
-                                    const jinxes = JSON.parse(jinxData);
-                                    jsonRole.jinxes = [];
-                                    for (const jinx of jinxes) {
-                                        const tempJinx = {
-                                            id: jinx.jinxedRole.toLowerCase().replace(" ", "_"),
-                                            reason: jinx.text
-                                        }
-                                        jsonRole.jinxes.push(tempJinx);
+                                    if (role.firstNight !== 0) {
+                                        jsonRole.firstNight = role.firstNight;
                                     }
-                                }
-                                if (specialData.includes("type")) {
-                                    const specials = JSON.parse(specialData);
-                                    jsonRole.special = [];
-                                    for (const special of specials) {
-                                        const tempSpecial = {
-                                            name: special.name,
-                                            type: special.type,
-                                        }
-                                        if (special.value !== "") {
-                                            tempSpecial.value = special.value;
-                                        }
-                                        if (special.time !== "") {
-                                            tempSpecial.time = special.time;
-                                        }
-                                        jsonRole.special.push(tempSpecial);
+                                    if (role.firstNightReminder !== "") {
+                                        jsonRole.firstNightReminder = role.firstNightReminder;
                                     }
-                                }
-                                const preString = JSON.stringify(jsonRole) + "xyEndxy";
-                                const jsonString = preString.replaceAll("},{", "},\n              {")
-                                    .replaceAll(',"reason"', "xyReasonxy")
-                                    .replaceAll(',"type"', "xyTypexy")
-                                    .replaceAll(',"value"', "xyValuexy")
-                                    .replaceAll(',"time"', "xyTimexy")
-                                    .replace("{", "{\n    ")
-                                    .replaceAll(',"', ',\n    "')
-                                    .replace("}xyEndxy", "\n}")
-                                    .replaceAll("xyReasonxy", ',"reason"')
-                                    .replaceAll("xyTypexy", ',"type"')
-                                    .replaceAll("xyValuexy", ',"value"')
-                                    .replaceAll("xyTimexy", ',"time"')
-                                    .replaceAll("xyCommaxy", ",")
-                                    .replaceAll("xyReminderTokenxy", '","')
-                                    .replace('"xyRemovexy', "")
-                                    .replace('xyRemove1xy"', "")
-                                    .replaceAll("\\", "");
-                                navigator.clipboard.writeText(jsonString);
+                                    if (role.otherNight !== 0) {
+                                        jsonRole.otherNight = role.otherNight;
+                                    }
+                                    if (role.otherNightReminder !== "") {
+                                        jsonRole.otherNightReminder = role.otherNightReminder;
+                                    }
+                                    if (reminderTokenData.includes("id")) {
+                                        const reminderTokens = JSON.parse(reminderTokenData);
+                                        jsonRole.reminders = [];
+                                        for (const reminderToken of reminderTokens) {
+                                            jsonRole.reminders.push(reminderToken.name);
+                                        }
+                                        jsonRole.reminders = "xyRemovexy[" + '"' + jsonRole.reminders.toString().replaceAll(",", "xyReminderTokenxy") + '"' + "]xyRemove1xy";
+                                    }
+                                    if (role.abilityText.includes("[") && role.abilityText.includes("]") || tagData === "1") {
+                                        jsonRole.setup = true;
+                                    }
+                                    if (jinxData.includes("id")) {
+                                        const jinxes = JSON.parse(jinxData);
+                                        jsonRole.jinxes = [];
+                                        for (const jinx of jinxes) {
+                                            const tempJinx = {
+                                                id: jinx.jinxedRole.toLowerCase().replace(" ", "_"),
+                                                reason: jinx.text
+                                            }
+                                            jsonRole.jinxes.push(tempJinx);
+                                        }
+                                    }
+                                    if (specialData.includes("type")) {
+                                        const specials = JSON.parse(specialData);
+                                        jsonRole.special = [];
+                                        for (const special of specials) {
+                                            const tempSpecial = {
+                                                name: special.name,
+                                                type: special.type,
+                                            }
+                                            if (special.value !== "") {
+                                                tempSpecial.value = special.value;
+                                            }
+                                            if (special.time !== "") {
+                                                tempSpecial.time = special.time;
+                                            }
+                                            jsonRole.special.push(tempSpecial);
+                                        }
+                                    }
+                                    const preString = JSON.stringify(jsonRole) + "xyEndxy";
+                                    const jsonString = preString.replaceAll("},{", "},\n              {")
+                                        .replaceAll(',"reason"', "xyReasonxy")
+                                        .replaceAll(',"type"', "xyTypexy")
+                                        .replaceAll(',"value"', "xyValuexy")
+                                        .replaceAll(',"time"', "xyTimexy")
+                                        .replace("{", "{\n    ")
+                                        .replaceAll(',"', ',\n    "')
+                                        .replace("}xyEndxy", "\n}")
+                                        .replaceAll("xyReasonxy", ',"reason"')
+                                        .replaceAll("xyTypexy", ',"type"')
+                                        .replaceAll("xyValuexy", ',"value"')
+                                        .replaceAll("xyTimexy", ',"time"')
+                                        .replaceAll("xyCommaxy", ",")
+                                        .replaceAll("xyReminderTokenxy", '","')
+                                        .replace('"xyRemovexy', "")
+                                        .replace('xyRemove1xy"', "")
+                                        .replaceAll("\\", "");
+                                    navigator.clipboard.writeText(jsonString);
+                                });
                             });
                         });
                     });
@@ -498,19 +524,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         displayRole();
                     });
                 });
-            }
-
-            function changeTags() {
-                document.querySelectorAll(".tag").forEach(element => element.addEventListener("change", function () {
-                    const tag = {
-                        roleId: role.id,
-                        name: element.name,
-                        isActive: element.checked ? 1 : 0
-                    }
-                    sendXMLHttpRequest("POST", "/api/tag/update.php", "", JSON.stringify(tag), function () {
-                        showTags();
-                    });
-                }));
             }
 
             function editJinxes() {
@@ -634,6 +647,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 jinxEditDiv.style.display = "none";
                 editReminderTokenDiv.style.display = "none";
                 specialEditDiv.style.display = "none";
+                scriptEditButton.style.display = "none";
+                scriptEditInput.style.display = "none";
                 document.getElementById("private-comments-checkbox-div").style.display = "none";
                 deleteRoleDiv.style.display = "none";
                 deletePopupBackground.style.display = "none";
@@ -680,6 +695,54 @@ document.addEventListener("DOMContentLoaded", function () {
                         specialValueInput.value = "";
                         specialTimeSelection.value = "none";
                         showSpecial();
+                    });
+                });
+            }
+
+            function fillFirstNightInfoTextArea() {
+                const firstNightList = ["Lord of Typhon", "Minion info", "Philosopher", "Demon info", "Kazali",
+                    "Alchemist", "Poppy Grower", "Yaggababble", "Magician", "Snitch", "Lunatic", "Summoner", "King", "Sailor",
+                    "Marionette", "Engineer", "Preacher", "Lil Monsta", "Lleech", "Poisoner", "Widow", "Courtier", "Snake Charmer",
+                    "Godfather", "Devil´s Advocate", "Evil Twin", "Witch", "Cerenovus", "Fearmonger", "Harpy", "Mezepheles", "Pukka",
+                    "Pixie", "Huntsman", "Damsel", "Amnesiac", "Washerwoman", "Librarian", "Investigator", "Chef", "Empath",
+                    "Fortune Teller", "Butler", "Grandmother", "Clockmaker", "Dreamer", "Seamstress", "Steward", "Knight",
+                    "Noble", "Balloonist", "Shugenja", "Village Idiot", "Bounty Hunter", "Nightwatchman", "Cult Leader",
+                    "Spy", "Ogre", "High Priestess", "Chambermaid", "Mathematician", "Leviathan", "Vizier"];
+                for (let i = 0; i < firstNightList.length; i++) {
+                    firstNightInfoText.innerHTML += (i + 5) + " " + firstNightList[i] + "<br>";
+                }
+            }
+
+            function fillOtherNightInfoTextArea() {
+                const otherNightList = ["Philosopher", "Poppy Grower", "Sailor", "Engineer", "Preacher", "Poisoner",
+                    "Courtier", "Innkeeper", "Gambler", "Snake Charmer", "Monk", "Devil´s Advocate", "Witch", "Cerenovus",
+                    "Pit-Hag", "Fearmonger", "Harpy", "Mezepheles", "Scarlet Woman", "Summoner", "Lunatic", "Exorcist",
+                    "Lycanthrope", "Legion", "Imp", "Zombuul", "Pukka", "Shabaloth", "Po", "Fang Gu", "No Dashii", "Vortox",
+                    "Lord of Typhon", "Vigormortis", "Ojo", "Al-Hadikhia", "Lleech", "Lil Monsta", "Yaggababble", "Kazali",
+                    "Assassin", "Godfather", "Gossip", "Acrobat", "Hatter", "Barber", "Sweetheart", "Sage", "Banshee", "Professor",
+                    "Choirboy", "Huntsman", "Damsel", "Amnesiac", "Farmer", "Tinker", "Moonchild", "Grandmother", "Ravenkeeper",
+                    "Empath", "Fortune Teller", "Undertaker", "Dreamer", "Flowergirl", "Town Crier", "Oracle", "Seamstress",
+                    "Juggler", "Balloonist", "Village Idiot", "King", "Bounty Hunter", "Nightwatchman", "Cult Leader", "Butler",
+                    "Spy", "High Priestess", "Chambermaid", "Mathematician", "Leviathan"];
+                for (let i = 0; i < otherNightList.length; i++) {
+                    otherNightInfoText.innerHTML += (i + 6) + " " + otherNightList[i] + "<br>";
+                }
+            }
+
+            function showScript() {
+                scriptText.style.display = "flex";
+                scriptText.textContent = "Script: " + role.script;
+                if (role.script === "" && !inEditMode) {
+                    scriptText.style.display = "none";
+                }
+            }
+
+            function editScript() {
+                scriptEditButton.addEventListener("click", function () {
+                    role.script = scriptEditInput.value;
+                    scriptEditInput.value = "";
+                    sendXMLHttpRequest("POST", "/api/role/update.php", "", JSON.stringify(role), function () {
+                        showScript();
                     });
                 });
             }

@@ -15,20 +15,7 @@ $firstNightReminder = $role->firstNightReminder;
 $otherNight = $role->otherNight;
 $otherNightReminder = $role->otherNightReminder;
 $onlyPrivateComments = $role->onlyPrivateComments;
-
-$newRole = [
-    "id" => $id,
-    "name" => $name,
-    "characterType" => $characterType,
-    "abilityText" => $abilityText,
-    "imageUrl" => $imageUrl,
-    "howToRun" => $howToRun,
-    "firstNight" => $firstNight,
-    "firstNightReminder" => $firstNightReminder,
-    "otherNight" => $otherNight,
-    "otherNightReminder" => $otherNightReminder,
-    "onlyPrivateComments" => $onlyPrivateComments
-];
+$script = $role->script;
 
 $statement1 = $pdo->prepare("UPDATE roles SET
     name = :name,
@@ -40,7 +27,8 @@ $statement1 = $pdo->prepare("UPDATE roles SET
     firstNightReminder = :firstNightReminder,
     otherNight = :otherNight,
     otherNightReminder = :otherNightReminder,
-    onlyPrivateComments = :onlyPrivateComments
+    onlyPrivateComments = :onlyPrivateComments,
+    script = :script
              WHERE id = :id");
 
 $statement1->execute([
@@ -54,7 +42,6 @@ $statement1->execute([
     "firstNightReminder" => $firstNightReminder,
     "otherNight" => $otherNight,
     "otherNightReminder" => $otherNightReminder,
-    "onlyPrivateComments" => $onlyPrivateComments
+    "onlyPrivateComments" => $onlyPrivateComments,
+    "script" => $script
 ]);
-
-echo json_encode($newRole);
