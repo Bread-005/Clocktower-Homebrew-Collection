@@ -55,7 +55,12 @@ document.addEventListener("DOMContentLoaded", function () {
             role.ability = role.abilityText;
             role.abilityText = undefined;
         }
+        if (role.howtorun !== undefined) {
+            role.howToRun = role.howtorun;
+            role.howtorun = undefined;
+        }
         if (role.owner !== undefined) role.owner = undefined;
+        console.log(role.name)
         if (role.inEditMode !== undefined) role.inEditMode = undefined;
         if (role.onlyPrivateComments !== undefined) role.onlyPrivateComments = undefined;
         if (role.jinxes === undefined) role.jinxes = [];
