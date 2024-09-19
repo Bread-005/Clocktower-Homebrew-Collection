@@ -1,9 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" crossorigin="anonymous" href="https://core.ontavio.de/font-awesome/6.4.0/css/all.min.css"/>
+    <title>Clocktower Homebrew Collection</title>
+</head>
+<body>
+
+<div class="center">
+    <h1>Clocktower Homebrew Collection</h1>
+</div>
+<div class="center">
+    <img src="BotC.webp" width="200px" alt="">
+</div>
+
+<h2 class="center">Write your homebrew role here</h2>
+
+<div class="space-between margin-top-20">
+    <div></div>
+    <div></div>
+    <button id="change-role-creation">Change Role creation</button>
+    <form id="create-main-role-attributes" class="flex-start">
+        <div>
+            <label class="margin" for="role-name">Rolename</label>
+            <input class="input" id="role-name" type="text"/>
+        </div>
+        <div class="margin">
+            <label for="character-types">Charactertype</label>
+            <select class="character-types" id="character-types">
+                <option value="Townsfolk">Townsfolk</option>
+                <option value="Outsider">Outsider</option>
+                <option value="Minion">Minion</option>
+                <option value="Demon">Demon</option>
+                <option value="Traveller">Traveller</option>
+            </select>
+        </div>
+        <label for="ability-text"></label>
+        <textarea class="text-area-input margin" id="ability-text" cols="30" rows="4"
+                  placeholder="Abilitytext"></textarea>
+        <button id="js-add-role" name="click" type="reset">Submit Role</button>
+    </form>
+    <div id="json-input-div" class="display-none center">
+        <label for="json-input-textarea"></label>
+        <textarea id="json-input-textarea" class="text-area-input" cols="60" rows="10" placeholder="Put Json text here"></textarea>
+        <button id="add-role-button">Add Role</button>
+    </div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+</div>
+
+<h2 class="center">Role Ideas</h2>
+
 <div class="filter">
     <div>
         <div class="next-to-each-other">
             <div class="center">
+                <label for="role-search"></label>
                 <input id="role-search" type="text" class="padding-6" placeholder="Search">
-                <input id="author-search" type="text" class="padding-6 margin-top-5" placeholder="Author">
+                <div class="margin-top-5">
+                    <label for="script-filter-selection">Script</label>
+                    <select id="script-filter-selection" class="padding-6 script-selection">
+                        <option value="All">All</option>
+                    </select>
+                </div>
             </div>
             <div class="center">
                 <div class="next-to-each-other">
@@ -39,20 +104,8 @@
         </div>
         <div class="space-between">
             <div class="font-size-18 margin-top-10 space-between">
-                <label for="only-my-ideas">Only my Ideas</label>
-                <input id="only-my-ideas" class="padding-6" type="checkbox">
-            </div>
-            <div class="font-size-18 margin-top-10 space-between">
                 <label for="only-my-favorites">Only my Favorites</label>
                 <input id="only-my-favorites" type="checkbox">
-            </div>
-        </div>
-        <div class="space-between">
-            <div>
-                <label for="script-filter-selection">Script</label>
-                <select id="script-filter-selection" class="padding-6 script-selection">
-                    <option value="All">All</option>
-                </select>
             </div>
             <div>
                 <button id="clear-searches-button">Clear Searches</button>
@@ -71,3 +124,18 @@
         </select>
     </div>
 </div>
+
+<div class="center">
+    <div id="homebrewroles" class="margin-top-20 max-width-1200">No Roleideas yet</div>
+</div>
+<div id="role-idea-page-selection" class="next-to-each-other margin-top-20">
+
+</div>
+
+<div class="center margin-top-30">
+    <a href="https://script.bloodontheclocktower.com/" target="_blank">Already existing roles</a>
+</div>
+
+<script src="script.js" type="module" defer></script>
+</body>
+</html>

@@ -220,6 +220,7 @@ textarea {
     width: 100%;
     position: fixed;
     height: 100%;
+    display: none;
 }
 
 .space-between {
@@ -293,6 +294,7 @@ textarea {
 
 .night-order-container {
     position: relative;
+    margin-top: 20px;
 }
 
 .padding-20 {
@@ -318,4 +320,8 @@ textarea {
 
 .tag-filter-selection {
     max-width: 120px;
+}
+
+.display-none {
+    display: none;
 }
