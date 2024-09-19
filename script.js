@@ -36,7 +36,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (websiteStorage.page) {
         websiteStorage.page = undefined;
-        saveLocalStorage();
     }
 
     for (const role of websiteStorage.roleIdeas) {
@@ -56,11 +55,21 @@ document.addEventListener("DOMContentLoaded", function () {
             role.ability = role.abilityText;
             role.abilityText = undefined;
         }
+        if (role.owner !== undefined) role.owner = undefined;
+        if (role.inEditMode !== undefined) role.inEditMode = undefined;
+        if (role.onlyPrivateComments !== undefined) role.onlyPrivateComments = undefined;
+        if (role.jinxes === undefined) role.jinxes = [];
+        if (role.isFavorite === undefined) role.isFavorite = false;
+        if (Array.isArray(role.rating)) role.rating = 0;
+        if (role.special === undefined) role.special = [];
+        if (role.reminders === undefined) role.reminders = [];
     }
 
     if (websiteStorage.users !== undefined) {
         websiteStorage.users = undefined;
     }
+
+    saveLocalStorage();
 
     const createMainRoleAttributesForm = document.getElementById("create-main-role-attributes");
     const changeRoleCreationButton = document.getElementById("change-role-creation");
