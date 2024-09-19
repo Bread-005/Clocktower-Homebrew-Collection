@@ -2,23 +2,13 @@
     <div>
         <div class="next-to-each-other">
             <div class="center">
-                <input id="role-search" type="text" class="padding" placeholder="Search">
-                <input id="author-search" type="text" class="padding margin-top-5" placeholder="Author">
-                <div class="font-size-18 margin-top-10 space-between">
-                    <label for="only-my-ideas">Only my Ideas</label>
-                    <input id="only-my-ideas" class="padding" type="checkbox">
-                </div>
-                <div>
-                    <label for="script-filter-selection">Script</label>
-                    <select id="script-filter-selection" class="padding">
-                        <option value="All">All</option>
-                    </select>
-                </div>
+                <input id="role-search" type="text" class="padding-6" placeholder="Search">
+                <input id="author-search" type="text" class="padding-6 margin-top-5" placeholder="Author">
             </div>
             <div class="center">
                 <div class="next-to-each-other">
                     <label for="character-typ-selection" class="margin-left-6">CharacterType</label>
-                    <select id="character-typ-selection" class="padding margin-left-2">
+                    <select id="character-typ-selection" class="padding-6 margin-left-2">
                         <option value="All">All</option>
                         <option value="Townsfolk">Townsfolk</option>
                         <option value="Outsider">Outsider</option>
@@ -29,7 +19,7 @@
                 </div>
                 <div id="tag-div" class="margin-left-6 margin-top-5">
                     <label for="tag-filter-selection">Tags filter</label>
-                    <select id="tag-filter-selection" class="padding">
+                    <select id="tag-filter-selection" class="padding-6 tag-filter-selection">
                         <option value="None">None</option>
                         <option value="Misinformation">Misinformation</option>
                         <option value="Extra Death">Extra Death</option>
@@ -45,19 +35,33 @@
                         <option value="Resurrection">Resurrection</option>
                     </select>
                 </div>
-                <div class="font-size-18 margin-top-10 space-between">
-                    <label for="only-my-favorites">Only my Favorites</label>
-                    <input id="only-my-favorites" type="checkbox">
-                </div>
-                <div class="center">
-                    <button id="clear-searches-button">Clear Searches</button>
-                </div>
+            </div>
+        </div>
+        <div class="space-between">
+            <div class="font-size-18 margin-top-10 space-between">
+                <label for="only-my-ideas">Only my Ideas</label>
+                <input id="only-my-ideas" class="padding-6" type="checkbox">
+            </div>
+            <div class="font-size-18 margin-top-10 space-between">
+                <label for="only-my-favorites">Only my Favorites</label>
+                <input id="only-my-favorites" type="checkbox">
+            </div>
+        </div>
+        <div class="space-between">
+            <div>
+                <label for="script-filter-selection">Script</label>
+                <select id="script-filter-selection" class="padding-6 script-selection">
+                    <option value="All">All</option>
+                </select>
+            </div>
+            <div>
+                <button id="clear-searches-button">Clear Searches</button>
             </div>
         </div>
     </div>
     <div class="font-size-18">
         <label for="sorting">Sorting</label>
-        <select id="sorting" class="padding">
+        <select id="sorting" class="padding-6">
             <option value="Alphabet A-Z">Alphabet A-Z</option>
             <option value="Alphabet Z-A">Alphabet Z-A</option>
             <option value="Newest first">Newest first</option>

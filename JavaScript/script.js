@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const scriptFilterSelection = document.getElementById("script-filter-selection");
             onlyMyFavoritesCheckBox.checked = currentUser.onlyMyFavorites === 1;
             const clearSearchesButton = document.getElementById("clear-searches-button");
+            const homebrewRolesDisplay = document.getElementById("homebrewroles");
 
             //reminder command shift r -> zum reloaden + cache leeren
 
@@ -56,50 +57,44 @@ document.addEventListener("DOMContentLoaded", function () {
                         sortRoles(roles, sortingDropDownMenu.value, function (roles) {
                             const roleIdeaArray = roles.slice((page - 1) * 10, page * 10);
 
-                            document.getElementById("homebrewroles").innerHTML = "";
-
-                            const table = document.createElement("table");
-                            table.setAttribute("class", "border-spacing-10");
-
-                            const tableBody = document.createElement("tbody");
+                            homebrewRolesDisplay.innerHTML = "";
 
                             for (const role of roleIdeaArray) {
 
                                 const key = role["id"].toString();
+                                const roleDiv = document.createElement("div");
+                                roleDiv.setAttribute("class", "space-between role-div");
+                                const roleImageAndText = document.createElement("div");
+                                roleImageAndText.setAttribute("class", "next-to-each-other margin-right-10");
 
-                                const columnRoleIdea = document.createElement("td");
-                                columnRoleIdea.setAttribute("class", "column-role-idea");
-                                const columnButtons = document.createElement("td");
-                                columnButtons.setAttribute("class", "column-delete-and-rate");
-                                const tableRow = document.createElement("tr");
-
-                                const list = document.createElement("li");
-                                list.setAttribute("id", key);
-                                list.setAttribute("class", "role-idea-list");
-
-                                const image = document.createElement("img");
-                                image.setAttribute("class", "clocktower-icon clocktower-icon-role-idea");
-                                image.setAttribute("src", "https://i.postimg.cc/qM09f8cD/placeholder-icon.png");
+                                const roleImage = document.createElement("img");
+                                roleImage.setAttribute("class", "clocktower-icon clocktower-icon-role-idea");
+                                roleImage.setAttribute("src", "https://i.postimg.cc/qM09f8cD/placeholder-icon.png");
                                 if (role["imageUrl"]) {
-                                    image.setAttribute("src", role["imageUrl"]);
+                                    roleImage.setAttribute("src", role["imageUrl"]);
                                 }
-                                list.textContent = role["name"] + " (" + role["characterType"] + "): " + role["abilityText"];
 
-                                const input = document.createElement("input");
-                                input.setAttribute("id", key + "-rate-field");
-                                input.setAttribute("class", "rate-field");
-                                input.setAttribute("type", "number");
-                                input.setAttribute("name", "rating" + key);
-                                input.setAttribute("min", "0");
-                                input.setAttribute("max", "10");
+                                const roleText = document.createElement("div");
+                                roleText.textContent = role["name"] + " (" + role["characterType"] + "): " + role["abilityText"];
+
+                                const buttons = document.createElement("div");
+                                buttons.setAttribute("class", "next-to-each-other");
+
+                                const rateInput = document.createElement("input");
+                                rateInput.setAttribute("id", key + "-rate-field");
+                                rateInput.setAttribute("class", "rate-input");
+                                rateInput.setAttribute("type", "number");
+                                rateInput.setAttribute("name", "rating" + key);
+                                rateInput.setAttribute("min", "0");
+                                rateInput.setAttribute("max", "10");
 
                                 const rateButton = document.createElement("button");
                                 rateButton.setAttribute("id", key + "-rate-field");
                                 rateButton.setAttribute("data-key", key);
 
-                                const rateButtonIcon = document.createElement("i");
-                                rateButtonIcon.setAttribute("class", "fa-sharp fa-regular fa-star");
-                                rateButtonIcon.setAttribute("data-key", key);
+                                const rateIcon = document.createElement("i");
+                                rateIcon.setAttribute("class", "fa-sharp fa-regular fa-star");
+                                rateIcon.setAttribute("data-key", key);
                                 sendXMLHttpRequest("POST", "/api/rating/get.php", "", JSON.stringify(role), function (data) {
 
                                     const rating = JSON.parse(data);
@@ -107,9 +102,9 @@ document.addEventListener("DOMContentLoaded", function () {
                                     for (const ratingElement of rating) {
                                         if (ratingElement.ownerId === currentUserId) {
                                             if (ratingElement.number) {
-                                                input.value = ratingElement.number;
-                                                rateButtonIcon.setAttribute("class", "fa-solid fa-star");
-                                                rateButtonIcon.setAttribute("style", "color: #FFD43B;");
+                                                rateInput.value = ratingElement.number;
+                                                rateIcon.setAttribute("class", "fa-solid fa-star");
+                                                rateIcon.setAttribute("style", "color: #FFD43B;");
                                             }
                                         }
                                     }
@@ -117,11 +112,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
                                 const wikiButton = document.createElement("button");
 
-                                const wikiButtonIcon = document.createElement("i");
-                                wikiButtonIcon.setAttribute("class", "fa-solid fa-book");
+                                const wikiIcon = document.createElement("i");
+                                wikiIcon.setAttribute("class", "fa-solid fa-book");
 
-                                const anchor = document.createElement("a");
-                                anchor.setAttribute("href", "wiki.php?r=" + key);
+                                const wikiAnchor = document.createElement("a");
+                                wikiAnchor.setAttribute("href", "wiki.php?r=" + key);
 
                                 const favoriteButton = document.createElement("button");
                                 const favoriteIcon = document.createElement("i");
@@ -144,28 +139,34 @@ document.addEventListener("DOMContentLoaded", function () {
                                     }
                                 });
 
-                                rateButton.append(rateButtonIcon);
-                                wikiButton.append(wikiButtonIcon);
+                                roleImageAndText.append(roleImage);
+                                roleImageAndText.append(roleText);
+                                roleDiv.append(roleImageAndText);
+                                rateButton.append(rateIcon);
+                                wikiButton.append(wikiIcon);
+                                wikiAnchor.append(wikiButton);
                                 favoriteButton.append(favoriteIcon);
-                                anchor.append(wikiButton);
-                                list.prepend(image);
-                                columnRoleIdea.append(list);
-                                columnButtons.append(input);
-                                columnButtons.append(rateButton);
-                                columnButtons.append(anchor);
-                                columnButtons.append(favoriteButton);
-                                tableRow.append(columnRoleIdea);
-                                tableRow.append(columnButtons);
-                                tableBody.append(tableRow);
-                                table.append(tableBody);
-                                document.getElementById("homebrewroles").append(table);
+                                buttons.append(rateInput);
+                                buttons.append(rateButton);
+                                buttons.append(wikiAnchor);
+                                buttons.append(favoriteButton);
+                                roleDiv.append(buttons);
+                                homebrewRolesDisplay.append(roleDiv);
 
                                 rateButton.addEventListener("click", function () {
-                                    if (input.value === "" || input.value < 0 || input.value > 10) {
+                                    if (rateInput.value < 0) {
+                                        rateInput.value = "0";
+                                        return;
+                                    }
+                                    if (rateInput.value > 10) {
+                                        rateInput.value = "10";
+                                        return;
+                                    }
+                                    if (rateInput.value === "") {
                                         return;
                                     }
                                     const rating = {
-                                        number: Number.parseFloat(input.value),
+                                        number: Number.parseFloat(rateInput.value),
                                         ownerId: currentUserId,
                                         roleId: role.id
                                     }
@@ -270,7 +271,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 const pages = array.length / 10;
                 if (array.length === 0) {
-                    document.getElementById("homebrewroles").innerHTML = "There is no role, that matches your search";
+                    homebrewRolesDisplay.innerHTML = "There is no role, that matches your search";
                 }
                 document.getElementById("role-idea-page-selection").innerHTML = "";
                 for (let i = 0; i < pages; i++) {

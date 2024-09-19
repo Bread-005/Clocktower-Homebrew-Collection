@@ -302,6 +302,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         jinxEditDiv.style.display = "flex";
                         showJinxes();
                         editReminderTokenDiv.style.display = "flex";
+                        specialEditDiv.style.display = "flex";
                         scriptEditInput.style.display = "flex";
                         scriptEditButton.style.display = "flex";
                         showScript();
@@ -404,7 +405,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                         name: role.name,
                                         ability: role.abilityText,
                                         team: role.characterType.toLowerCase(),
-                                        image: role.image
+                                        image: role.imageUrl
                                     }
                                     if (role.firstNight !== 0) {
                                         jsonRole.firstNight = role.firstNight;

@@ -10,7 +10,7 @@
 <?php include "partials/roleFilter.php" ?>
 
 <div class="center">
-    <div id="homebrewroles" class="homebrewroles center margin-top-20">No Roleideas yet</div>
+    <div id="homebrewroles" class="margin-top-20 max-width-1200">No Roleideas yet</div>
 </div>
 <div id="role-idea-page-selection" class="next-to-each-other margin-top-20">
 

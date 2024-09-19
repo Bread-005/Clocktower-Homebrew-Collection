@@ -1,7 +1,7 @@
 <div class="page-top">
     <img src="https://i.postimg.cc/qM09f8cD/placeholder-icon.png" id="wiki-role-image"
          class="clocktower-icon margin-top-20"/>
-    <div>
+    <div class="padding-20">
         <div id="main-role-display" class="center padding-50">
             <h1 id="role-name"></h1>
             <h2 id="character-type"></h2>
@@ -33,6 +33,5 @@
     </div>
     <div class="edit-button-container">
         <button id="edit-button" class="margin-left-30"><i class="fa-solid fa-pen fa-pen-to-square"></i></button>
-        <div></div>
     </div>
 </div>

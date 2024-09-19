@@ -5,6 +5,7 @@
 body {
     margin: 0 auto;
     font-family: Kokonor, sans-serif;
+    min-width: 90vw;
     max-width: 1200px;
     padding: 10px;
 }
@@ -28,10 +29,6 @@ li {
 
 .icon-button {
     margin-left: 10px;
-}
-
-.rate-history {
-    margin-top: 20px;
 }
 
 .input {
@@ -128,11 +125,6 @@ textarea {
     margin-right: 10px;
 }
 
-.role-idea-list {
-    display: flex;
-    align-items: center;
-}
-
 .border-spacing-10 {
     border-spacing: 10px;
     width: 100%;
@@ -146,6 +138,14 @@ textarea {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+
+    .edit-button-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 200px;
+    }
 }
 
 .margin-top-30 {
@@ -154,14 +154,6 @@ textarea {
 
 .margin-left-30 {
     margin-left: 30px;
-}
-
-.edit-button-container {
-    width: 200px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
 }
 
 .height-20 {
@@ -173,10 +165,6 @@ textarea {
     justify-content: space-between;
 }
 
-.homebrewroles {
-    width: 100%;
-}
-
 .column-role-idea {
     width: 100%;
 }
@@ -185,7 +173,7 @@ textarea {
     margin: 5px;
 }
 
-.padding {
+.padding-6 {
     padding: 6px;
 }
 
@@ -305,4 +293,29 @@ textarea {
 
 .night-order-container {
     position: relative;
+}
+
+.padding-20 {
+    padding: 20px;
+}
+
+.role-div {
+    margin: 5px;
+    min-width: 90vw;
+}
+
+.rate-input {
+    padding: 6px 0;
+}
+
+.margin-right-10 {
+    margin-right: 10px;
+}
+
+.script-selection {
+    max-width: 125px;
+}
+
+.tag-filter-selection {
+    max-width: 120px;
 }
