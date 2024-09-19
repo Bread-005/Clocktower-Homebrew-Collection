@@ -11,15 +11,15 @@
 </head>
 <body>
 
-<div class="space-between">
+<div>
     <a href="index.html">
-        <button class="icon-button" type="submit"><i class="fa-solid fa-square-left"></i></button>
+        <button class="icon-button"><i class="fa-solid fa-square-left"></i></button>
     </a>
 </div>
 
 <div class="page-top">
     <img src="https://i.postimg.cc/qM09f8cD/placeholder-icon.png" id="wiki-role-image"
-         class="clocktower-icon margin-top-20"/>
+         class="clocktower-icon margin-top-20" alt=""/>
     <div class="padding-20">
         <div id="main-role-display" class="center padding-50">
             <h1 id="role-name"></h1>
@@ -74,19 +74,23 @@
         <div>
             Misinformation
             <label for="misinformation-tag"></label>
-            <input type="checkbox" class="tag" name="Misinformation" id="misinformation-tag"></div>
+            <input type="checkbox" class="tag" name="Misinformation" id="misinformation-tag">
+        </div>
         <div>
             Extra Death
             <label for="extra-death-tag"></label>
-            <input type="checkbox" class="tag" name="Extra Death" id="extra-death-tag"></div>
+            <input type="checkbox" class="tag" name="Extra Death" id="extra-death-tag">
+        </div>
         <div>
             Protection
             <label for="protection-tag"></label>
-            <input type="checkbox" class="tag" name="Protection" id="protection-tag"></div>
+            <input type="checkbox" class="tag" name="Protection" id="protection-tag">
+        </div>
         <div>
             Wincondition
             <label for="wincondition-tag"></label>
-            <input type="checkbox" class="tag" name="Wincondition" id="wincondition-tag"></div>
+            <input type="checkbox" class="tag" name="Wincondition" id="wincondition-tag">
+        </div>
         <div>
             Character Changing
             <label for="character-changing-tag"></label>
@@ -95,31 +99,43 @@
         <div>
             Setup
             <label for="setup-tag"></label>
-            <input type="checkbox" class="tag" name="Setup" id="setup-tag"></div>
+            <input type="checkbox" class="tag" name="Setup" id="setup-tag">
+        </div>
         <div>
             Madness
             <label for="madness-tag"></label>
-            <input id="madness-tag" class="tag" type="checkbox" name="Madness"></div>
+            <input id="madness-tag" class="tag" type="checkbox" name="Madness">
+        </div>
         <div>
             Noms Votes Exes
             <label for="noms-votes-exes-tag"></label>
-            <input id="noms-votes-exes-tag" class="tag" type="checkbox" name="Noms Votes Exes"></div>
+            <input id="noms-votes-exes-tag" class="tag" type="checkbox" name="Noms Votes Exes">
+        </div>
         <div>
             Does Not Wake
             <label for="does-not-wake-tag"></label>
-            <input id="does-not-wake-tag" class="tag" type="checkbox" name="Does Not Wake"></div>
+            <input id="does-not-wake-tag" class="tag" type="checkbox" name="Does Not Wake">
+        </div>
         <div>
             ST Consult
             <label for="st-consult-tag"></label>
-            <input id="st-consult-tag" class="tag" type="checkbox" name="ST Consult"></div>
+            <input id="st-consult-tag" class="tag" type="checkbox" name="ST Consult">
+        </div>
         <div>
             When You Die
             <label for="when-you-die-tag"></label>
-            <input id="when-you-die-tag" class="tag" type="checkbox" name="When You Die"></div>
+            <input id="when-you-die-tag" class="tag" type="checkbox" name="When You Die">
+        </div>
         <div>
             Resurrection
             <label for="resurrection-tag"></label>
-            <input id="resurrection-tag" class="tag" type="checkbox" name="Resurrection"></div>
+            <input id="resurrection-tag" class="tag" type="checkbox" name="Resurrection">
+        </div>
+        <div>
+            Alignment Switching
+            <label for="alignment-switching-tag"></label>
+            <input id="alignment-switching-tag" class="tag" type="checkbox" name="Alignment Switching">
+        </div>
     </div>
 </div>
 
@@ -127,23 +143,25 @@
     <h2>Night Order</h2>
     <div class="next-to-each-other night-order-container">
         <label id="first-night" for="first-night-input">firstNight: </label>
-        <input id="first-night-input" class="margin-left-10 edit-night-order" type="number">
+        <input id="first-night-input" class="margin-left-10 edit-night-order" type="number" min="0">
         <button id="first-night-info-button"><i class="fa-regular fa-circle-info"></i></button>
         <div id="first-night-info-text" class="night-order-info-text"></div>
     </div>
     <div class="center margin-top-20">
         <label id="first-night-reminder" for="first-night-reminder-input">firstNightReminder: </label>
-        <textarea id="first-night-reminder-input" cols="35" rows="3" class="text-area-input edit-night-order"></textarea>
+        <textarea id="first-night-reminder-input" cols="35" rows="3"
+                  class="text-area-input edit-night-order"></textarea>
     </div>
     <div class="next-to-each-other night-order-container">
         <label id="other-night" for="other-night-input">otherNight: </label>
-        <input id="other-night-input" class="margin-left-10 edit-night-order" type="number">
+        <input id="other-night-input" class="margin-left-10 edit-night-order" type="number" min="0">
         <button id="other-night-info-button"><i class="fa-regular fa-circle-info"></i></button>
         <div id="other-night-info-text" class="night-order-info-text"></div>
     </div>
     <div class="center margin-top-20">
         <label id="other-night-reminder" for="other-night-reminder-input">otherNightReminder: </label>
-        <textarea id="other-night-reminder-input" cols="35" rows="3" class="text-area-input edit-night-order"></textarea>
+        <textarea id="other-night-reminder-input" cols="35" rows="3"
+                  class="text-area-input edit-night-order"></textarea>
     </div>
     <button id="edit-night-order-button" class="edit-night-order margin-top-10">Save Night Order Changes</button>
 </div>
@@ -165,7 +183,7 @@
         <label for="jinx-role-input"></label>
         <input id="jinx-role-input" placeholder="Role" class="padding-3">
         <label for="jinx-text-input"></label>
-        <textarea id="jinx-text-input" rows="3" cols="30" placeholder="Jinx Text"
+        <textarea id="jinx-text-input" rows="4" cols="38" placeholder="Jinx Text"
                   class="text-area-input margin-top-10"></textarea>
         <button id="jinx-add-button" class="margin-top-10">add Jinx</button>
     </div>
@@ -273,13 +291,13 @@
 </div>
 
 <div id="delete-role-div" class="center margin-top-20">
-    Delete Role
+    <label for="delete-role-button">Delete Role</label>
     <button id="delete-role-button"><i class="fa-solid fa-trash"></i></button>
 </div>
 
 <div id="delete-popup-background" class="delete-popup-background center">
     <div class="center delete-confirmation-popup">
-        <p>Are you sure you want to delete this role?</p>
+        <p id="delete-confirmation-text">Are you sure you want to delete</p>
         <div class="space-between">
             <button id="delete-confirmation-yes-button">Yes</button>
             <button id="delete-confirmation-cancel-button">Cancel</button>

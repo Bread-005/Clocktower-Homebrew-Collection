@@ -49,6 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const commentsList = document.getElementById("comments-list");
     const downloadJsonButton = document.getElementById("download-json-button");
     const deleteRoleDiv = document.getElementById("delete-role-div");
+    const deleteConfirmationText = document.getElementById("delete-confirmation-text");
     const deleteConfirmationYesButton = document.getElementById("delete-confirmation-yes-button");
     const deleteConfirmationCancelButton = document.getElementById("delete-confirmation-cancel-button");
     const deletePopupBackground = document.getElementById("delete-popup-background");
@@ -131,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
         function changeTags() {
             const tagCheckBoxes = document.querySelectorAll(".tag");
             for (const checkBox of tagCheckBoxes) {
-                checkBox.addEventListener("click",function () {
+                checkBox.addEventListener("click", function () {
                     if (checkBox.checked) {
                         role.tags.push(checkBox.name);
                     }
@@ -210,6 +211,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     jinxEditDiv.style.display = "flex";
                     showJinxes();
                     editReminderTokenDiv.style.display = "flex";
+                    showReminderTokens();
                     specialEditDiv.style.display = "flex";
                     showSpecial();
                     scriptEditInput.style.display = "flex";
@@ -350,6 +352,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function deleteRoleListener() {
+            deleteConfirmationText.textContent += " " + role.name + "?";
             document.getElementById("delete-role-button").addEventListener("click", function (event) {
                 event.preventDefault();
                 deletePopupBackground.style.display = "flex";
@@ -360,7 +363,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 for (let i = 0; i < websiteStorage.roleIdeas.length; i++) {
                     if (websiteStorage.roleIdeas[i].createdAt === role.createdAt) {
                         websiteStorage.archive.push(websiteStorage.roleIdeas[i]);
-                        websiteStorage.roleIdeas.splice(i,1);
+                        websiteStorage.roleIdeas.splice(i, 1);
                         saveLocalStorage();
                         break;
                     }
@@ -420,6 +423,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         if (jinx1.createdAt === role.tempJinxId) {
                             jinx1.jinxedRole = jinx.jinxedRole;
                             jinx1.reason = jinx.reason;
+                            jinxRoleInput.value = "";
+                            jinxTextInput.value = "";
                             saveLocalStorage();
                             showJinxes();
                             break;
@@ -482,16 +487,18 @@ document.addEventListener("DOMContentLoaded", function () {
             for (const reminderToken of role.reminders) {
                 const list = document.createElement("li");
                 list.textContent = reminderToken;
-                const deleteButton = document.createElement("button");
-                const deleteIcon = document.createElement("i");
-                deleteIcon.setAttribute("class", "fa-solid fa-trash");
-                deleteButton.append(deleteIcon);
-                list.append(deleteButton);
-                deleteButton.addEventListener("click", function () {
-                    role.reminders = role.reminders.filter(reminderToken1 => reminderToken1 !== reminderToken);
-                    saveLocalStorage();
-                    showReminderTokens();
-                });
+                if (inEditMode) {
+                    const deleteButton = document.createElement("button");
+                    const deleteIcon = document.createElement("i");
+                    deleteIcon.setAttribute("class", "fa-solid fa-trash");
+                    deleteButton.append(deleteIcon);
+                    list.append(deleteButton);
+                    deleteButton.addEventListener("click", function () {
+                        role.reminders = role.reminders.filter(reminderToken1 => reminderToken1 !== reminderToken);
+                        saveLocalStorage();
+                        showReminderTokens();
+                    });
+                }
                 reminderTokenList.append(list);
             }
         }
@@ -592,7 +599,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function editScript() {
-            scriptEditButton.addEventListener("click", function () {
+            scriptEditButton.addEventListener("click", function (event) {
+                event.preventDefault();
                 role.script = scriptEditInput.value;
                 scriptEditInput.value = "";
                 saveLocalStorage();
@@ -601,7 +609,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function saveLocalStorage() {
-            localStorage.setItem(storageString,JSON.stringify(websiteStorage));
+            localStorage.setItem(storageString, JSON.stringify(websiteStorage));
         }
     }
 });

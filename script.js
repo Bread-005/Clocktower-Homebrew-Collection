@@ -60,7 +60,6 @@ document.addEventListener("DOMContentLoaded", function () {
             role.howtorun = undefined;
         }
         if (role.owner !== undefined) role.owner = undefined;
-        console.log(role.name)
         if (role.inEditMode !== undefined) role.inEditMode = undefined;
         if (role.onlyPrivateComments !== undefined) role.onlyPrivateComments = undefined;
         if (role.jinxes === undefined) role.jinxes = [];
@@ -94,8 +93,6 @@ document.addEventListener("DOMContentLoaded", function () {
     onlyMyFavoritesCheckBox.checked = websiteStorage.user.onlyMyFavorites;
     const clearSearchesButton = document.getElementById("clear-searches-button");
     const homebrewRolesDisplay = document.getElementById("homebrewroles");
-
-    //reminder command shift r -> zum reloaden + cache leeren
 
     addRole();
     setupScriptSelection();
@@ -262,6 +259,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function showPages(array, pageArray) {
         if (pageArray.length === 0 && websiteStorage.user.page > 1) {
             websiteStorage.user.page -= 1;
+            saveLocalStorage();
             displayRoles();
         }
         const pages = array.length / 10;
@@ -278,6 +276,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             button.addEventListener("click", function () {
                 websiteStorage.user.page = Number.parseInt(button.textContent);
+                saveLocalStorage();
                 document.querySelectorAll(".blue").forEach(element => element.classList.remove("blue"));
                 if (websiteStorage.user.page === Number.parseInt(button.textContent)) {
                     button.setAttribute("class", "blue");
