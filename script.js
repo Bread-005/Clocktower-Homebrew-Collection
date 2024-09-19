@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             archive: []
         }
-        localStorage.setItem(storageString,JSON.stringify(storage));
+        localStorage.setItem(storageString, JSON.stringify(storage));
     }
 
     const websiteStorage = JSON.parse(localStorage.getItem(storageString));
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
             scriptFilter: "All",
             tagFilter: "None"
         }
-        localStorage.setItem(storageString,JSON.stringify(websiteStorage));
+        localStorage.setItem(storageString, JSON.stringify(websiteStorage));
     }
 
     if (websiteStorage.page) {
@@ -56,6 +56,10 @@ document.addEventListener("DOMContentLoaded", function () {
             role.ability = role.abilityText;
             role.abilityText = undefined;
         }
+    }
+
+    if (websiteStorage.users !== undefined) {
+        websiteStorage.users = undefined;
     }
 
     const createMainRoleAttributesForm = document.getElementById("create-main-role-attributes");
@@ -190,17 +194,29 @@ document.addEventListener("DOMContentLoaded", function () {
         showPages(websiteStorage.roleIdeas, roleIdeaArray);
     }
 
-    sortingDropDownMenu.addEventListener("change", function () {onChangeFilter(sortingDropDownMenu,"sorting");});
-    characterTypeSelection.addEventListener("change", function () {onChangeFilter(characterTypeSelection,"characterType");});
-    roleSearch.addEventListener("input", function () {onChangeFilter(roleSearch,"roleSearch");});
-    onlyMyFavoritesCheckBox.addEventListener("change", function () {onChangeFilter(onlyMyFavoritesCheckBox,"onlyMyFavorites");});
-    tagFilterSelection.addEventListener("change", function () {onChangeFilter(tagFilterSelection,"tagFilter");});
-    scriptFilterSelection.addEventListener("change", function () {onChangeFilter(scriptFilterSelection,"scriptFilter");});
+    sortingDropDownMenu.addEventListener("change", function () {
+        onChangeFilter(sortingDropDownMenu, "sorting");
+    });
+    characterTypeSelection.addEventListener("change", function () {
+        onChangeFilter(characterTypeSelection, "characterType");
+    });
+    roleSearch.addEventListener("input", function () {
+        onChangeFilter(roleSearch, "roleSearch");
+    });
+    onlyMyFavoritesCheckBox.addEventListener("change", function () {
+        onChangeFilter(onlyMyFavoritesCheckBox, "onlyMyFavorites");
+    });
+    tagFilterSelection.addEventListener("change", function () {
+        onChangeFilter(tagFilterSelection, "tagFilter");
+    });
+    scriptFilterSelection.addEventListener("change", function () {
+        onChangeFilter(scriptFilterSelection, "scriptFilter");
+    });
 
     function sortRoles(roles) {
         const input = sortingDropDownMenu.value;
         if (input === "Newest first" || input === "Oldest first") {
-            roles.sort((a,b) => a.createdAt - b.createdAt);
+            roles.sort((a, b) => a.createdAt - b.createdAt);
             if (input === "Newest first") {
                 roles.reverse();
             }
@@ -212,7 +228,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
         if (input.includes("favorite first")) {
-            roles.sort((a,b) => a.rating - b.rating);
+            roles.sort((a, b) => a.rating - b.rating);
             if (input === "Most favorite first") {
                 roles.reverse();
             }
@@ -367,7 +383,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function saveLocalStorage() {
-        localStorage.setItem(storageString,JSON.stringify(websiteStorage));
+        localStorage.setItem(storageString, JSON.stringify(websiteStorage));
     }
 
     function onChangeFilter(element, storageComponent) {
@@ -376,7 +392,7 @@ document.addEventListener("DOMContentLoaded", function () {
         displayRoles();
     }
 
-    changeRoleCreationButton.addEventListener("click",function (event) {
+    changeRoleCreationButton.addEventListener("click", function (event) {
         event.preventDefault();
         normalRoleCreation = !normalRoleCreation;
 
@@ -390,7 +406,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    jsonAddRoleButton.addEventListener("click",function (event) {
+    jsonAddRoleButton.addEventListener("click", function (event) {
         event.preventDefault();
 
         const text = jsonInputTextarea.value;
