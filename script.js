@@ -291,7 +291,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (roleSearch.value !== "") {
             roles = roles.filter(role =>
                 role.name.toUpperCase().includes(roleSearch.value.toUpperCase()) ||
-                role.characterType.toUpperCase().includes(roleSearch.value.toUpperCase()) ||
                 role.ability.toUpperCase().includes(roleSearch.value.toUpperCase()));
         }
         if (characterTypeSelection.value !== "All") {
