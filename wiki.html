@@ -24,7 +24,7 @@
         <div id="main-role-display" class="center padding-50">
             <h1 id="role-name"></h1>
             <h2 id="character-type"></h2>
-            <h2 id="ability-text"></h2>
+            <h2 id="ability-text" class="ability-text"></h2>
         </div>
         <div id="edit-role-field" class="center margin-top-30">
             <form>
@@ -136,6 +136,16 @@
             <label for="alignment-switching-tag"></label>
             <input id="alignment-switching-tag" class="tag" type="checkbox" name="Alignment Switching">
         </div>
+        <div>
+            Public
+            <label for="public-tag"></label>
+            <input id="public-tag" class="tag" type="checkbox" name="Public">
+        </div>
+        <div>
+            Seating Order
+            <label for="seating-order-tag"></label>
+            <input id="seating-order-tag" class="tag" type="checkbox" name="Seating Order">
+        </div>
     </div>
 </div>
 
@@ -152,7 +162,7 @@
         <textarea id="first-night-reminder-input" cols="35" rows="3"
                   class="text-area-input edit-night-order"></textarea>
     </div>
-    <div class="next-to-each-other night-order-container">
+    <div class="next-to-each-other night-order-container margin-top-20">
         <label id="other-night" for="other-night-input">otherNight: </label>
         <input id="other-night-input" class="margin-left-10 edit-night-order" type="number" min="0">
         <button id="other-night-info-button"><i class="fa-regular fa-circle-info"></i></button>
@@ -164,17 +174,6 @@
                   class="text-area-input edit-night-order"></textarea>
     </div>
     <button id="edit-night-order-button" class="edit-night-order margin-top-10">Save Night Order Changes</button>
-</div>
-
-<div class="center margin-top-30">
-    <h2>How To Run</h2>
-    <p id="howtorun-text"></p>
-    <form class="center">
-        <label for="howtorun-input"></label>
-        <textarea id="howtorun-input" class="text-area-input" cols="60" rows="6"
-                  placeholder="How To Run Text"></textarea>
-        <button id="howtorun-button" class="howtorun-button" type="submit">Change How To Run Text</button>
-    </form>
 </div>
 
 <div class="center">
@@ -264,6 +263,17 @@
         <input id="script-edit-input">
         <button id="script-edit-button">Change Script</button>
     </div>
+</div>
+
+<div class="center margin-top-30">
+    <h2>How To Run</h2>
+    <p id="howtorun-text"></p>
+    <form class="center">
+        <label for="howtorun-input"></label>
+        <textarea id="howtorun-input" class="text-area-input" cols="60" rows="6"
+                  placeholder="How To Run Text"></textarea>
+        <button id="howtorun-button" class="howtorun-button" type="submit">Change How To Run Text</button>
+    </form>
 </div>
 
 <div class="center margin-top-30">

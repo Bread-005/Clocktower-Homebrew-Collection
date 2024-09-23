@@ -110,8 +110,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById("comments-list").append(list);
 
                 deleteButton.addEventListener("click", function () {
-                    role.comments = role.comments.filter(comment1 => comment1 !== comment.text);
+                    role.comments = role.comments.filter(comment1 => comment1.createdAt !== comment.createdAt);
                     saveLocalStorage();
+                    displayComments();
                 });
             }
         }
@@ -267,11 +268,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 const comment = {
                     text: inputComment.value,
-                    id: Date.now().toString()
+                    createdAt: Date.now().toString()
                 }
                 role.comments.push(comment);
                 saveLocalStorage();
                 inputComment.value = "";
+                displayComments();
             });
         }
 
@@ -282,8 +284,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     id: role.name.toLowerCase().replace(" ", "_"),
                     name: role.name,
                     ability: role.ability,
-                    team: role.characterType.toLowerCase(),
-                    image: role.image
+                    team: role.characterType.toLowerCase()
+                }
+                if (role.image !== "") {
+                    jsonRole.image = role.image;
                 }
                 if (role.firstNight !== 0) {
                     jsonRole.firstNight = role.firstNight;
@@ -318,7 +322,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     for (const special of role.special) {
                         const tempSpecial = {
                             name: special.name,
-                            type: special.type,
+                            type: special.type
                         }
                         if (special.value !== "") {
                             tempSpecial.value = special.value;
@@ -330,13 +334,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 }
                 const preString = JSON.stringify(jsonRole) + "xyEndxy";
-                const jsonString = preString.replaceAll("},{", "},\n              {")
+                const emptyStrings = "        ";
+                const jsonString = preString.replaceAll("},{", "},\n" + emptyStrings + emptyStrings + "  " + "{")
                     .replaceAll(',"reason"', "xyReasonxy")
                     .replaceAll(',"type"', "xyTypexy")
                     .replaceAll(',"value"', "xyValuexy")
                     .replaceAll(',"time"', "xyTimexy")
-                    .replace("{", "{\n    ")
-                    .replaceAll(',"', ',\n    "')
+                    .replace("{", "{\n" + emptyStrings)
+                    .replaceAll(',"', ',\n' + emptyStrings + '"')
                     .replace("}xyEndxy", "\n}")
                     .replaceAll("xyReasonxy", ',"reason"')
                     .replaceAll("xyTypexy", ',"type"')
@@ -461,7 +466,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
 
                     deleteButton.addEventListener("click", function () {
-                        role.jinxes = role.jinxes.filter(jinx1 => jinx1.createdAt !== jinx.createdAt);
+                        role.jinxes = role.jinxes.filter(jinx1 => jinx1.jinxedRole !== jinx.jinxedRole);
                         saveLocalStorage();
                         showJinxes();
                     });
@@ -574,7 +579,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 "Noble", "Balloonist", "Shugenja", "Village Idiot", "Bounty Hunter", "Nightwatchman", "Cult Leader",
                 "Spy", "Ogre", "High Priestess", "Chambermaid", "Mathematician", "Leviathan", "Vizier"];
             for (let i = 0; i < firstNightList.length; i++) {
-                firstNightInfoText.innerHTML += (i + 5) + " " + firstNightList[i] + "<br>";
+                firstNightInfoText.innerHTML += (i + 6) + " " + firstNightList[i] + "<br>";
             }
         }
 
@@ -590,7 +595,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 "Juggler", "Balloonist", "Village Idiot", "King", "Bounty Hunter", "Nightwatchman", "Cult Leader", "Butler",
                 "Spy", "High Priestess", "Chambermaid", "Mathematician", "Leviathan"];
             for (let i = 0; i < otherNightList.length; i++) {
-                otherNightInfoText.innerHTML += (i + 6) + " " + otherNightList[i] + "<br>";
+                otherNightInfoText.innerHTML += (i + 2) + " " + otherNightList[i] + "<br>";
             }
         }
 

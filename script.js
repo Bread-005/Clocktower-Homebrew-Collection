@@ -202,7 +202,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 displayRoles();
             });
         }
-        showPages(websiteStorage.roleIdeas, roleIdeaArray);
+        showPages(roles, roleIdeaArray);
     }
 
     sortingDropDownMenu.addEventListener("change", function () {
@@ -320,11 +320,11 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             const role = {
-                image: "",
                 name: roleNameInput.value,
                 characterType: characterTypeInput.value,
                 ability: abilityTextInput.value,
                 createdAt: Date.now().toString(),
+                image: "",
                 rating: 0,
                 isFavorite: false,
                 tags: [],
@@ -365,7 +365,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function setupScriptSelection() {
 
-        const scripts = [];
+        const scripts = ["All"];
         for (const role of websiteStorage.roleIdeas) {
             if (!scripts.includes(role.script) && role.script !== "") {
                 scripts.push(role.script);
@@ -373,10 +373,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         scriptFilterSelection.textContent = "";
-        const option = document.createElement("option");
-        option.setAttribute("value", "All");
-        option.textContent = "All";
-        scriptFilterSelection.append(option);
 
         for (const script of scripts) {
             const option = document.createElement("option");
@@ -436,8 +432,30 @@ document.addEventListener("DOMContentLoaded", function () {
         if (role.otherNight === undefined) role.otherNight = 0;
         if (role.otherNightReminder === undefined) role.otherNightReminder = "";
         if (role.jinxes === undefined) role.jinxes = [];
+        for (let i = 0; i < role.jinxes.length; i++) {
+            const jinx = role.jinxes[i];
+            jinx.createdAt = (Date.now() + i).toString();
+            jinx.jinxedRole = jinx.id[0].toUpperCase();
+            for (let j = 1; j < jinx.id.length; j++) {
+                if (jinx.id[j] === "_" && j + 1 < jinx.id.length) {
+                    jinx.jinxedRole += " " + jinx.id[j + 1].toUpperCase();
+                    j++;
+                    continue;
+                }
+                jinx.jinxedRole += jinx.id[j];
+            }
+            jinx.id = undefined;
+        }
         if (role.reminders === undefined) role.reminders = [];
         if (role.special === undefined) role.special = [];
+        for (const special of role.special) {
+            if (special.time === undefined) {
+                special.time = "";
+            }
+            if (special.value === undefined) {
+                special.value = "";
+            }
+        }
         role.rating = 0;
         role.isFavorite = false;
         role.tags = [];
