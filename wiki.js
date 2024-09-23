@@ -281,10 +281,13 @@ document.addEventListener("DOMContentLoaded", function () {
             downloadJsonButton.addEventListener("click", function (event) {
                 event.preventDefault();
                 const jsonRole = {
-                    id: role.name.toLowerCase().replace(" ", "_"),
+                    id: role.name.toLowerCase().replaceAll(" ", "_"),
                     name: role.name,
                     ability: role.ability,
                     team: role.characterType.toLowerCase()
+                }
+                if (role.script !== "") {
+                    jsonRole.id += "_" + role.script.toLowerCase().replaceAll(" ", "_");
                 }
                 if (role.image !== "") {
                     jsonRole.image = role.image;
