@@ -320,6 +320,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
+            for (const role of websiteStorage.roleIdeas) {
+                if (role.name === roleNameInput.value && role.ability === abilityTextInput.value) {
+                    return;
+                }
+            }
+
             const role = {
                 name: roleNameInput.value,
                 characterType: characterTypeInput.value,
@@ -424,6 +430,13 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
         const role = JSON.parse(text);
+
+        for (const role1 of websiteStorage.roleIdeas) {
+            if (role1.name === role.name && role1.ability === role.ability) {
+                return;
+            }
+        }
+
         role.createdAt = Date.now().toString();
         role.characterType = role.team[0].toUpperCase() + role.team.substring(1);
         role.team = undefined;

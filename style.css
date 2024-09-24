@@ -140,7 +140,7 @@ textarea {
     justify-content: space-between;
 
     .wiki-main-role-display {
-        padding: 50px;
+        padding: 0 50px;
     }
 
     .ability-text {
@@ -373,6 +373,7 @@ textarea {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    max-width: 1200px;
 
     .rate-input {
         padding: 6px 0;
@@ -459,4 +460,12 @@ textarea {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+
+.night-order-heading {
+    margin-bottom: 0;
+}
+
+.homebrew-roles {
+    margin-top: 20px;
 }
