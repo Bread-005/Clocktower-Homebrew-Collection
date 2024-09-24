@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("role-name").textContent = role.name;
             document.getElementById("character-type").textContent = "Charactertype: " + role.characterType;
             document.getElementById("ability-text").textContent = "Ability: " + role.ability;
-            if (window.innerWidth <= 430) {
+            if (window.innerWidth <= 600) {
                 document.getElementById("role-name").append(wikiRoleImage);
                 wikiHeader.append(editButton);
             }
@@ -221,7 +221,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     scriptEditInput.style.display = "flex";
                     scriptEditButton.style.display = "flex";
                     showScript();
-                    if (window.innerWidth <= 430) {
+                    if (window.innerWidth <= 600) {
                         imageSubmission.prepend(wikiRoleImage);
                     }
                 }

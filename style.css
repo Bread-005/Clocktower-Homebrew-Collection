@@ -155,7 +155,7 @@ textarea {
         width: 200px;
     }
 
-    @media (max-width: 430px) {
+    @media (max-width: 600px) {
         .wiki-image {
             width: 100px;
             height: 100px;
@@ -202,7 +202,7 @@ textarea {
 .roles-filter {
     display: flex;
     justify-content: space-between;
-    @media (max-width: 430px) {
+    @media (max-width: 600px) {
         flex-direction: column;
         align-items: center;
         .sorting {
@@ -334,7 +334,7 @@ textarea {
     justify-content: center;
     align-items: center;
 
-    @media (max-width: 430px) {
+    @media (max-width: 600px) {
         display: flex;
         justify-content: center;
         align-items: flex-start;
@@ -375,7 +375,7 @@ textarea {
         padding: 6px 0;
     }
 
-    @media (max-width: 430px) {
+    @media (max-width: 600px) {
         justify-content: center;
         flex-direction: column;
         .role-buttons {
@@ -405,7 +405,7 @@ textarea {
     display: none;
 }
 
-@media (max-width: 430px) {
+@media (max-width: 600px) {
     .ability-text-text-area {
         width: 80vw;
     }
@@ -429,7 +429,7 @@ textarea {
     justify-content: space-between;
     align-items: center;
 
-    @media (max-width: 430px) {
+    @media (max-width: 600px) {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -437,7 +437,7 @@ textarea {
     }
 
     .image-submission {
-        @media (max-width: 430px) {
+        @media (max-width: 600px) {
             .wiki-image {
                 width: 100px;
                 height: 100px;
