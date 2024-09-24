@@ -20,7 +20,7 @@
 
 <h2 class="center">Write your homebrew role here</h2>
 
-<div class="space-between margin-top-20">
+<div class="space-between margin-top-20 role-creation-div">
     <div></div>
     <div></div>
     <button id="change-role-creation">Change Role creation</button>
@@ -41,13 +41,13 @@
             </select>
         </div>
         <label for="ability-text"></label>
-        <textarea class="text-area-input margin" id="ability-text" cols="30" rows="4"
+        <textarea class="text-area-input margin ability-text-text-area" id="ability-text" cols="30" rows="4"
                   placeholder="Abilitytext"></textarea>
         <button id="js-add-role" name="click" type="reset">Submit Role</button>
     </form>
     <div id="json-input-div" class="display-none center">
         <label for="json-input-textarea"></label>
-        <textarea id="json-input-textarea" class="text-area-input" cols="60" rows="10"
+        <textarea id="json-input-textarea" class="text-area-input ability-text-text-area" cols="60" rows="10"
                   placeholder="Put Json text here"></textarea>
         <button id="add-role-button">Add Role</button>
     </div>
@@ -59,7 +59,7 @@
 
 <h2 class="center">Role Ideas</h2>
 
-<div class="filter">
+<div class="roles-filter">
     <div>
         <div class="next-to-each-other">
             <div class="center">
@@ -118,7 +118,7 @@
             </div>
         </div>
     </div>
-    <div class="font-size-18">
+    <div class="font-size-18 sorting">
         <label for="sorting">Sorting</label>
         <select id="sorting" class="padding-6">
             <option value="Alphabet A-Z">Alphabet A-Z</option>

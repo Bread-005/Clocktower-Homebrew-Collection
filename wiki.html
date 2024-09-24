@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<div>
+<div id="wiki-header" class="space-between">
     <a href="index.html">
         <button class="icon-button"><i class="fa-solid fa-square-left"></i></button>
     </a>
@@ -19,10 +19,10 @@
 
 <div class="page-top">
     <img src="https://i.postimg.cc/qM09f8cD/placeholder-icon.png" id="wiki-role-image"
-         class="clocktower-icon margin-top-20" alt=""/>
+         class="clocktower-icon margin-top-20 wiki-image" alt=""/>
     <div class="padding-20">
-        <div id="main-role-display" class="center padding-50">
-            <h1 id="role-name"></h1>
+        <div id="main-role-display" class="center padding-50 wiki-main-role-display">
+            <h1 id="role-name" class="wiki-role-name"></h1>
             <h2 id="character-type"></h2>
             <h2 id="ability-text" class="ability-text"></h2>
         </div>
@@ -42,7 +42,7 @@
                     </select>
                 </div>
                 <label for="edit-ability-text"></label>
-                <textarea class="text-area-input margin" id="edit-ability-text" cols="40" rows="5"
+                <textarea class="text-area-input margin edit-ability-textarea" id="edit-ability-text" cols="40" rows="5"
                           placeholder="Abilitytext"></textarea>
                 <br>
                 <button id="submit-edit-role-button" name="click" type="reset">
@@ -56,12 +56,14 @@
     </div>
 </div>
 
-<div class="space-between">
-    <div id="image-submission">
+<div class="image-submission-containers">
+    <div id="image-submission" class="image-submission">
         <h2>Change Role Icon</h2>
-        <label for="image-input-url"></label>
-        <input type="url" id="image-input-url">
-        <button id="upload-button">Set Image for Role</button>
+        <div class="next-to-each-other">
+            <label for="image-input-url"></label>
+            <input type="url" id="image-input-url">
+            <button id="upload-button">Set Image for Role</button>
+        </div>
     </div>
 
     <div class="width-290"></div>
@@ -150,9 +152,9 @@
     </div>
 </div>
 
-<div class="center max-width-800 margin-0-auto">
+<div class="center max-width-800 margin-0-auto edit-night-order-div">
     <h2>Night Order</h2>
-    <div class="next-to-each-other night-order-container">
+    <div class="night-order-container">
         <label id="first-night" for="first-night-input">firstNight: </label>
         <input id="first-night-input" class="margin-left-10 edit-night-order" type="number" min="0">
         <button id="first-night-info-button"><i class="fa-regular fa-circle-info"></i></button>
@@ -161,9 +163,9 @@
     <div class="center margin-top-20">
         <label id="first-night-reminder" for="first-night-reminder-input">firstNightReminder: </label>
         <textarea id="first-night-reminder-input" cols="35" rows="3"
-                  class="text-area-input edit-night-order"></textarea>
+                  class="text-area-input edit-night-order wiki-text-area"></textarea>
     </div>
-    <div class="next-to-each-other night-order-container margin-top-20">
+    <div class="night-order-container">
         <label id="other-night" for="other-night-input">otherNight: </label>
         <input id="other-night-input" class="margin-left-10 edit-night-order" type="number" min="0">
         <button id="other-night-info-button"><i class="fa-regular fa-circle-info"></i></button>
@@ -172,19 +174,19 @@
     <div class="center margin-top-20">
         <label id="other-night-reminder" for="other-night-reminder-input">otherNightReminder: </label>
         <textarea id="other-night-reminder-input" cols="35" rows="3"
-                  class="text-area-input edit-night-order"></textarea>
+                  class="text-area-input edit-night-order wiki-text-area"></textarea>
     </div>
     <button id="edit-night-order-button" class="edit-night-order margin-top-10">Save Night Order Changes</button>
 </div>
 
-<div class="center">
+<div class="jinx-div">
     <h2>Jinxes</h2>
     <div id="jinx-edit-div" class="center">
         <label for="jinx-role-input"></label>
         <input id="jinx-role-input" placeholder="Role" class="padding-3">
         <label for="jinx-text-input"></label>
         <textarea id="jinx-text-input" rows="4" cols="38" placeholder="Jinx Text"
-                  class="text-area-input margin-top-10"></textarea>
+                  class="text-area-input margin-top-10 wiki-text-area"></textarea>
         <button id="jinx-add-button" class="margin-top-10">add Jinx</button>
     </div>
     <ul id="jinx-display"></ul>
@@ -268,10 +270,10 @@
 
 <div class="center margin-top-30">
     <h2>How To Run</h2>
-    <p id="howtorun-text"></p>
+    <p id="howtorun-text" class="max-width-800"></p>
     <form class="center">
         <label for="howtorun-input"></label>
-        <textarea id="howtorun-input" class="text-area-input" cols="60" rows="6"
+        <textarea id="howtorun-input" class="text-area-input wiki-text-area" cols="60" rows="6"
                   placeholder="How To Run Text"></textarea>
         <button id="howtorun-button" class="howtorun-button" type="submit">Change How To Run Text</button>
     </form>
@@ -285,7 +287,7 @@
     <div class="comments">
         <div class="center">
             <label for="input-comment"></label>
-            <textarea id="input-comment" class="text-area-input" cols="40" rows="4"
+            <textarea id="input-comment" class="text-area-input wiki-text-area" cols="40" rows="4"
                       placeholder="write comment"></textarea>
             <div class="comments">
                 <button id="add-comment-button">add comment</button>

@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
         for (const role of roleIdeaArray) {
 
             const roleDiv = document.createElement("div");
-            roleDiv.setAttribute("class", "space-between role-div");
+            roleDiv.setAttribute("class", "role-div");
             const roleImageAndText = document.createElement("div");
             roleImageAndText.setAttribute("class", "next-to-each-other margin-right-10");
 
@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
             roleText.textContent = role["name"] + " (" + role["characterType"] + "): " + role["ability"];
 
             const buttons = document.createElement("div");
-            buttons.setAttribute("class", "next-to-each-other");
+            buttons.setAttribute("class", "next-to-each-other role-buttons");
 
             const rateInput = document.createElement("input");
             rateInput.setAttribute("class", "rate-input");

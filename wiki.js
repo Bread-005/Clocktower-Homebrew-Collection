@@ -4,6 +4,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const websiteStorage = JSON.parse(localStorage.getItem(storageString));
     const searchParameters = new URLSearchParams(window.location.search);
     const id = searchParameters.get("r");
+    const wikiHeader = document.getElementById("wiki-header");
+    const wikiRoleImage = document.getElementById("wiki-role-image");
+    const editButton = document.getElementById("edit-button");
     const mainRoleDisplay = document.getElementById("main-role-display");
     const editRoleFieldDiv = document.getElementById("edit-role-field");
     const editRoleNameInput = document.getElementById("edit-role-name");
@@ -62,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let inEditMode = false;
 
         if (role.image !== "") {
-            document.getElementById("wiki-role-image").setAttribute("src", role.image);
+            wikiRoleImage.setAttribute("src", role.image);
         }
 
         hideEditStuff();
@@ -121,6 +124,10 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("role-name").textContent = role.name;
             document.getElementById("character-type").textContent = "Charactertype: " + role.characterType;
             document.getElementById("ability-text").textContent = "Ability: " + role.ability;
+            if (window.innerWidth <= 430) {
+                document.getElementById("role-name").append(wikiRoleImage);
+                wikiHeader.append(editButton);
+            }
         }
 
         function showNightOrder() {
@@ -160,22 +167,18 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
-        firstNightInfoButton.addEventListener("click", function () {
+        function nightOrderInfoButtonListener(button, text) {
+            button.addEventListener("click", function () {
+                if (text.style.display === "flex") {
+                    text.style.display = "none";
+                } else {
+                    text.style.display = "flex";
+                }
+            });
+        }
 
-            if (firstNightInfoText.style.display === "flex") {
-                firstNightInfoText.style.display = "none";
-            } else {
-                firstNightInfoText.style.display = "flex";
-            }
-        });
-
-        otherNightInfoButton.addEventListener("click", function () {
-            if (otherNightInfoText.style.display === "flex") {
-                otherNightInfoText.style.display = "none";
-            } else {
-                otherNightInfoText.style.display = "flex";
-            }
-        });
+        nightOrderInfoButtonListener(firstNightInfoButton, firstNightInfoText);
+        nightOrderInfoButtonListener(otherNightInfoButton, otherNightInfoText);
 
         function showPersonalRating() {
             personalRoleRating.textContent = "You have not rated this role";
@@ -218,6 +221,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     scriptEditInput.style.display = "flex";
                     scriptEditButton.style.display = "flex";
                     showScript();
+                    if (window.innerWidth <= 430) {
+                        imageSubmission.prepend(wikiRoleImage);
+                    }
                 }
                 if (!inEditMode) {
                     hideEditStuff();
@@ -236,7 +242,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     return;
                 }
                 role.image = uploadImageURL.value;
-                document.getElementById("wiki-role-image").setAttribute("src", role.image);
+                wikiRoleImage.setAttribute("src", role.image);
                 uploadImageURL.value = "";
                 saveLocalStorage();
             });

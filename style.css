@@ -139,12 +139,51 @@ textarea {
     flex-direction: row;
     justify-content: space-between;
 
+    .wiki-main-role-display {
+        padding: 50px;
+    }
+
+    .ability-text {
+        padding: 0 50px;
+    }
+
     .edit-button-container {
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
         width: 200px;
+    }
+
+    @media (max-width: 430px) {
+        .wiki-image {
+            width: 100px;
+            height: 100px;
+            margin-left: 25px;
+            margin-top: 0;
+        }
+
+        .wiki-main-role-display {
+            width: 80vw;
+            padding: 10px;
+        }
+
+        .wiki-role-name {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0 10px;
+        }
+
+        .ability-text {
+            padding: 0 5px;
+        }
+
+        .edit-ability-textarea {
+            width: 80vw;
+            padding: 10px;
+        }
     }
 }
 
@@ -160,9 +199,16 @@ textarea {
     height: 20px;
 }
 
-.filter {
+.roles-filter {
     display: flex;
     justify-content: space-between;
+    @media (max-width: 430px) {
+        flex-direction: column;
+        align-items: center;
+        .sorting {
+            margin-top: 10px;
+        }
+    }
 }
 
 .column-role-idea {
@@ -282,18 +328,35 @@ textarea {
     width: 115px;
 }
 
-.night-order-info-text {
-    position: absolute;
-    background-color: gray;
-    overflow: scroll;
-    right: -190px;
-    width: 180px;
-    height: 250px;
-    padding: 4px;
-}
+.edit-night-order-div {
 
-.night-order-container {
-    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @media (max-width: 430px) {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    .night-order-container {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .night-order-info-text {
+        position: absolute;
+        background-color: gray;
+        overflow: scroll;
+        right: -190px;
+        width: 180px;
+        height: 250px;
+        padding: 4px;
+    }
 }
 
 .padding-20 {
@@ -303,10 +366,27 @@ textarea {
 .role-div {
     margin: 5px;
     min-width: 90vw;
-}
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 
-.rate-input {
-    padding: 6px 0;
+    .rate-input {
+        padding: 6px 0;
+    }
+
+    @media (max-width: 430px) {
+        justify-content: center;
+        flex-direction: column;
+        .role-buttons {
+            margin: 2px 0 12px 0;
+            padding: 6px;
+        }
+
+        .rate-input {
+            padding: 6px 3px;
+        }
+    }
 }
 
 .margin-right-10 {
@@ -325,10 +405,55 @@ textarea {
     display: none;
 }
 
-.padding-50 {
-    padding: 50px;
+@media (max-width: 430px) {
+    .ability-text-text-area {
+        width: 80vw;
+    }
+
+    .role-creation-div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .wiki-text-area {
+        width: 90vw;
+        padding: 10px;
+    }
 }
 
-.ability-text {
-    padding: 0 50px;
+.image-submission-containers {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    @media (max-width: 430px) {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .image-submission {
+        @media (max-width: 430px) {
+            .wiki-image {
+                width: 100px;
+                height: 100px;
+            }
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+}
+
+.jinx-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
