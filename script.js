@@ -80,6 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const jsonInputDiv = document.getElementById("json-input-div");
     const jsonInputTextarea = document.getElementById("json-input-textarea");
     const jsonAddRoleButton = document.getElementById("add-role-button");
+    const rolesFilter = document.getElementById("roles-filter");
     const roleSearch = document.getElementById("role-search");
     roleSearch.value = websiteStorage.user.roleSearch;
     const characterTypeSelection = document.getElementById("character-typ-selection");
@@ -94,6 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const clearSearchesButton = document.getElementById("clear-searches-button");
     const homebrewRolesDisplay = document.getElementById("homebrewroles");
 
+    mobileSupportSetup();
     addRole();
     setupScriptSelection();
     displayRoles();
@@ -466,4 +468,16 @@ document.addEventListener("DOMContentLoaded", function () {
         jsonInputTextarea.value = "";
         displayRoles();
     });
+
+    function mobileSupportSetup() {
+        if (window.innerWidth <= 400) {
+            rolesFilter.append(document.getElementById("role-search-div"));
+            rolesFilter.append(document.getElementById("character-typ-selection-div"));
+            rolesFilter.append(document.getElementById("script-filter-selection-div"));
+            rolesFilter.append(document.getElementById("tag-div"));
+            rolesFilter.append(document.getElementById("only-my-favorites-div"));
+            rolesFilter.append(document.getElementById("clear-searches-button"));
+            rolesFilter.append(document.getElementById("sorting-roles-div"));
+        }
+    }
 });

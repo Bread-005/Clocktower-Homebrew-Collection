@@ -208,6 +208,13 @@ textarea {
         .sorting {
             margin-top: 10px;
         }
+
+        .only-filter {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
     }
 }
 
@@ -328,17 +335,13 @@ textarea {
     width: 115px;
 }
 
-.edit-night-order-div {
+.night-order-div {
 
     display: flex;
     justify-content: center;
     align-items: center;
-
-    @media (max-width: 600px) {
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-    }
+    flex-direction: column;
+    max-width: 800px;
 
     .night-order-container {
         position: relative;
@@ -352,9 +355,9 @@ textarea {
         position: absolute;
         background-color: gray;
         overflow: scroll;
-        right: -190px;
-        width: 180px;
-        height: 250px;
+        right: -160px;
+        width: 150px;
+        height: 220px;
         padding: 4px;
     }
 }

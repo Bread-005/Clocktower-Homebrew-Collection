@@ -59,13 +59,15 @@
 
 <h2 class="center">Role Ideas</h2>
 
-<div class="roles-filter">
+<div id="roles-filter" class="roles-filter">
     <div>
         <div class="next-to-each-other">
             <div class="center">
-                <label for="role-search"></label>
-                <input id="role-search" type="text" class="padding-6" placeholder="Search">
-                <div class="margin-top-5">
+                <div id="role-search-div">
+                    <label for="role-search"></label>
+                    <input id="role-search" type="text" class="padding-6" placeholder="Search">
+                </div>
+                <div id="script-filter-selection-div" class="margin-top-5">
                     <label for="script-filter-selection">Script</label>
                     <select id="script-filter-selection" class="padding-6 script-selection">
                         <option value="All">All</option>
@@ -73,7 +75,7 @@
                 </div>
             </div>
             <div class="center">
-                <div class="next-to-each-other">
+                <div id="character-typ-selection-div" class="next-to-each-other">
                     <label for="character-typ-selection" class="margin-left-6">CharacterType</label>
                     <select id="character-typ-selection" class="padding-6 margin-left-2">
                         <option value="All">All</option>
@@ -109,7 +111,7 @@
             </div>
         </div>
         <div class="space-between">
-            <div class="font-size-18 margin-top-10 space-between">
+            <div id="only-my-favorites-div" class="font-size-18 margin-top-10 space-between">
                 <label for="only-my-favorites">Only my Favorites</label>
                 <input id="only-my-favorites" type="checkbox">
             </div>
@@ -118,7 +120,7 @@
             </div>
         </div>
     </div>
-    <div class="font-size-18 sorting">
+    <div id="sorting-roles-div" class="font-size-18 sorting">
         <label for="sorting">Sorting</label>
         <select id="sorting" class="padding-6">
             <option value="Alphabet A-Z">Alphabet A-Z</option>
