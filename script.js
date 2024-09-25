@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const rolesFilter = document.getElementById("roles-filter");
     const roleSearch = document.getElementById("role-search");
     roleSearch.value = websiteStorage.user.roleSearch;
-    const characterTypeSelection = document.getElementById("character-typ-selection");
+    const characterTypeSelection = document.getElementById("character-type-selection");
     characterTypeSelection.value = websiteStorage.user.characterType;
     const sortingDropDownMenu = document.getElementById("sorting");
     sortingDropDownMenu.value = websiteStorage.user.sorting;
@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const roleDiv = document.createElement("div");
             roleDiv.setAttribute("class", "role-div");
             const roleImageAndText = document.createElement("div");
-            roleImageAndText.setAttribute("class", "next-to-each-other margin-right-10");
+            roleImageAndText.setAttribute("class", "role-image-and-text");
 
             const roleImage = document.createElement("img");
             roleImage.setAttribute("class", "clocktower-icon clocktower-icon-role-idea");
@@ -485,7 +485,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function mobileSupportSetup() {
         if (window.innerWidth <= 400) {
             rolesFilter.append(document.getElementById("role-search-div"));
-            rolesFilter.append(document.getElementById("character-typ-selection-div"));
+            rolesFilter.append(document.getElementById("character-type-selection-div"));
             rolesFilter.append(document.getElementById("script-filter-selection-div"));
             rolesFilter.append(document.getElementById("tag-div"));
             rolesFilter.append(document.getElementById("only-my-favorites-div"));

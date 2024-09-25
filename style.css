@@ -33,53 +33,28 @@ li {
 
 .input {
     padding: 4px;
+    margin-left: 2px;
 }
 
 button:hover {
     background: lightblue;
 }
 
-.column-delete-and-rate {
-    display: flex;
-}
-
 .character-types {
     height: 2rem;
 }
 
-.input, .character-types {
-    margin-left: 2px;
-}
-
-.role-text {
-    max-width: 1000px;
-    margin-top: 50px;
-}
-
-.role-rating {
-    margin-top: 20px;
-}
-
 .text-area-input {
-    margin-left: 5px;
+    margin: 5px;
     border: 2px solid transparent;
     background-color: lightgray;
     font-size: 20px;
     border-radius: 12px;
-}
 
-.howtorun-div {
-    max-width: 1000px;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.howtorun-form {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
+    @media (max-width: 600px) {
+        width: 90vw;
+        padding: 10px;
+    }
 }
 
 textarea {
@@ -96,38 +71,14 @@ textarea {
     height: 200px;
 }
 
-.clocktower-icon-div {
-    width: 50%;
-    height: 50%;
-    display: flex;
-    justify-content: center;
-}
-
 .div {
     margin-top: 30px;
-}
-
-.image-div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    margin-right: 20px;
-}
-
-.max-width {
-    max-width: 800px;
 }
 
 .clocktower-icon-role-idea {
     width: 50px;
     height: 50px;
     margin-right: 10px;
-}
-
-.border-spacing-10 {
-    border-spacing: 10px;
-    width: 100%;
 }
 
 .margin-top-20 {
@@ -163,11 +114,6 @@ textarea {
             margin-top: 0;
         }
 
-        .wiki-main-role-display {
-            width: 80vw;
-            padding: 10px;
-        }
-
         .wiki-role-name {
             display: flex;
             flex-direction: row;
@@ -184,6 +130,11 @@ textarea {
             width: 80vw;
             padding: 10px;
         }
+
+        .wiki-main-role-display {
+            width: 80vw;
+            padding: 10px;
+        }
     }
 }
 
@@ -191,22 +142,20 @@ textarea {
     margin-top: 30px;
 }
 
-.margin-left-30 {
-    margin-left: 30px;
-}
-
-.height-20 {
-    height: 20px;
-}
-
 .roles-filter {
     display: flex;
     justify-content: space-between;
+
+    .sorting-roles-div {
+        font-size: 18px;
+    }
+
     @media (max-width: 600px) {
         flex-direction: column;
         align-items: center;
-        .sorting {
+        .sorting-roles-div {
             margin-top: 10px;
+            font-size: 18px;
         }
 
         .only-filter {
@@ -218,16 +167,8 @@ textarea {
     }
 }
 
-.column-role-idea {
-    width: 100%;
-}
-
 .margin {
     margin: 5px;
-}
-
-.padding-6 {
-    padding: 6px;
 }
 
 .flex-start {
@@ -249,6 +190,7 @@ textarea {
 
 .comment {
     overflow-wrap: break-word;
+    max-width: 800px;
 }
 
 .flex-end {
@@ -256,10 +198,6 @@ textarea {
     flex-direction: column;
     justify-content: center;
     align-items: flex-end;
-}
-
-.font-size-18 {
-    font-size: 18px;
 }
 
 .margin-top-10 {
@@ -292,14 +230,6 @@ textarea {
     color: #cc0f0f;
 }
 
-.margin-top-5 {
-    margin-top: 5px;
-}
-
-.margin-left-10 {
-    margin-left: 10px;
-}
-
 .comments {
     display: flex;
     flex-direction: row;
@@ -307,32 +237,21 @@ textarea {
     justify-content: center;
 }
 
-.margin-5 {
-    margin: 5px;
+.tag-div {
+    margin: 5px 0 0 6px;
 }
 
-.padding-3 {
-    padding: 3px;
-}
-
-.margin-left-6 {
-    margin-left: 6px;
-}
-
-.margin-left-2 {
+.character-type-selection {
+    padding: 6px;
     margin-left: 2px;
 }
 
-.margin-0-auto {
-    margin: 0 auto;
-}
-
-.max-width-800 {
+.edit-tags {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     max-width: 800px;
-}
-
-.width-115 {
-    width: 115px;
 }
 
 .night-order-div {
@@ -342,6 +261,7 @@ textarea {
     align-items: center;
     flex-direction: column;
     max-width: 800px;
+    margin: 0 auto;
 
     .night-order-container {
         position: relative;
@@ -360,10 +280,22 @@ textarea {
         height: 220px;
         padding: 4px;
     }
-}
 
-.padding-20 {
-    padding: 20px;
+    .night-order-number {
+        margin-left: 10px;
+    }
+
+    .night-order-reminder {
+        margin-top: 10px;
+    }
+
+    .night-reminder-div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 20px;
+    }
 }
 
 .role-div {
@@ -382,6 +314,7 @@ textarea {
     @media (max-width: 600px) {
         justify-content: center;
         flex-direction: column;
+
         .role-buttons {
             margin: 2px 0 12px 0;
             padding: 6px;
@@ -393,41 +326,45 @@ textarea {
     }
 }
 
-.margin-right-10 {
+.role-image-and-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-right: 10px;
 }
 
 .script-selection {
     max-width: 125px;
+    padding: 6px;
 }
 
 .tag-filter-selection {
     max-width: 120px;
+    padding: 6px;
 }
 
-.display-none {
+.json-input-div {
     display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
-@media (max-width: 600px) {
-    .ability-text-text-area {
-        width: 80vw;
-    }
+.role-creation-div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-    .role-creation-div {
+    @media (max-width: 600px) {
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
         flex-direction: column;
-    }
-
-    .wiki-text-area {
-        width: 90vw;
-        padding: 10px;
+        margin-top: 20px;
     }
 }
 
-.image-submission-containers {
+.image-submission-div {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -445,6 +382,7 @@ textarea {
             .wiki-image {
                 width: 100px;
                 height: 100px;
+                margin-top: 20px;
             }
 
             display: flex;
@@ -460,12 +398,16 @@ textarea {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+
+    .jinx-text-area {
+        margin-top: 10px;
+    }
 }
 
-.night-order-heading {
-    margin-bottom: 0;
-}
-
-.homebrew-roles {
-    margin-top: 20px;
+.only-my-favorites-div {
+    font-size: 18px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

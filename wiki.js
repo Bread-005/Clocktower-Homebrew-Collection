@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
             commentsList.innerHTML = "";
             for (const comment of role.comments) {
                 const list = document.createElement("li");
-                list.setAttribute("class", "max-width comment");
+                list.setAttribute("class", "comment");
                 list.textContent = comment.text;
                 const deleteButton = document.createElement("button");
                 deleteButton.setAttribute("class", "icon-button");
@@ -183,7 +183,21 @@ document.addEventListener("DOMContentLoaded", function () {
         function showPersonalRating() {
             personalRoleRating.textContent = "You have not rated this role";
             if (role.rating > 0) {
-                personalRoleRating.textContent = "Your rating: " + role.rating;
+                personalRoleRating.textContent = "Your rating: ";
+                const yellowStarCount = Math.round(role.rating);
+                const grayStarCount = 10 - yellowStarCount;
+                for (let i = 0; i < yellowStarCount; i++) {
+                    const yellowStarIcon = document.createElement("i");
+                    yellowStarIcon.setAttribute("class", "fa-solid fa-star");
+                    yellowStarIcon.setAttribute("style", "color: #FFD43B");
+                    personalRoleRating.append(yellowStarIcon);
+                }
+                for (let i = 0; i < grayStarCount; i++) {
+                    const grayStarIcon = document.createElement("i");
+                    grayStarIcon.setAttribute("class", "fa-regular fa-star");
+                    personalRoleRating.append(grayStarIcon);
+                }
+                personalRoleRating.append(" " + role.rating + "/10");
             }
         }
 
@@ -228,6 +242,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (!inEditMode) {
                     hideEditStuff();
                     showNightOrder();
+                    showReminderTokens();
                     showJinxes();
                     showSpecial();
                     showScript();
@@ -499,21 +514,21 @@ document.addEventListener("DOMContentLoaded", function () {
         function showReminderTokens() {
             reminderTokenList.textContent = "";
             for (const reminderToken of role.reminders) {
-                const list = document.createElement("li");
-                list.textContent = reminderToken;
+                const div = document.createElement("div");
+                div.textContent = reminderToken;
                 if (inEditMode) {
                     const deleteButton = document.createElement("button");
                     const deleteIcon = document.createElement("i");
                     deleteIcon.setAttribute("class", "fa-solid fa-trash");
                     deleteButton.append(deleteIcon);
-                    list.append(deleteButton);
+                    div.append(deleteButton);
                     deleteButton.addEventListener("click", function () {
                         role.reminders = role.reminders.filter(reminderToken1 => reminderToken1 !== reminderToken);
                         saveLocalStorage();
                         showReminderTokens();
                     });
                 }
-                reminderTokenList.append(list);
+                reminderTokenList.append(div);
             }
         }
 
