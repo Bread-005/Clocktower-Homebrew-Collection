@@ -1,3 +1,5 @@
+import {copyJsonString} from "./functions.js";
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const storageString = "websiteStorage1";
@@ -147,14 +149,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 rateIcon.setAttribute("class", "fa-solid fa-star");
                 rateIcon.setAttribute("style", "color: #FFD43B;");
             }
+            rateButton.append(rateIcon);
 
             const wikiButton = document.createElement("button");
 
             const wikiIcon = document.createElement("i");
             wikiIcon.setAttribute("class", "fa-solid fa-book");
+            wikiButton.append(wikiIcon);
 
             const wikiAnchor = document.createElement("a");
             wikiAnchor.setAttribute("href", "wiki.html?r=" + role.createdAt);
+            wikiAnchor.append(wikiButton);
 
             const favoriteButton = document.createElement("button");
             const favoriteIcon = document.createElement("i");
@@ -167,18 +172,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 favoriteIcon.classList.remove("red");
                 favoriteIcon.setAttribute("class", "fa-light fa-heart");
             }
+            favoriteButton.append(favoriteIcon);
+
+            const downloadJsonButton = document.createElement("button");
+            const downloadIcon = document.createElement("i");
+            downloadIcon.setAttribute("class", "fa-solid fa-download");
+            downloadJsonButton.append(downloadIcon);
 
             roleImageAndText.append(roleImage);
             roleImageAndText.append(roleText);
             roleDiv.append(roleImageAndText);
-            rateButton.append(rateIcon);
-            wikiButton.append(wikiIcon);
-            wikiAnchor.append(wikiButton);
-            favoriteButton.append(favoriteIcon);
             buttons.append(rateInput);
             buttons.append(rateButton);
             buttons.append(wikiAnchor);
             buttons.append(favoriteButton);
+            buttons.append(downloadJsonButton);
             roleDiv.append(buttons);
             homebrewRolesDisplay.append(roleDiv);
 
@@ -202,6 +210,10 @@ document.addEventListener("DOMContentLoaded", function () {
             favoriteButton.addEventListener("click", function () {
                 role.isFavorite = !role.isFavorite;
                 displayRoles();
+            });
+
+            downloadJsonButton.addEventListener("click", function () {
+                copyJsonString(role);
             });
         }
         showPages(roles, roleIdeaArray);
