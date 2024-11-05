@@ -516,10 +516,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function fillFirstNightInfoTextArea() {
-            const firstNightList = ["Lord of Typhon", "Philosopher", "Kazali", "Alchemist", "Poppy Grower",
+            const firstNightList = ["Lord of Typhon", "Kazali", "Boffin", "Philosopher", "Alchemist", "Poppy Grower",
                 "Yaggababble", "Magician", "Minion info", "Snitch", "Lunatic", "Summoner", "Demon info", "King", "Sailor",
                 "Marionette", "Engineer", "Preacher", "Lil Monsta", "Lleech", "Poisoner", "Widow", "Courtier", "Snake Charmer",
-                "Godfather", "Devil´s Advocate", "Evil Twin", "Witch", "Cerenovus", "Fearmonger", "Harpy", "Mezepheles", "Pukka",
+                "Godfather", "Organ Grinder", "Devil´s Advocate", "Evil Twin", "Witch", "Cerenovus", "Fearmonger", "Harpy", "Mezepheles", "Pukka",
                 "Pixie", "Huntsman", "Damsel", "Amnesiac", "Washerwoman", "Librarian", "Investigator", "Chef", "Empath",
                 "Fortune Teller", "Butler", "Grandmother", "Clockmaker", "Dreamer", "Seamstress", "Steward", "Knight",
                 "Noble", "Balloonist", "Shugenja", "Village Idiot", "Bounty Hunter", "Nightwatchman", "Cult Leader",
@@ -531,11 +531,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function fillOtherNightInfoTextArea() {
             const otherNightList = ["Philosopher", "Poppy Grower", "Sailor", "Engineer", "Preacher", "Poisoner",
-                "Courtier", "Innkeeper", "Gambler", "Snake Charmer", "Monk", "Devil´s Advocate", "Witch", "Cerenovus",
+                "Courtier", "Innkeeper", "Gambler", "Acrobat", "Snake Charmer", "Monk", "Organ Grinder", "Devil´s Advocate", "Witch", "Cerenovus",
                 "Pit-Hag", "Fearmonger", "Harpy", "Mezepheles", "Scarlet Woman", "Summoner", "Lunatic", "Exorcist",
                 "Lycanthrope", "Legion", "Imp", "Zombuul", "Pukka", "Shabaloth", "Po", "Fang Gu", "No Dashii", "Vortox",
                 "Lord of Typhon", "Vigormortis", "Ojo", "Al-Hadikhia", "Lleech", "Lil Monsta", "Yaggababble", "Kazali",
-                "Assassin", "Godfather", "Gossip", "Acrobat", "Hatter", "Barber", "Sweetheart", "Sage", "Banshee", "Professor",
+                "Assassin", "Godfather", "Gossip", "Hatter", "Barber", "Sweetheart", "Sage", "Banshee", "Professor",
                 "Choirboy", "Huntsman", "Damsel", "Amnesiac", "Farmer", "Tinker", "Moonchild", "Grandmother", "Ravenkeeper",
                 "Empath", "Fortune Teller", "Undertaker", "Dreamer", "Flowergirl", "Town Crier", "Oracle", "Seamstress",
                 "Juggler", "Balloonist", "Village Idiot", "King", "Bounty Hunter", "Nightwatchman", "Cult Leader", "Butler",
