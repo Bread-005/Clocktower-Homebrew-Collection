@@ -518,19 +518,19 @@ document.addEventListener("DOMContentLoaded", function () {
         function fillFirstNightInfoTextArea() {
             const firstNightList = ["Lord of Typhon", "Kazali", "Boffin", "Philosopher", "Alchemist", "Poppy Grower",
                 "Yaggababble", "Magician", "Minion info", "Snitch", "Lunatic", "Summoner", "Demon info", "King", "Sailor",
-                "Marionette", "Engineer", "Preacher", "Lil Monsta", "Lleech", "Poisoner", "Widow", "Courtier", "Snake Charmer",
+                "Marionette", "Engineer", "Preacher", "Lil Monsta", "Lleech", "Xaan", "Poisoner", "Widow", "Courtier", "Snake Charmer",
                 "Godfather", "Organ Grinder", "Devil´s Advocate", "Evil Twin", "Witch", "Cerenovus", "Fearmonger", "Harpy", "Mezepheles", "Pukka",
                 "Pixie", "Huntsman", "Damsel", "Amnesiac", "Washerwoman", "Librarian", "Investigator", "Chef", "Empath",
                 "Fortune Teller", "Butler", "Grandmother", "Clockmaker", "Dreamer", "Seamstress", "Steward", "Knight",
                 "Noble", "Balloonist", "Shugenja", "Village Idiot", "Bounty Hunter", "Nightwatchman", "Cult Leader",
-                "Spy", "Ogre", "High Priestess", "Chambermaid", "Mathematician", "Leviathan", "Vizier"];
+                "Spy", "Ogre", "High Priestess", "General", "Chambermaid", "Mathematician", "Leviathan", "Vizier"];
             for (let i = 0; i < firstNightList.length; i++) {
                 firstNightInfoText.innerHTML += (i + 6) + " " + firstNightList[i] + "<br>";
             }
         }
 
         function fillOtherNightInfoTextArea() {
-            const otherNightList = ["Philosopher", "Poppy Grower", "Sailor", "Engineer", "Preacher", "Poisoner",
+            const otherNightList = ["Philosopher", "Poppy Grower", "Sailor", "Engineer", "Preacher", "Xaan", "Poisoner",
                 "Courtier", "Innkeeper", "Gambler", "Acrobat", "Snake Charmer", "Monk", "Organ Grinder", "Devil´s Advocate", "Witch", "Cerenovus",
                 "Pit-Hag", "Fearmonger", "Harpy", "Mezepheles", "Scarlet Woman", "Summoner", "Lunatic", "Exorcist",
                 "Lycanthrope", "Legion", "Imp", "Zombuul", "Pukka", "Shabaloth", "Po", "Fang Gu", "No Dashii", "Vortox",
@@ -539,7 +539,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 "Choirboy", "Huntsman", "Damsel", "Amnesiac", "Farmer", "Tinker", "Moonchild", "Grandmother", "Ravenkeeper",
                 "Empath", "Fortune Teller", "Undertaker", "Dreamer", "Flowergirl", "Town Crier", "Oracle", "Seamstress",
                 "Juggler", "Balloonist", "Village Idiot", "King", "Bounty Hunter", "Nightwatchman", "Cult Leader", "Butler",
-                "Spy", "High Priestess", "Chambermaid", "Mathematician", "Leviathan"];
+                "Spy", "High Priestess", "General", "Chambermaid", "Mathematician", "Riot", "Leviathan"];
             for (let i = 0; i < otherNightList.length; i++) {
                 otherNightInfoText.innerHTML += (i + 2) + " " + otherNightList[i] + "<br>";
             }
