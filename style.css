@@ -71,70 +71,115 @@ textarea {
     height: 200px;
 }
 
-.div {
-    margin-top: 30px;
-}
-
 .clocktower-icon-role-idea {
     width: 50px;
     height: 50px;
     margin-right: 10px;
 }
 
-.margin-top-20 {
-    margin-top: 20px;
-}
+.main-page {
 
-.page-top {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-
-    .wiki-main-role-display {
-        padding: 0 50px;
-    }
-
-    .ability-text {
-        padding: 0 50px;
-    }
-
-    .edit-button-container {
+    .homebrew-display {
+        margin-top: 1.25rem;
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        width: 200px;
+
+        .role-idea-page-selection {
+            margin-top: 1rem;
+        }
     }
 
-    @media (max-width: 600px) {
-        .wiki-image {
-            width: 100px;
-            height: 100px;
-            margin-left: 25px;
-            margin-top: 0;
-        }
+    .clocktower-script-tool-link {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+}
 
-        .wiki-role-name {
+.wiki {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    @media (min-width: 700px) {
+        padding: 2rem;
+    }
+
+    .page-top {
+        display: flex;
+        justify-content: space-between;
+
+        .main-role-display {
+            padding: 0 50px;
             display: flex;
-            flex-direction: row;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            margin: 0 10px;
+            flex-direction: column;
+            text-align: center;
+
+            .ability-text {
+                padding: 0 50px;
+            }
         }
 
-        .ability-text {
-            padding: 0 5px;
+        .edit-role-field {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
         }
 
-        .edit-ability-textarea {
-            width: 80vw;
-            padding: 10px;
+        .edit-button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 200px;
         }
 
-        .wiki-main-role-display {
-            width: 80vw;
-            padding: 10px;
+        @media (max-width: 600px) {
+            .wiki-image {
+                width: 100px;
+                height: 100px;
+                margin-left: 25px;
+                margin-top: 0;
+            }
+
+            .wiki-role-name {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                margin: 0 10px;
+            }
+
+            .ability-text {
+                padding: 0 5px;
+            }
+
+            .edit-ability-textarea {
+                width: 80vw;
+                padding: 10px;
+            }
+
+            .main-role-display {
+                width: 80vw;
+                padding: 10px;
+            }
         }
+    }
+
+    .delete-role-div {
+        margin-top: 1.25rem;
+        display: flex;
+        justify-content: center;
+    }
+
+    .download-json-button {
+        margin-top: 30px;
     }
 }
 
@@ -393,7 +438,7 @@ textarea {
     }
 }
 
-.jinx-div {
+.jinxes {
     display: flex;
     justify-content: center;
     align-items: center;

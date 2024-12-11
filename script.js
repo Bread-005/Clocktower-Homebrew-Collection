@@ -96,6 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
     onlyMyFavoritesCheckBox.checked = websiteStorage.user.onlyMyFavorites;
     const clearSearchesButton = document.getElementById("clear-searches-button");
     const homebrewRolesDisplay = document.getElementById("homebrewroles");
+    const roleIdeaPageSelection = document.querySelector(".role-idea-page-selection");
 
     mobileSupportSetup();
     addRole();
@@ -280,7 +281,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (array.length === 0) {
             homebrewRolesDisplay.innerHTML = "There is no role, that matches your search";
         }
-        document.getElementById("role-idea-page-selection").innerHTML = "";
+        roleIdeaPageSelection.innerHTML = "";
         for (let i = 0; i < pages; i++) {
             const button = document.createElement("button");
             button.textContent = (i + 1).toString();
@@ -297,7 +298,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 displayRoles();
             });
-            document.getElementById("role-idea-page-selection").append(button);
+            roleIdeaPageSelection.append(button);
         }
     }
 

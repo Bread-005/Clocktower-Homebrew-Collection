@@ -11,296 +11,297 @@
 </head>
 <body>
 
-<div id="wiki-header" class="space-between">
-    <a href="index.html">
-        <button class="icon-button"><i class="fa-solid fa-square-left"></i></button>
-    </a>
-</div>
-
-<div class="page-top">
-    <img src="https://i.postimg.cc/qM09f8cD/placeholder-icon.png" id="wiki-role-image"
-         class="clocktower-icon wiki-image" alt=""/>
-    <div>
-        <div id="main-role-display" class="center wiki-main-role-display">
-            <h1 id="role-name" class="wiki-role-name"></h1>
-            <h2 id="character-type"></h2>
-            <h2 id="ability-text" class="ability-text"></h2>
-        </div>
-        <div id="edit-role-field" class="center margin-top-30">
-            <form>
-                <label for="edit-role-name">Rolename</label>
-                <input class="input" id="edit-role-name" type="text"/>
-                <div class="character-type-dropdown margin">
-                    <label for="edit-character-type">Charactertype</label>
-                    <select class="character-types" id="edit-character-type">
-                        <option value="Townsfolk">Townsfolk</option>
-                        <option value="Outsider">Outsider</option>
-                        <option value="Minion">Minion</option>
-                        <option value="Demon">Demon</option>
-                        <option value="Traveller">Traveller</option>
-                        <option value="Fabled">Fabled</option>
-                    </select>
-                </div>
-                <label for="edit-ability-text"></label>
-                <textarea class="text-area-input edit-ability-textarea" id="edit-ability-text" cols="40" rows="5"
-                          placeholder="Abilitytext"></textarea>
-                <br>
-                <button id="submit-edit-role-button" name="click" type="reset">
-                    Submit Role Change
-                </button>
-            </form>
-        </div>
-    </div>
-    <div class="edit-button-container">
-        <button id="edit-button"><i class="fa-solid fa-pen fa-pen-to-square"></i></button>
-    </div>
-</div>
-
-<div class="image-submission-div">
-    <div id="image-submission" class="image-submission">
-        <h2>Change Role Icon</h2>
-        <div class="next-to-each-other">
-            <label for="image-input-url"></label>
-            <input type="url" id="image-input-url">
-            <button id="upload-button">Set Image for Role</button>
-        </div>
+<div class="wiki">
+    <div style="width: 100%">
+        <a href="index.html">
+            <button><i class="fa-solid fa-square-left"></i></button>
+        </a>
     </div>
 
-    <div class="width-290"></div>
-    <div class="width-290"></div>
-</div>
-
-<div id="tags-div" class="center">
-    <h2>Tags</h2>
-    <p id="tag-display"></p>
-    <div id="edit-tags" class="edit-tags">
+    <div class="page-top">
+        <img src="https://i.postimg.cc/qM09f8cD/placeholder-icon.png" id="wiki-role-image"
+             class="clocktower-icon wiki-image" alt=""/>
         <div>
-            <label for="misinformation-tag">Misinformation</label>
-            <input type="checkbox" class="tag" name="Misinformation" id="misinformation-tag">
-        </div>
-        <div>
-            <label for="extra-death-tag">Extra Death</label>
-            <input type="checkbox" class="tag" name="Extra Death" id="extra-death-tag">
-        </div>
-        <div>
-            <label for="protection-tag">Protection</label>
-            <input type="checkbox" class="tag" name="Protection" id="protection-tag">
-        </div>
-        <div>
-            <label for="wincondition-tag">Wincondition</label>
-            <input type="checkbox" class="tag" name="Wincondition" id="wincondition-tag">
-        </div>
-        <div>
-            <label for="character-changing-tag">Character Changing</label>
-            <input type="checkbox" class="tag" name="Character Changing" id="character-changing-tag">
-        </div>
-        <div>
-            <label for="setup-tag">Setup</label>
-            <input type="checkbox" class="tag" name="Setup" id="setup-tag">
-        </div>
-        <div>
-            <label for="madness-tag">Madness</label>
-            <input id="madness-tag" class="tag" type="checkbox" name="Madness">
-        </div>
-        <div>
-            <label for="noms-votes-exes-tag">Noms Votes Exes</label>
-            <input id="noms-votes-exes-tag" class="tag" type="checkbox" name="Noms Votes Exes">
-        </div>
-        <div>
-            <label for="does-not-wake-tag">Does Not Wake</label>
-            <input id="does-not-wake-tag" class="tag" type="checkbox" name="Does Not Wake">
-        </div>
-        <div>
-            <label for="st-consult-tag">ST Consult</label>
-            <input id="st-consult-tag" class="tag" type="checkbox" name="ST Consult">
-        </div>
-        <div>
-            <label for="when-you-die-tag">When You Die</label>
-            <input id="when-you-die-tag" class="tag" type="checkbox" name="When You Die">
-        </div>
-        <div>
-            <label for="resurrection-tag">Resurrection</label>
-            <input id="resurrection-tag" class="tag" type="checkbox" name="Resurrection">
-        </div>
-        <div>
-            <label for="alignment-switching-tag">Alignment Switching</label>
-            <input id="alignment-switching-tag" class="tag" type="checkbox" name="Alignment Switching">
-        </div>
-        <div>
-            <label for="public-tag">Public</label>
-            <input id="public-tag" class="tag" type="checkbox" name="Public">
-        </div>
-        <div>
-            <label for="seating-order-tag">Seating Order</label>
-            <input id="seating-order-tag" class="tag" type="checkbox" name="Seating Order">
-        </div>
-    </div>
-</div>
-
-<div class="night-order-div">
-    <h2 style="margin-bottom: 0">Night Order</h2>
-    <div class="night-order-container">
-        <label id="first-night" for="first-night-input">firstNight: </label>
-        <input id="first-night-input" class="edit-night-order night-order-number" type="number" min="0">
-        <button id="first-night-info-button"><i class="fa-regular fa-circle-info"></i></button>
-        <div id="first-night-info-text" class="night-order-info-text"></div>
-    </div>
-    <div class="night-reminder-div">
-        <label id="first-night-reminder" for="first-night-reminder-input">firstNightReminder: </label>
-        <textarea id="first-night-reminder-input" cols="35" rows="3"
-                  class="text-area-input edit-night-order"></textarea>
-    </div>
-    <div class="night-order-container">
-        <label id="other-night" for="other-night-input">otherNight: </label>
-        <input id="other-night-input" class="edit-night-order night-order-number" type="number" min="0">
-        <button id="other-night-info-button"><i class="fa-regular fa-circle-info"></i></button>
-        <div id="other-night-info-text" class="night-order-info-text"></div>
-    </div>
-    <div class="night-reminder-div">
-        <label id="other-night-reminder" for="other-night-reminder-input">otherNightReminder: </label>
-        <textarea id="other-night-reminder-input" cols="35" rows="3"
-                  class="text-area-input edit-night-order"></textarea>
-    </div>
-    <button id="edit-night-order-button" class="edit-night-order margin-top-10">Save Night Order Changes</button>
-</div>
-
-<div class="center">
-    <h2 style="margin-bottom: 0">Reminder Tokens</h2>
-    <div id="edit-reminder-token-div" class="center">
-        <label for="reminder-token-input"></label>
-        <input id="reminder-token-input">
-        <button id="reminder-token-add-button">add Reminder Token</button>
-    </div>
-    <div id="reminder-token-list" class="center"></div>
-</div>
-
-<div class="jinx-div">
-    <h2>Jinxes</h2>
-    <div id="jinx-edit-div" class="center">
-        <label for="jinx-role-input"></label>
-        <input id="jinx-role-input" placeholder="Role" style="padding: 3px">
-        <label for="jinx-text-input"></label>
-        <textarea id="jinx-text-input" rows="4" cols="38" placeholder="Jinx Text"
-                  class="text-area-input jinx-text-area"></textarea>
-        <button id="jinx-add-button">add Jinx</button>
-    </div>
-    <ul id="jinx-display"></ul>
-</div>
-
-<div id="special-div" class="center">
-    <h3>Special</h3>
-    <div id="special-edit-div" class="center">
-        <div class="center">
-            Required
-            <div>
-                <label for="special-type-selection">Type: </label>
-                <select id="special-type-selection">
-                    <option value="selection">Selection</option>
-                    <option value="ability">Ability</option>
-                    <option value="signal">Signal</option>
-                    <option value="vote">Vote</option>
-                    <option value="reveal">Reveal</option>
-                </select>
-                <label for="special-name-selection">Name: </label>
-                <select id="special-name-selection">
-                    <option value="grimoire">Grimoire</option>
-                    <option value="pointing">Pointing</option>
-                    <option value="ghost-votes">Ghost Votes</option>
-                    <option value="distribute-roles">Distribute Roles</option>
-                    <option value="bag-disabled">Bag Disabled</option>
-                    <option value="bag-duplication">Bag Duplication</option>
-                    <option value="multiplier">Multiplier</option>
-                    <option value="hidden">Hidden</option>
-                    <option value="replace-character">Replace Character</option>
-                    <option value="player">Player</option>
-                    <option value="card">Card</option>
-                </select>
+            <div class="main-role-display">
+                <h1 id="role-name" class="wiki-role-name"></h1>
+                <h2 id="character-type"></h2>
+                <h2 id="ability-text" class="ability-text"></h2>
             </div>
-            <div class="margin-top-10">
-                <div class="center">Optional</div>
-                <div class="next-to-each-other">
-                    <div>
-                        <label for="special-value-input">Value: </label>
-                        <input id="special-value-input">
-                    </div>
-                    <div style="margin-left: 6px">
-                        <label for="special-time-selection">Time: </label>
-                        <select id="special-time-selection">
-                            <option value="none">None</option>
-                            <option value="pregame">Pregame</option>
-                            <option value="day">Day</option>
-                            <option value="night">Night</option>
-                            <option value="firstnight">First Night</option>
-                            <option value="firstday">First Day</option>
-                            <option value="othernight">Other Night</option>
-                            <option value="otherday">Other Day</option>
+            <div class="edit-role-field">
+                <form>
+                    <label for="edit-role-name">Rolename</label>
+                    <input class="input" id="edit-role-name" type="text"/>
+                    <div class="character-type-dropdown margin">
+                        <label for="edit-character-type">Charactertype</label>
+                        <select id="edit-character-type" class="character-types">
+                            <option value="Townsfolk">Townsfolk</option>
+                            <option value="Outsider">Outsider</option>
+                            <option value="Minion">Minion</option>
+                            <option value="Demon">Demon</option>
+                            <option value="Traveller">Traveller</option>
+                            <option value="Fabled">Fabled</option>
                         </select>
                     </div>
+                    <label for="edit-ability-text"></label>
+                    <textarea class="text-area-input edit-ability-textarea" id="edit-ability-text" cols="40" rows="5"
+                              placeholder="Abilitytext"></textarea>
+                    <br>
+                    <button id="submit-edit-role-button" name="click" type="reset">
+                        Submit Role Change
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="edit-button-container">
+            <button id="edit-button"><i class="fa-solid fa-pen fa-pen-to-square"></i></button>
+        </div>
+    </div>
+
+    <div class="image-submission-div">
+        <div id="image-submission" class="image-submission">
+            <h2>Change Role Icon</h2>
+            <div class="next-to-each-other">
+                <label for="image-input-url"></label>
+                <input type="url" id="image-input-url">
+                <button id="upload-button">Set Image for Role</button>
+            </div>
+        </div>
+
+        <div class="width-290"></div>
+        <div class="width-290"></div>
+    </div>
+
+    <div id="tags-div" class="center">
+        <h2>Tags</h2>
+        <p id="tag-display"></p>
+        <div id="edit-tags" class="edit-tags">
+            <div>
+                <label for="misinformation-tag">Misinformation</label>
+                <input type="checkbox" class="tag" name="Misinformation" id="misinformation-tag">
+            </div>
+            <div>
+                <label for="extra-death-tag">Extra Death</label>
+                <input type="checkbox" class="tag" name="Extra Death" id="extra-death-tag">
+            </div>
+            <div>
+                <label for="protection-tag">Protection</label>
+                <input type="checkbox" class="tag" name="Protection" id="protection-tag">
+            </div>
+            <div>
+                <label for="wincondition-tag">Wincondition</label>
+                <input type="checkbox" class="tag" name="Wincondition" id="wincondition-tag">
+            </div>
+            <div>
+                <label for="character-changing-tag">Character Changing</label>
+                <input type="checkbox" class="tag" name="Character Changing" id="character-changing-tag">
+            </div>
+            <div>
+                <label for="setup-tag">Setup</label>
+                <input type="checkbox" class="tag" name="Setup" id="setup-tag">
+            </div>
+            <div>
+                <label for="madness-tag">Madness</label>
+                <input id="madness-tag" class="tag" type="checkbox" name="Madness">
+            </div>
+            <div>
+                <label for="noms-votes-exes-tag">Noms Votes Exes</label>
+                <input id="noms-votes-exes-tag" class="tag" type="checkbox" name="Noms Votes Exes">
+            </div>
+            <div>
+                <label for="does-not-wake-tag">Does Not Wake</label>
+                <input id="does-not-wake-tag" class="tag" type="checkbox" name="Does Not Wake">
+            </div>
+            <div>
+                <label for="st-consult-tag">ST Consult</label>
+                <input id="st-consult-tag" class="tag" type="checkbox" name="ST Consult">
+            </div>
+            <div>
+                <label for="when-you-die-tag">When You Die</label>
+                <input id="when-you-die-tag" class="tag" type="checkbox" name="When You Die">
+            </div>
+            <div>
+                <label for="resurrection-tag">Resurrection</label>
+                <input id="resurrection-tag" class="tag" type="checkbox" name="Resurrection">
+            </div>
+            <div>
+                <label for="alignment-switching-tag">Alignment Switching</label>
+                <input id="alignment-switching-tag" class="tag" type="checkbox" name="Alignment Switching">
+            </div>
+            <div>
+                <label for="public-tag">Public</label>
+                <input id="public-tag" class="tag" type="checkbox" name="Public">
+            </div>
+            <div>
+                <label for="seating-order-tag">Seating Order</label>
+                <input id="seating-order-tag" class="tag" type="checkbox" name="Seating Order">
+            </div>
+        </div>
+    </div>
+
+    <div class="night-order-div">
+        <h2 style="margin-bottom: 0">Night Order</h2>
+        <div class="night-order-container">
+            <label id="first-night" for="first-night-input">firstNight: </label>
+            <input id="first-night-input" class="edit-night-order night-order-number" type="number" min="0">
+            <button id="first-night-info-button"><i class="fa-regular fa-circle-info"></i></button>
+            <div id="first-night-info-text" class="night-order-info-text"></div>
+        </div>
+        <div class="night-reminder-div">
+            <label id="first-night-reminder" for="first-night-reminder-input">firstNightReminder: </label>
+            <textarea id="first-night-reminder-input" cols="35" rows="3"
+                      class="text-area-input edit-night-order"></textarea>
+        </div>
+        <div class="night-order-container">
+            <label id="other-night" for="other-night-input">otherNight: </label>
+            <input id="other-night-input" class="edit-night-order night-order-number" type="number" min="0">
+            <button id="other-night-info-button"><i class="fa-regular fa-circle-info"></i></button>
+            <div id="other-night-info-text" class="night-order-info-text"></div>
+        </div>
+        <div class="night-reminder-div">
+            <label id="other-night-reminder" for="other-night-reminder-input">otherNightReminder: </label>
+            <textarea id="other-night-reminder-input" cols="35" rows="3"
+                      class="text-area-input edit-night-order"></textarea>
+        </div>
+        <button id="edit-night-order-button" class="edit-night-order margin-top-10">Save Night Order Changes</button>
+    </div>
+
+    <div class="center">
+        <h2 style="margin-bottom: 0">Reminder Tokens</h2>
+        <div id="edit-reminder-token-div" class="center">
+            <label for="reminder-token-input"></label>
+            <input id="reminder-token-input">
+            <button id="reminder-token-add-button">add Reminder Token</button>
+        </div>
+        <div id="reminder-token-list" class="center"></div>
+    </div>
+
+    <div class="jinxes">
+        <h2>Jinxes</h2>
+        <div id="jinx-edit-div" class="center">
+            <label for="jinx-role-input"></label>
+            <input id="jinx-role-input" placeholder="Role" style="padding: 3px">
+            <label for="jinx-text-input"></label>
+            <textarea id="jinx-text-input" rows="4" cols="38" placeholder="Jinx Text"
+                      class="text-area-input jinx-text-area"></textarea>
+            <button id="jinx-add-button">add Jinx</button>
+        </div>
+        <ul id="jinx-display"></ul>
+    </div>
+
+    <div id="special-div" class="center">
+        <h3>Special</h3>
+        <div id="special-edit-div" class="center">
+            <div class="center">
+                Required
+                <div>
+                    <label for="special-type-selection">Type: </label>
+                    <select id="special-type-selection">
+                        <option value="selection">Selection</option>
+                        <option value="ability">Ability</option>
+                        <option value="signal">Signal</option>
+                        <option value="vote">Vote</option>
+                        <option value="reveal">Reveal</option>
+                    </select>
+                    <label for="special-name-selection">Name: </label>
+                    <select id="special-name-selection">
+                        <option value="grimoire">Grimoire</option>
+                        <option value="pointing">Pointing</option>
+                        <option value="ghost-votes">Ghost Votes</option>
+                        <option value="distribute-roles">Distribute Roles</option>
+                        <option value="bag-disabled">Bag Disabled</option>
+                        <option value="bag-duplication">Bag Duplication</option>
+                        <option value="multiplier">Multiplier</option>
+                        <option value="hidden">Hidden</option>
+                        <option value="replace-character">Replace Character</option>
+                        <option value="player">Player</option>
+                        <option value="card">Card</option>
+                    </select>
+                </div>
+                <div class="margin-top-10">
+                    <div class="center">Optional</div>
+                    <div class="next-to-each-other">
+                        <div>
+                            <label for="special-value-input">Value: </label>
+                            <input id="special-value-input">
+                        </div>
+                        <div style="margin-left: 6px">
+                            <label for="special-time-selection">Time: </label>
+                            <select id="special-time-selection">
+                                <option value="none">None</option>
+                                <option value="pregame">Pregame</option>
+                                <option value="day">Day</option>
+                                <option value="night">Night</option>
+                                <option value="firstnight">First Night</option>
+                                <option value="firstday">First Day</option>
+                                <option value="othernight">Other Night</option>
+                                <option value="otherday">Other Day</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button id="special-add-button">Add Special</button>
+        </div>
+        <ul id="special-display"></ul>
+    </div>
+
+    <div class="center">
+        <h3 id="script-text"></h3>
+        <div class="next-to-each-other">
+            <label for="script-edit-input"></label>
+            <input id="script-edit-input">
+            <button id="script-edit-button">Change Script</button>
+        </div>
+    </div>
+
+    <div class="center margin-top-30">
+        <h2>How To Run</h2>
+        <p id="howtorun-text" style="max-width: 800px"></p>
+        <div class="center">
+            <label for="howtorun-input"></label>
+            <textarea id="howtorun-input" class="text-area-input" cols="60" rows="6"
+                      placeholder="How To Run Text"></textarea>
+            <button id="howtorun-button" class="howtorun-button" type="submit">Change How To Run Text</button>
+        </div>
+    </div>
+
+    <div class="center">
+        <h2 style="margin-bottom: 0">Rating</h2>
+        <p id="personal-role-rating"></p>
+    </div>
+
+    <div class="margin-top-30 center">
+        <h2>Comments</h2>
+        <div class="comments">
+            <div class="center">
+                <label for="input-comment"></label>
+                <textarea id="input-comment" class="text-area-input" cols="40" rows="4"
+                          placeholder="write comment"></textarea>
+                <div class="comments">
+                    <button id="add-comment-button">add comment</button>
                 </div>
             </div>
         </div>
-        <button id="special-add-button">Add Special</button>
+        <ul id="comments-list">
+
+        </ul>
     </div>
-    <ul id="special-display"></ul>
-</div>
 
-<div class="center">
-    <h3 id="script-text"></h3>
-    <div class="next-to-each-other">
-        <label for="script-edit-input"></label>
-        <input id="script-edit-input">
-        <button id="script-edit-button">Change Script</button>
+
+    <button class="download-json-button">Copy Json to clipboard</button>
+
+    <div class="delete-role-div">
+        <label for="delete-role-button">Delete Role</label>
+        <button id="delete-role-button"><i class="fa-solid fa-trash"></i></button>
     </div>
-</div>
 
-<div class="center margin-top-30">
-    <h2>How To Run</h2>
-    <p id="howtorun-text" style="max-width: 800px"></p>
-    <div class="center">
-        <label for="howtorun-input"></label>
-        <textarea id="howtorun-input" class="text-area-input" cols="60" rows="6"
-                  placeholder="How To Run Text"></textarea>
-        <button id="howtorun-button" class="howtorun-button" type="submit">Change How To Run Text</button>
-    </div>
-</div>
-
-<div class="center">
-    <h2 style="margin-bottom: 0">Rating</h2>
-    <p id="personal-role-rating"></p>
-</div>
-
-<div class="margin-top-30 center">
-    <h2>Comments</h2>
-    <div class="comments">
-        <div class="center">
-            <label for="input-comment"></label>
-            <textarea id="input-comment" class="text-area-input" cols="40" rows="4"
-                      placeholder="write comment"></textarea>
-            <div class="comments">
-                <button id="add-comment-button">add comment</button>
+    <div id="delete-popup-background" class="delete-popup-background center">
+        <div class="center delete-confirmation-popup">
+            <p id="delete-confirmation-text">Are you sure you want to delete</p>
+            <div class="space-between">
+                <button id="delete-confirmation-yes-button">Yes</button>
+                <button id="delete-confirmation-cancel-button">Cancel</button>
             </div>
-        </div>
-    </div>
-    <ul id="comments-list">
-
-    </ul>
-</div>
-
-<div class="center margin-top-30">
-    <button id="download-json-button">Copy Json to clipboard</button>
-</div>
-
-<div id="delete-role-div" class="center margin-top-20">
-    <label for="delete-role-button">Delete Role</label>
-    <button id="delete-role-button"><i class="fa-solid fa-trash"></i></button>
-</div>
-
-<div id="delete-popup-background" class="delete-popup-background center">
-    <div class="center delete-confirmation-popup">
-        <p id="delete-confirmation-text">Are you sure you want to delete</p>
-        <div class="space-between">
-            <button id="delete-confirmation-yes-button">Yes</button>
-            <button id="delete-confirmation-cancel-button">Cancel</button>
         </div>
     </div>
 </div>

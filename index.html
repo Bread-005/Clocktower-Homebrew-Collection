@@ -11,133 +11,133 @@
 </head>
 <body>
 
-<div class="center">
-    <h1>Clocktower Homebrew Collection</h1>
-</div>
-<div class="center">
-    <img src="BotC.webp" style="width: 200px" alt="">
-</div>
-
-<h2 class="center">Write your homebrew role here</h2>
-
-<div class="role-creation-div">
-    <div id="change-role-creation-div">
-        <button id="change-role-creation">Change Role creation</button>
+<div class="main-page">
+    <div class="center">
+        <h1>Clocktower Homebrew Collection</h1>
     </div>
-    <div id="create-main-role-attributes" class="center">
-        <div>
-            <label for="role-name">Rolename</label>
-            <input class="input" id="role-name" type="text"/>
+    <div class="center">
+        <img src="BotC.webp" style="width: 200px" alt="">
+    </div>
+
+    <h2 class="center">Write your homebrew role here</h2>
+
+    <div class="role-creation-div">
+        <div id="change-role-creation-div">
+            <button id="change-role-creation">Change Role creation</button>
         </div>
-        <div class="margin">
-            <label for="character-types">Charactertype</label>
-            <select class="character-types" id="character-types">
-                <option value="Townsfolk">Townsfolk</option>
-                <option value="Outsider">Outsider</option>
-                <option value="Minion">Minion</option>
-                <option value="Demon">Demon</option>
-                <option value="Traveller">Traveller</option>
-                <option value="Fabled">Fabled</option>
+        <div id="create-main-role-attributes" class="center">
+            <div>
+                <label for="role-name">Rolename</label>
+                <input class="input" id="role-name" type="text"/>
+            </div>
+            <div class="margin">
+                <label for="character-types">Charactertype</label>
+                <select class="character-types" id="character-types">
+                    <option value="Townsfolk">Townsfolk</option>
+                    <option value="Outsider">Outsider</option>
+                    <option value="Minion">Minion</option>
+                    <option value="Demon">Demon</option>
+                    <option value="Traveller">Traveller</option>
+                    <option value="Fabled">Fabled</option>
+                </select>
+            </div>
+            <label for="ability-text"></label>
+            <textarea id="ability-text" class="text-area-input" cols="30" rows="4" placeholder="Abilitytext"></textarea>
+            <button id="js-add-role">Submit Role</button>
+        </div>
+        <div id="json-input-div" class="json-input-div">
+            <label for="json-input-textarea"></label>
+            <textarea id="json-input-textarea" class="text-area-input" cols="60" rows="10"
+                      placeholder="Put Json text here"></textarea>
+            <button id="add-role-button">Add Role</button>
+        </div>
+        <div id="role-creation-right-div" style="width: 153px"></div>
+    </div>
+
+    <h2 class="center">Role Ideas</h2>
+
+    <div id="roles-filter" class="roles-filter">
+        <div>
+            <div class="next-to-each-other">
+                <div class="center">
+                    <div id="role-search-div">
+                        <label for="role-search"></label>
+                        <input id="role-search" type="text" style="padding: 6px" placeholder="Search">
+                    </div>
+                    <div id="script-filter-selection-div" style="margin-top: 5px">
+                        <label for="script-filter-selection">Script</label>
+                        <select id="script-filter-selection" class="script-selection">
+                            <option value="All">All</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="center">
+                    <div id="character-type-selection-div" class="next-to-each-other">
+                        <label for="character-type-selection" style="margin-left: 6px">CharacterType</label>
+                        <select id="character-type-selection" class="character-type-selection">
+                            <option value="All">All</option>
+                            <option value="Townsfolk">Townsfolk</option>
+                            <option value="Outsider">Outsider</option>
+                            <option value="Minion">Minion</option>
+                            <option value="Demon">Demon</option>
+                            <option value="Traveller">Traveller</option>
+                            <option value="Fabled">Fabled</option>
+                        </select>
+                    </div>
+                    <div id="tag-div" class="tag-div">
+                        <label for="tag-filter-selection">Tag filter</label>
+                        <select id="tag-filter-selection" class="tag-filter-selection">
+                            <option value="None">None</option>
+                            <option value="Misinformation">Misinformation</option>
+                            <option value="Extra Death">Extra Death</option>
+                            <option value="Protection">Protection</option>
+                            <option value="Wincondition">Wincondition</option>
+                            <option value="Character Changing">Character Changing</option>
+                            <option value="Setup">Setup</option>
+                            <option value="Madness">Madness</option>
+                            <option value="Noms Votes Exes">Noms Votes Exes</option>
+                            <option value="Does Not Wake">Does Not Wake</option>
+                            <option value="ST Consult">ST Consult</option>
+                            <option value="When You Die">When You Die</option>
+                            <option value="Resurrection">Resurrection</option>
+                            <option value="Alignment Switching">Alignment Switching</option>
+                            <option value="Public">Public</option>
+                            <option value="Seating Order">Seating Order</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="space-between">
+                <div id="only-my-favorites-div" class="only-my-favorites-div">
+                    <label for="only-my-favorites">Only my Favorites</label>
+                    <input id="only-my-favorites" type="checkbox">
+                </div>
+                <div>
+                    <button id="clear-searches-button">Clear Searches</button>
+                </div>
+            </div>
+        </div>
+        <div id="sorting-roles-div" class="sorting-roles-div">
+            <label for="sorting">Sorting</label>
+            <select id="sorting" style="padding: 6px">
+                <option value="Alphabet A-Z">Alphabet A-Z</option>
+                <option value="Alphabet Z-A">Alphabet Z-A</option>
+                <option value="Newest first">Newest first</option>
+                <option value="Oldest first">Oldest first</option>
+                <option value="Most favorite first">Most favorite first</option>
+                <option value="Least favorite first">Least favorite first</option>
             </select>
         </div>
-        <label for="ability-text"></label>
-        <textarea id="ability-text" class="text-area-input" cols="30" rows="4" placeholder="Abilitytext"></textarea>
-        <button id="js-add-role">Submit Role</button>
     </div>
-    <div id="json-input-div" class="json-input-div">
-        <label for="json-input-textarea"></label>
-        <textarea id="json-input-textarea" class="text-area-input" cols="60" rows="10"
-                  placeholder="Put Json text here"></textarea>
-        <button id="add-role-button">Add Role</button>
+
+    <div class="homebrew-display">
+        <div id="homebrewroles">No Roleideas yet</div>
+        <div class="role-idea-page-selection"></div>
     </div>
-    <div id="role-creation-right-div" style="width: 153px"></div>
-</div>
 
-<h2 class="center">Role Ideas</h2>
-
-<div id="roles-filter" class="roles-filter">
-    <div>
-        <div class="next-to-each-other">
-            <div class="center">
-                <div id="role-search-div">
-                    <label for="role-search"></label>
-                    <input id="role-search" type="text" style="padding: 6px" placeholder="Search">
-                </div>
-                <div id="script-filter-selection-div" style="margin-top: 5px">
-                    <label for="script-filter-selection">Script</label>
-                    <select id="script-filter-selection" class="script-selection">
-                        <option value="All">All</option>
-                    </select>
-                </div>
-            </div>
-            <div class="center">
-                <div id="character-type-selection-div" class="next-to-each-other">
-                    <label for="character-type-selection" style="margin-left: 6px">CharacterType</label>
-                    <select id="character-type-selection" class="character-type-selection">
-                        <option value="All">All</option>
-                        <option value="Townsfolk">Townsfolk</option>
-                        <option value="Outsider">Outsider</option>
-                        <option value="Minion">Minion</option>
-                        <option value="Demon">Demon</option>
-                        <option value="Traveller">Traveller</option>
-                        <option value="Fabled">Fabled</option>
-                    </select>
-                </div>
-                <div id="tag-div" class="tag-div">
-                    <label for="tag-filter-selection">Tag filter</label>
-                    <select id="tag-filter-selection" class="tag-filter-selection">
-                        <option value="None">None</option>
-                        <option value="Misinformation">Misinformation</option>
-                        <option value="Extra Death">Extra Death</option>
-                        <option value="Protection">Protection</option>
-                        <option value="Wincondition">Wincondition</option>
-                        <option value="Character Changing">Character Changing</option>
-                        <option value="Setup">Setup</option>
-                        <option value="Madness">Madness</option>
-                        <option value="Noms Votes Exes">Noms Votes Exes</option>
-                        <option value="Does Not Wake">Does Not Wake</option>
-                        <option value="ST Consult">ST Consult</option>
-                        <option value="When You Die">When You Die</option>
-                        <option value="Resurrection">Resurrection</option>
-                        <option value="Alignment Switching">Alignment Switching</option>
-                        <option value="Public">Public</option>
-                        <option value="Seating Order">Seating Order</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="space-between">
-            <div id="only-my-favorites-div" class="only-my-favorites-div">
-                <label for="only-my-favorites">Only my Favorites</label>
-                <input id="only-my-favorites" type="checkbox">
-            </div>
-            <div>
-                <button id="clear-searches-button">Clear Searches</button>
-            </div>
-        </div>
+    <div class="clocktower-script-tool-link">
+        <a href="https://script.bloodontheclocktower.com/" target="_blank">Already existing roles</a>
     </div>
-    <div id="sorting-roles-div" class="sorting-roles-div">
-        <label for="sorting">Sorting</label>
-        <select id="sorting" style="padding: 6px">
-            <option value="Alphabet A-Z">Alphabet A-Z</option>
-            <option value="Alphabet Z-A">Alphabet Z-A</option>
-            <option value="Newest first">Newest first</option>
-            <option value="Oldest first">Oldest first</option>
-            <option value="Most favorite first">Most favorite first</option>
-            <option value="Least favorite first">Least favorite first</option>
-        </select>
-    </div>
-</div>
-
-<div class="center">
-    <div id="homebrewroles" style="margin-top: 20px">No Roleideas yet</div>
-</div>
-<div id="role-idea-page-selection" class="next-to-each-other margin-top-20">
-
-</div>
-
-<div class="center margin-top-30">
-    <a href="https://script.bloodontheclocktower.com/" target="_blank">Already existing roles</a>
 </div>
 
 <script src="script.js" type="module" defer></script>

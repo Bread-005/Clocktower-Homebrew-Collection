@@ -9,8 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const wikiHeader = document.getElementById("wiki-header");
     const wikiRoleImage = document.getElementById("wiki-role-image");
     const editButton = document.getElementById("edit-button");
-    const mainRoleDisplay = document.getElementById("main-role-display");
-    const editRoleFieldDiv = document.getElementById("edit-role-field");
+    const mainRoleDisplay = document.querySelector(".main-role-display");
+    const editRoleFieldDiv = document.querySelector(".edit-role-field");
     const editRoleNameInput = document.getElementById("edit-role-name");
     const editCharacterTypeInput = document.getElementById("edit-character-type");
     const editAbilityTextInput = document.getElementById("edit-ability-text");
@@ -52,8 +52,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const inputComment = document.getElementById("input-comment");
     const addCommentButton = document.getElementById("add-comment-button");
     const commentsList = document.getElementById("comments-list");
-    const downloadJsonButton = document.getElementById("download-json-button");
-    const deleteRoleDiv = document.getElementById("delete-role-div");
+    const downloadJsonButton = document.querySelector(".download-json-button");
+    const deleteRoleDiv = document.querySelector(".delete-role-div");
     const deleteConfirmationText = document.getElementById("delete-confirmation-text");
     const deleteConfirmationYesButton = document.getElementById("delete-confirmation-yes-button");
     const deleteConfirmationCancelButton = document.getElementById("delete-confirmation-cancel-button");
@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 list.setAttribute("class", "comment");
                 list.textContent = comment.text;
                 const deleteButton = document.createElement("button");
-                deleteButton.setAttribute("class", "icon-button");
+                deleteButton.style.marginLeft = "10px";
 
                 const deleteButtonIcon = document.createElement("i");
                 deleteButtonIcon.setAttribute("class", "js-delete-button fa-solid fa-trash");
