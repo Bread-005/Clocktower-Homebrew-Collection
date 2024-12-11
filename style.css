@@ -110,7 +110,7 @@ textarea {
 
     .page-top {
         display: flex;
-        justify-content: space-between;
+        justify-content: space-around;
 
         .main-role-display {
             padding: 0 50px;
@@ -119,17 +119,11 @@ textarea {
             align-items: center;
             flex-direction: column;
             text-align: center;
+            /*background-color: purple;*/
 
             .ability-text {
                 padding: 0 50px;
             }
-        }
-
-        .edit-role-field {
-            margin-top: 30px;
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
         }
 
         .edit-button-container {
@@ -137,7 +131,13 @@ textarea {
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            width: 200px;
+            padding: 80px;
+        }
+
+        .edit-role-field {
+            margin: 2rem 0 0 1rem;
+            text-align: center;
+            display: none;
         }
 
         @media (max-width: 600px) {
@@ -148,28 +148,38 @@ textarea {
                 margin-top: 0;
             }
 
-            .wiki-role-name {
-                display: flex;
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                margin: 0 10px;
-            }
+            .main-role-display {
+                width: 80vw;
+                padding: 10px;
 
-            .ability-text {
-                padding: 0 5px;
+                .wiki-role-name {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin: 0 10px;
+                }
+
+                .ability-text {
+                    padding: 0 5px;
+                }
             }
 
             .edit-ability-textarea {
                 width: 80vw;
                 padding: 10px;
             }
-
-            .main-role-display {
-                width: 80vw;
-                padding: 10px;
-            }
         }
+    }
+
+    .image-submission {
+        width: 100%;
+    }
+
+    .tags {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
     }
 
     .delete-role-div {
@@ -406,35 +416,6 @@ textarea {
         align-items: center;
         flex-direction: column;
         margin-top: 20px;
-    }
-}
-
-.image-submission-div {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-
-    @media (max-width: 600px) {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .image-submission {
-        @media (max-width: 600px) {
-            .wiki-image {
-                width: 100px;
-                height: 100px;
-                margin-top: 20px;
-            }
-
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
     }
 }
 

@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const editCharacterTypeInput = document.getElementById("edit-character-type");
     const editAbilityTextInput = document.getElementById("edit-ability-text");
     const uploadImageURL = document.getElementById("image-input-url");
-    const imageSubmission = document.getElementById("image-submission");
+    const imageSubmission = document.querySelector(".image-submission");
     const tagDisplay = document.getElementById("tag-display");
     const editTags = document.getElementById("edit-tags");
     const firstNightInput = document.getElementById("first-night-input");
@@ -76,7 +76,6 @@ document.addEventListener("DOMContentLoaded", function () {
         displayRole();
         editMainRole();
         showTags();
-        changeTags();
         showNightOrder();
         editNightOrder();
         fillFirstNightInfoTextArea();
@@ -141,36 +140,6 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("other-night-reminder").textContent = "otherNightReminder: " + role.otherNightReminder;
         }
 
-        function changeTags() {
-            const tagCheckBoxes = document.querySelectorAll(".tag");
-            for (const checkBox of tagCheckBoxes) {
-                checkBox.addEventListener("click", function () {
-                    if (checkBox.checked) {
-                        role.tags.push(checkBox.name);
-                    }
-                    if (!checkBox.checked) {
-                        role.tags = role.tags.filter(tag => tag !== checkBox.name);
-                    }
-                    saveLocalStorage();
-                    showTags();
-                });
-            }
-        }
-
-        function showTags() {
-            tagDisplay.textContent = "Tags: ";
-            if (role.tags.length === 0) {
-                return;
-            }
-            for (let i = 0; i < role.tags.length; i++) {
-                tagDisplay.textContent += role.tags[i];
-                document.getElementById(role.tags[i].replaceAll(" ", "-").toLowerCase() + "-tag").checked = true;
-                if (i < role.tags.length - 1) {
-                    tagDisplay.textContent += ", ";
-                }
-            }
-        }
-
         function nightOrderInfoButtonListener(button, text) {
             button.addEventListener("click", function () {
                 if (text.style.display === "flex") {
@@ -218,6 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     editAbilityTextInput.value = role.ability;
                     howToRunInput.style.display = "block";
                     howToRunChangeButton.style.display = "block";
+                    setupTagsDisplay();
                     imageSubmission.style.display = "block";
                     deleteRoleDiv.style.display = "flex";
                     document.querySelectorAll(".edit-night-order").forEach(element => element.style.display = "flex");
@@ -226,8 +196,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     otherNightInput.value = role.otherNight;
                     otherNightReminderInput.value = role.otherNightReminder;
                     showNightOrder();
-                    editTags.style.display = "flex";
-                    showTags();
                     firstNightInfoButton.style.display = "flex";
                     otherNightInfoButton.style.display = "flex";
                     jinxEditDiv.style.display = "flex";
@@ -265,6 +233,55 @@ document.addEventListener("DOMContentLoaded", function () {
                 uploadImageURL.value = "";
                 saveLocalStorage();
             });
+        }
+
+        function showTags() {
+            tagDisplay.textContent = "Tags: ";
+            for (let i = 0; i < role.tags.length; i++) {
+                tagDisplay.textContent += role.tags[i];
+                if (i < role.tags.length - 1) {
+                    tagDisplay.textContent += ", ";
+                }
+            }
+        }
+
+        function setupTagsDisplay() {
+
+            showTags();
+            const tags = ["Misinformation", "Extra Death", "Protection", "Wincondition", "Character Changing", "Setup",
+                "Madness", "Noms Votes Exes", "Does Not Wake", "ST Consult"];
+            editTags.style.display = "flex";
+            editTags.innerText = "";
+
+            for (const tagString of tags) {
+                const div = document.createElement("div");
+                const id = tagString.replaceAll(" ", "-").toLowerCase() + "-tag";
+                const label = document.createElement("label");
+                label.setAttribute("for", id);
+                label.innerText = tagString;
+                const tag = document.createElement("input");
+                tag.setAttribute("id", id);
+                tag.setAttribute("class", "tag");
+                tag.setAttribute("name", tagString);
+                tag.setAttribute("type", "checkbox");
+                tag.addEventListener("click", function () {
+                    if (tag.checked) {
+                        role.tags.push(tagString);
+                    }
+                    console.log(role.tags);
+                    if (!tag.checked) {
+                        role.tags = role.tags.filter(tag => tag.toString() !== tagString);
+                    }
+                    saveLocalStorage();
+                    showTags();
+                });
+                div.append(label);
+                div.append(tag);
+                editTags.append(div);
+            }
+            for (const tag of role.tags) {
+                document.getElementById(tag.replaceAll(" ", "-").toLowerCase() + "-tag").checked = true;
+            }
         }
 
         function editNightOrder() {
