@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const scriptText = document.getElementById("script-text");
     const scriptEditButton = document.getElementById("script-edit-button");
     const scriptEditInput = document.getElementById("script-edit-input");
-    const howToRunText = document.querySelector(".how-torun-text");
+    const howToRunText = document.querySelector(".how-to-run-text");
     const howToRunInput = document.getElementById("how-to-run-input");
     const howToRunChangeButton = document.getElementById("how-to-run-button");
     const personalRoleRating = document.getElementById("personal-role-rating");
