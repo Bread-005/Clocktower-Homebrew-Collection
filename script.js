@@ -69,9 +69,11 @@ document.addEventListener("DOMContentLoaded", function () {
         if (Array.isArray(role.rating)) role.rating = 0;
         if (role.special === undefined) role.special = [];
         if (role.reminders === undefined) role.reminders = [];
+
+        role.tags = role.tags.filter(tag => tag.toString() !== "Does Not Wake");
     }
 
-    if (websiteStorage.users !== undefined) {
+    if (websiteStorage.users) {
         websiteStorage.users = undefined;
     }
 
@@ -124,6 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const roleImage = document.createElement("img");
             roleImage.setAttribute("class", "clocktower-icon clocktower-icon-role-idea");
             roleImage.setAttribute("src", "https://i.postimg.cc/qM09f8cD/placeholder-icon.png");
+            roleImage.setAttribute("alt", "Icon");
             if (role["image"]) {
                 roleImage.setAttribute("src", role["image"]);
             }

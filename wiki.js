@@ -249,7 +249,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             showTags();
             const tags = ["Misinformation", "Extra Death", "Protection", "Wincondition", "Character Changing", "Setup",
-                "Madness", "Noms Votes Exes", "Does Not Wake", "ST Consult"];
+                "Madness", "Noms Votes Exes", "ST Consult"];
             editTags.style.display = "flex";
             editTags.innerText = "";
 

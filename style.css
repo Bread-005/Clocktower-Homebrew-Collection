@@ -71,20 +71,47 @@ textarea {
     height: 200px;
 }
 
-.clocktower-icon-role-idea {
-    width: 50px;
-    height: 50px;
-    margin-right: 10px;
-}
-
 .main-page {
-
     .homebrew-display {
         margin-top: 1.25rem;
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
+
+        .role-div {
+            margin: 5px;
+            min-width: 90vw;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+
+            .rate-input {
+                padding: 6px 0;
+            }
+
+            .clocktower-icon-role-idea {
+                width: 50px;
+                height: 50px;
+                margin-right: 10px;
+            }
+
+            @media (max-width: 600px) {
+                justify-content: center;
+                flex-direction: column;
+
+                .role-buttons {
+                    margin: 2px 0 12px 0;
+                    padding: 6px;
+                }
+
+                .rate-input {
+                    padding: 6px 3px;
+                }
+            }
+        }
 
         .role-idea-page-selection {
             margin-top: 1rem;
@@ -182,19 +209,34 @@ textarea {
         flex-direction: column;
     }
 
+    .how-to-run {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .rating {
+        text-align: center;
+    }
+
+    .comments {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
     .delete-role-div {
         margin-top: 1.25rem;
         display: flex;
         justify-content: center;
+        align-items: center;
     }
 
     .download-json-button {
         margin-top: 30px;
     }
-}
-
-.margin-top-30 {
-    margin-top: 30px;
 }
 
 .roles-filter {
@@ -285,13 +327,6 @@ textarea {
     color: #cc0f0f;
 }
 
-.comments {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-}
-
 .tag-div {
     margin: 5px 0 0 6px;
 }
@@ -350,34 +385,6 @@ textarea {
         align-items: center;
         flex-direction: column;
         margin-top: 20px;
-    }
-}
-
-.role-div {
-    margin: 5px;
-    min-width: 90vw;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-
-    .rate-input {
-        padding: 6px 0;
-    }
-
-    @media (max-width: 600px) {
-        justify-content: center;
-        flex-direction: column;
-
-        .role-buttons {
-            margin: 2px 0 12px 0;
-            padding: 6px;
-        }
-
-        .rate-input {
-            padding: 6px 3px;
-        }
     }
 }
 

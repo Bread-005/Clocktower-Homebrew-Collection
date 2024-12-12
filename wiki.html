@@ -20,7 +20,7 @@
 
     <div class="page-top">
         <img src="https://i.postimg.cc/qM09f8cD/placeholder-icon.png" id="wiki-role-image"
-             class="clocktower-icon wiki-image" alt=""/>
+             class="clocktower-icon wiki-image" alt="Icon"/>
         <div>
             <div class="main-role-display">
                 <h1 id="role-name" class="wiki-role-name"></h1>
@@ -67,9 +67,7 @@
     <div class="tags">
         <h2>Tags</h2>
         <p id="tag-display"></p>
-        <div id="edit-tags" class="edit-tags">
-            
-        </div>
+        <div id="edit-tags" class="edit-tags"></div>
     </div>
 
     <div class="night-order-div">
@@ -179,18 +177,18 @@
         <ul id="special-display"></ul>
     </div>
 
-    <div class="center">
+    <div class="script">
         <h3 id="script-text"></h3>
-        <div class="next-to-each-other">
+        <div class="script-edit">
             <label for="script-edit-input"></label>
             <input id="script-edit-input">
             <button id="script-edit-button">Change Script</button>
         </div>
     </div>
 
-    <div class="center margin-top-30">
+    <div class="how-to-run">
         <h2>How To Run</h2>
-        <p id="howtorun-text" style="max-width: 800px"></p>
+        <p id="howtorun-text" style="max-width: 800px; text-align: center"></p>
         <div class="center">
             <label for="howtorun-input"></label>
             <textarea id="howtorun-input" class="text-area-input" cols="60" rows="6"
@@ -199,26 +197,20 @@
         </div>
     </div>
 
-    <div class="center">
+    <div class="rating">
         <h2 style="margin-bottom: 0">Rating</h2>
         <p id="personal-role-rating"></p>
     </div>
 
-    <div class="margin-top-30 center">
+    <div class="comments">
         <h2>Comments</h2>
         <div class="comments">
-            <div class="center">
-                <label for="input-comment"></label>
-                <textarea id="input-comment" class="text-area-input" cols="40" rows="4"
-                          placeholder="write comment"></textarea>
-                <div class="comments">
-                    <button id="add-comment-button">add comment</button>
-                </div>
-            </div>
+            <label for="input-comment"></label>
+            <textarea id="input-comment" class="text-area-input" cols="40" rows="4"
+                      placeholder="write comment"></textarea>
+            <button id="add-comment-button">add comment</button>
         </div>
-        <ul id="comments-list">
-
-        </ul>
+        <ul id="comments-list"></ul>
     </div>
 
 
