@@ -12,27 +12,23 @@
 <body>
 
 <div class="main-page">
-    <div class="center">
+    <div class="main-page-top">
         <h1>Clocktower Homebrew Collection</h1>
+        <img src="BotC.webp" style="width: 200px" alt="Clocktower">
+        <h2>Write your homebrew role here</h2>
     </div>
-    <div class="center">
-        <img src="BotC.webp" style="width: 200px" alt="">
-    </div>
-
-    <h2 class="center">Write your homebrew role here</h2>
-
     <div class="role-creation-div">
         <div id="change-role-creation-div">
             <button id="change-role-creation">Change Role creation</button>
         </div>
-        <div id="create-main-role-attributes" class="center">
+        <div class="create-main-role-attributes">
             <div>
                 <label for="role-name">Rolename</label>
-                <input class="input" id="role-name" type="text"/>
+                <input id="role-name" class="input" type="text"/>
             </div>
-            <div>
+            <div style="margin: 5px">
                 <label for="character-types">Charactertype</label>
-                <select class="character-types" id="character-types">
+                <select id="character-types" class="character-types">
                     <option value="Townsfolk">Townsfolk</option>
                     <option value="Outsider">Outsider</option>
                     <option value="Minion">Minion</option>
@@ -45,7 +41,7 @@
             <textarea id="ability-text" class="text-area-input" cols="30" rows="4" placeholder="Abilitytext"></textarea>
             <button id="js-add-role">Submit Role</button>
         </div>
-        <div id="json-input-div" class="json-input-div">
+        <div class="json-input-div">
             <label for="json-input-textarea"></label>
             <textarea id="json-input-textarea" class="text-area-input" cols="60" rows="10"
                       placeholder="Put Json text here"></textarea>
@@ -54,7 +50,7 @@
         <div id="role-creation-right-div" style="width: 153px"></div>
     </div>
 
-    <h2 class="center">Role Ideas</h2>
+    <h2>Role Ideas</h2>
 
     <div class="role-display-settings">
         <div class="role-filter">
@@ -64,7 +60,7 @@
                     <input id="role-search" type="text" style="padding: 6px" placeholder="Search">
                 </div>
                 <div id="character-type-selection-div">
-                    <label for="character-type-selection" style="margin-left: 6px">CharacterType</label>
+                    <label for="character-type-selection" style="margin-left: 10px">CharacterType</label>
                     <select id="character-type-selection" class="character-type-selection">
                         <option value="All">All</option>
                         <option value="Townsfolk">Townsfolk</option>
@@ -83,7 +79,7 @@
                         <option value="All">All</option>
                     </select>
                 </div>
-                <div id="tag-div" class="tag-div">
+                <div class="tag-div">
                     <label for="tag-filter-selection">Tag filter</label>
                     <select id="tag-filter-selection" class="tag-filter-selection"></select>
                 </div>

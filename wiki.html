@@ -30,7 +30,7 @@
             <div class="edit-role-field">
                 <form>
                     <label for="edit-role-name">Rolename</label>
-                    <input class="input" id="edit-role-name" type="text"/>
+                    <input id="edit-role-name" class="input" type="text"/>
                     <div class="character-type-dropdown margin">
                         <label for="edit-character-type">Charactertype</label>
                         <select id="edit-character-type" class="character-types">
@@ -67,11 +67,11 @@
     <div class="tags">
         <h2>Tags</h2>
         <p id="tag-display"></p>
-        <div id="edit-tags" class="edit-tags"></div>
+        <div class="edit-tags"></div>
     </div>
 
     <div class="night-order-div">
-        <h2 style="margin-bottom: 0">Night Order</h2>
+        <h2>Night Order</h2>
         <div class="night-order-container">
             <label id="first-night" for="first-night-input">firstNight: </label>
             <input id="first-night-input" class="edit-night-order night-order-number" type="number" min="0">
@@ -97,19 +97,19 @@
         <button id="edit-night-order-button" class="edit-night-order">Save Night Order Changes</button>
     </div>
 
-    <div class="center">
-        <h2 style="margin-bottom: 0">Reminder Tokens</h2>
-        <div id="edit-reminder-token-div" class="center">
+    <div class="reminder-token">
+        <h2>Reminder Tokens</h2>
+        <div class="edit-reminder-token">
             <label for="reminder-token-input"></label>
             <input id="reminder-token-input">
             <button id="reminder-token-add-button">add Reminder Token</button>
         </div>
-        <div id="reminder-token-list" class="center"></div>
+        <div class="reminder-token-list"></div>
     </div>
 
     <div class="jinxes">
         <h2>Jinxes</h2>
-        <div id="jinx-edit-div" class="center">
+        <div class="jinx-edit-div">
             <label for="jinx-role-input"></label>
             <input id="jinx-role-input" placeholder="Role" style="padding: 3px">
             <label for="jinx-text-input"></label>
@@ -120,55 +120,57 @@
         <ul id="jinx-display"></ul>
     </div>
 
-    <div id="special-div" class="center">
+    <div class="special">
         <h3>Special</h3>
-        <div id="special-edit-div" class="center">
-            <div class="center">
-                Required
-                <div>
-                    <label for="special-type-selection">Type: </label>
-                    <select id="special-type-selection">
-                        <option value="selection">Selection</option>
-                        <option value="ability">Ability</option>
-                        <option value="signal">Signal</option>
-                        <option value="vote">Vote</option>
-                        <option value="reveal">Reveal</option>
-                    </select>
-                    <label for="special-name-selection">Name: </label>
-                    <select id="special-name-selection">
-                        <option value="grimoire">Grimoire</option>
-                        <option value="pointing">Pointing</option>
-                        <option value="ghost-votes">Ghost Votes</option>
-                        <option value="distribute-roles">Distribute Roles</option>
-                        <option value="bag-disabled">Bag Disabled</option>
-                        <option value="bag-duplication">Bag Duplication</option>
-                        <option value="multiplier">Multiplier</option>
-                        <option value="hidden">Hidden</option>
-                        <option value="replace-character">Replace Character</option>
-                        <option value="player">Player</option>
-                        <option value="card">Card</option>
-                    </select>
-                </div>
-                <div>
-                    <div class="center">Optional</div>
+        <div id="special-edit-div" class="special-edit">
+            <div class="special-edit-selections">
+                <div class="required">
+                    Required
                     <div>
-                        <div>
-                            <label for="special-value-input">Value: </label>
-                            <input id="special-value-input">
-                        </div>
-                        <div style="margin-left: 6px">
-                            <label for="special-time-selection">Time: </label>
-                            <select id="special-time-selection">
-                                <option value="none">None</option>
-                                <option value="pregame">Pregame</option>
-                                <option value="day">Day</option>
-                                <option value="night">Night</option>
-                                <option value="firstnight">First Night</option>
-                                <option value="firstday">First Day</option>
-                                <option value="othernight">Other Night</option>
-                                <option value="otherday">Other Day</option>
-                            </select>
-                        </div>
+                        <label for="special-type-selection">Type: </label>
+                        <select id="special-type-selection">
+                            <option value="selection">Selection</option>
+                            <option value="ability">Ability</option>
+                            <option value="signal">Signal</option>
+                            <option value="vote">Vote</option>
+                            <option value="reveal">Reveal</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="special-name-selection">Name: </label>
+                        <select id="special-name-selection">
+                            <option value="grimoire">Grimoire</option>
+                            <option value="pointing">Pointing</option>
+                            <option value="ghost-votes">Ghost Votes</option>
+                            <option value="distribute-roles">Distribute Roles</option>
+                            <option value="bag-disabled">Bag Disabled</option>
+                            <option value="bag-duplication">Bag Duplication</option>
+                            <option value="multiplier">Multiplier</option>
+                            <option value="hidden">Hidden</option>
+                            <option value="replace-character">Replace Character</option>
+                            <option value="player">Player</option>
+                            <option value="card">Card</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="optional">
+                    Optional
+                    <div>
+                        <label for="special-value-input">Value: </label>
+                        <input id="special-value-input">
+                    </div>
+                    <div>
+                        <label for="special-time-selection">Time: </label>
+                        <select id="special-time-selection">
+                            <option value="none">None</option>
+                            <option value="pregame">Pregame</option>
+                            <option value="day">Day</option>
+                            <option value="night">Night</option>
+                            <option value="firstnight">First Night</option>
+                            <option value="firstday">First Day</option>
+                            <option value="othernight">Other Night</option>
+                            <option value="otherday">Other Day</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -179,26 +181,22 @@
 
     <div class="script">
         <h3 id="script-text"></h3>
-        <div class="script-edit">
-            <label for="script-edit-input"></label>
-            <input id="script-edit-input">
-            <button id="script-edit-button">Change Script</button>
-        </div>
+        <label for="script-edit-input"></label>
+        <input id="script-edit-input">
+        <button id="script-edit-button">Change Script</button>
     </div>
 
     <div class="how-to-run">
         <h2>How To Run</h2>
-        <p id="howtorun-text" style="max-width: 800px; text-align: center"></p>
-        <div class="center">
-            <label for="howtorun-input"></label>
-            <textarea id="howtorun-input" class="text-area-input" cols="60" rows="6"
-                      placeholder="How To Run Text"></textarea>
-            <button id="howtorun-button" class="howtorun-button" type="submit">Change How To Run Text</button>
-        </div>
+        <p class="how-to-run-text"></p>
+        <label for="how-to-run-input"></label>
+        <textarea id="how-to-run-input" class="text-area-input" cols="60" rows="6"
+                  placeholder="How To Run Text"></textarea>
+        <button id="how-to-run-button" type="submit">Change How To Run Text</button>
     </div>
 
     <div class="rating">
-        <h2 style="margin-bottom: 0">Rating</h2>
+        <h2>Rating</h2>
         <p id="personal-role-rating"></p>
     </div>
 
@@ -213,16 +211,15 @@
         <ul id="comments-list"></ul>
     </div>
 
-
     <button class="download-json-button">Copy Json to clipboard</button>
 
-    <div class="delete-role-div">
+    <div class="delete-role">
         <label for="delete-role-button">Delete Role</label>
         <button id="delete-role-button"><i class="fa-solid fa-trash"></i></button>
     </div>
 
-    <div id="delete-popup-background" class="delete-popup-background center">
-        <div class="center delete-confirmation-popup">
+    <div class="delete-popup-background">
+        <div class="delete-confirmation-popup">
             <p id="delete-confirmation-text">Are you sure you want to delete</p>
             <div>
                 <button id="delete-confirmation-yes-button">Yes</button>

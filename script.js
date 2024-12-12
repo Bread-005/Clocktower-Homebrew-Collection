@@ -79,9 +79,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     saveLocalStorage();
 
-    const createMainRoleAttributesForm = document.getElementById("create-main-role-attributes");
+    const createMainRoleAttributesForm = document.querySelector(".create-main-role-attributes");
     const changeRoleCreationButton = document.getElementById("change-role-creation");
-    const jsonInputDiv = document.getElementById("json-input-div");
+    const jsonInputDiv = document.querySelector(".json-input-div");
     const jsonInputTextarea = document.getElementById("json-input-textarea");
     const jsonAddRoleButton = document.getElementById("add-role-button");
     const rolesFilter = document.querySelector(".roles-filter");
@@ -508,7 +508,7 @@ document.addEventListener("DOMContentLoaded", function () {
             rolesFilter.append(document.getElementById("role-search-div"));
             rolesFilter.append(document.getElementById("character-type-selection-div"));
             rolesFilter.append(document.getElementById("script-filter-selection-div"));
-            rolesFilter.append(document.getElementById("tag-div"));
+            rolesFilter.append(document.querySelector(".tag-div"));
             rolesFilter.append(document.getElementById("only-my-favorites-div"));
             rolesFilter.append(document.getElementById("clear-searches-button"));
             rolesFilter.append(document.querySelector(".sorting-role-display"));

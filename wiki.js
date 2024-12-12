@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const uploadImageURL = document.getElementById("image-input-url");
     const imageSubmission = document.querySelector(".image-submission");
     const tagDisplay = document.getElementById("tag-display");
-    const editTags = document.getElementById("edit-tags");
+    const editTags = document.querySelector(".edit-tags");
     const firstNightInput = document.getElementById("first-night-input");
     const firstNightInfoButton = document.getElementById("first-night-info-button");
     const firstNightInfoText = document.getElementById("first-night-info-text");
@@ -28,12 +28,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const otherNightReminderInput = document.getElementById("other-night-reminder-input");
     const reminderTokenAddButton = document.getElementById("reminder-token-add-button");
     const reminderTokenInput = document.getElementById("reminder-token-input");
-    const editReminderTokenDiv = document.getElementById("edit-reminder-token-div");
-    const reminderTokenList = document.getElementById("reminder-token-list");
+    const editReminderTokenDiv = document.querySelector(".edit-reminder-token");
+    const reminderTokenList = document.querySelector(".reminder-token-list");
     const jinxRoleInput = document.getElementById("jinx-role-input");
     const jinxTextInput = document.getElementById("jinx-text-input");
     const jinxAddButton = document.getElementById("jinx-add-button");
-    const jinxEditDiv = document.getElementById("jinx-edit-div");
+    const jinxEditDiv = document.querySelector(".jinx-edit-div");
     const jinxList = document.getElementById("jinx-display");
     const specialDisplay = document.getElementById("special-display");
     const specialEditDiv = document.getElementById("special-edit-div");
@@ -45,19 +45,19 @@ document.addEventListener("DOMContentLoaded", function () {
     const scriptText = document.getElementById("script-text");
     const scriptEditButton = document.getElementById("script-edit-button");
     const scriptEditInput = document.getElementById("script-edit-input");
-    const howToRunText = document.getElementById("howtorun-text");
-    const howToRunInput = document.getElementById("howtorun-input");
-    const howToRunChangeButton = document.getElementById("howtorun-button");
+    const howToRunText = document.querySelector(".how-torun-text");
+    const howToRunInput = document.getElementById("how-to-run-input");
+    const howToRunChangeButton = document.getElementById("how-to-run-button");
     const personalRoleRating = document.getElementById("personal-role-rating");
     const inputComment = document.getElementById("input-comment");
     const addCommentButton = document.getElementById("add-comment-button");
     const commentsList = document.getElementById("comments-list");
     const downloadJsonButton = document.querySelector(".download-json-button");
-    const deleteRoleDiv = document.querySelector(".delete-role-div");
+    const deleteRoleDiv = document.querySelector(".delete-role");
     const deleteConfirmationText = document.getElementById("delete-confirmation-text");
     const deleteConfirmationYesButton = document.getElementById("delete-confirmation-yes-button");
     const deleteConfirmationCancelButton = document.getElementById("delete-confirmation-cancel-button");
-    const deletePopupBackground = document.getElementById("delete-popup-background");
+    const deletePopupBackground = document.querySelector(".delete-popup-background");
 
     const allTags = ["Misinformation", "Extra Death", "Protection", "Wincondition", "Character Changing", "Setup",
         "Madness", "Noms Votes Exes", "ST Consult", "When You Die", "Resurrection", "Alignment Switching", "Public", "Seating Order"];
@@ -138,9 +138,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function showNightOrder() {
             document.getElementById("first-night").textContent = "firstNight: " + role.firstNight;
-            document.getElementById("first-night-reminder").textContent = "firstNightReminder: " + role.firstNightReminder;
             document.getElementById("other-night").textContent = "otherNight: " + role.otherNight;
             document.getElementById("other-night-reminder").textContent = "otherNightReminder: " + role.otherNightReminder;
+
+            const firstNightReminder = document.getElementById("first-night-reminder");
+            firstNightReminder.textContent = "firstNightReminder: ";
+            firstNightReminder.append(document.createElement("br"));
+            firstNightReminder.append(role.firstNightReminder);
+
+            const otherNightReminder = document.getElementById("other-night-reminder");
+            otherNightReminder.textContent = "otherNightReminder: ";
+            otherNightReminder.append(document.createElement("br"));
+            otherNightReminder.append(role.otherNightReminder);
         }
 
         function nightOrderInfoButtonListener(button, text) {
@@ -269,7 +278,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (tag.checked) {
                         role.tags.push(tagString);
                     }
-                    console.log(role.tags);
                     if (!tag.checked) {
                         role.tags = role.tags.filter(tag => tag.toString() !== tagString);
                     }
@@ -349,8 +357,7 @@ document.addEventListener("DOMContentLoaded", function () {
         function editHowToRun() {
             howToRunChangeButton.addEventListener("click", function (event) {
                 event.preventDefault();
-                const input = document.getElementById("howtorun-input");
-                role.howToRun = input.value;
+                role.howToRun = howToRunInput.value;
                 howToRunText.textContent = role.howToRun;
                 saveLocalStorage();
             });

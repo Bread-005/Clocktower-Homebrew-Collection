@@ -16,19 +16,8 @@ button {
     margin: 5px;
 }
 
-.center {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
 li {
     list-style: none;
-}
-
-.icon-button {
-    margin-left: 10px;
 }
 
 .input {
@@ -71,7 +60,49 @@ textarea {
     height: 200px;
 }
 
+h1, h2, h3 {
+    text-align: center;
+}
+
+.red {
+    color: #cc0f0f;
+}
+
 .main-page {
+
+    .main-page-top {
+        text-align: center;
+    }
+
+    .role-creation-div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .create-main-role-attributes {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-bottom: 4.25rem;
+        }
+
+        .json-input-div {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        @media (max-width: 600px) {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+    }
+
     .role-display-settings {
         display: flex;
         justify-content: space-between;
@@ -84,6 +115,33 @@ textarea {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+
+                .character-type-selection {
+                    padding: 6px;
+                    margin-left: 2px;
+                }
+
+                .script-selection {
+                    max-width: 125px;
+                    padding: 6px;
+                }
+
+                .only-my-favorites-div {
+                    font-size: 18px;
+                    margin-top: 10px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+            }
+
+            .tag-div {
+                margin: 5px 0 0 6px;
+
+                .tag-filter-selection {
+                    max-width: 120px;
+                    padding: 6px;
+                }
             }
         }
 
@@ -125,20 +183,27 @@ textarea {
             align-items: center;
             max-width: 1200px;
 
-            .rate-input {
-                padding: 6px 0;
-            }
-
-            .clocktower-icon-role-idea {
-                width: 50px;
-                height: 50px;
+            .role-image-and-text {
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 margin-right: 10px;
+
+                .clocktower-icon-role-idea {
+                    width: 50px;
+                    height: 50px;
+                    margin-right: 10px;
+                }
             }
 
             .role-buttons {
                 display: flex;
                 justify-content: center;
                 align-items: center;
+
+                .rate-input {
+                    padding: 6px 0;
+                }
             }
 
             @media (max-width: 600px) {
@@ -254,6 +319,149 @@ textarea {
         justify-content: center;
         align-items: center;
         flex-direction: column;
+
+        .edit-tags {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            max-width: 800px;
+        }
+    }
+
+    .night-order-div {
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        max-width: 800px;
+        margin: 0 auto;
+
+        h2 {
+            margin-bottom: 0;
+        }
+
+        .night-order-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .night-order-info-text {
+            position: absolute;
+            background-color: gray;
+            overflow: scroll;
+            right: -160px;
+            width: 150px;
+            height: 220px;
+            padding: 4px;
+        }
+
+        .night-order-number {
+            margin-left: 10px;
+        }
+
+        .night-order-reminder {
+            margin-top: 10px;
+        }
+
+        .night-reminder-div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            margin-top: 20px;
+        }
+    }
+
+    .reminder-token {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        h2 {
+            margin-bottom: 0;
+        }
+
+        .edit-reminder-token {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .reminder-token-list {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+    }
+
+    .jinxes {
+        text-align: center;
+
+        .jinx-edit-div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+
+            .jinx-text-area {
+                margin-top: 10px;
+            }
+        }
+    }
+
+    .special {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        .special-edit {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+
+            .special-edit-selections {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 1rem;
+
+                .required {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction: column;
+                }
+
+                .optional {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction: column;
+                }
+            }
+        }
+    }
+
+    .script {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        h3 {
+            margin-bottom: 0.25rem;
+        }
     }
 
     .how-to-run {
@@ -261,10 +469,16 @@ textarea {
         justify-content: center;
         align-items: center;
         flex-direction: column;
+
+        .how-to-run-text {
+            max-width: 800px;
+            text-align: center;
+        }
     }
 
     .rating {
         text-align: center;
+        margin-bottom: 0;
     }
 
     .comments {
@@ -279,151 +493,35 @@ textarea {
         }
     }
 
-    .delete-role-div {
-        margin-top: 1.25rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
     .download-json-button {
         margin-top: 30px;
     }
-}
 
-.delete-popup-background {
-    background-color: rgba(150, 150, 150, 0.7);
-    top: 0;
-    left: 0;
-    width: 100%;
-    position: fixed;
-    height: 100%;
-    display: none;
-}
-
-.delete-confirmation-popup {
-    background-color: white;
-    width: 40%;
-}
-
-.red {
-    color: #cc0f0f;
-}
-
-.tag-div {
-    margin: 5px 0 0 6px;
-}
-
-.character-type-selection {
-    padding: 6px;
-    margin-left: 2px;
-}
-
-.edit-tags {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    max-width: 800px;
-}
-
-.night-order-div {
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    max-width: 800px;
-    margin: 0 auto;
-
-    .night-order-container {
-        position: relative;
-        display: flex;
+    .delete-role {
+        margin-top: 1.5rem;
+        display: none;
         justify-content: center;
         align-items: center;
-        margin-top: 20px;
     }
 
-    .night-order-info-text {
-        position: absolute;
-        background-color: gray;
-        overflow: scroll;
-        right: -160px;
-        width: 150px;
-        height: 220px;
-        padding: 4px;
-    }
-
-    .night-order-number {
-        margin-left: 10px;
-    }
-
-    .night-order-reminder {
-        margin-top: 10px;
-    }
-
-    .night-reminder-div {
-        display: flex;
+    .delete-popup-background {
+        background-color: rgba(150, 150, 150, 0.7);
+        top: 0;
+        left: 0;
+        width: 100%;
+        position: fixed;
+        height: 100%;
+        display: none;
         justify-content: center;
         align-items: center;
-        flex-direction: column;
-        margin-top: 20px;
+
+        .delete-confirmation-popup {
+            background-color: white;
+            width: 40%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
     }
-}
-
-.role-image-and-text {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 10px;
-}
-
-.script-selection {
-    max-width: 125px;
-    padding: 6px;
-}
-
-.tag-filter-selection {
-    max-width: 120px;
-    padding: 6px;
-}
-
-.json-input-div {
-    display: none;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-.role-creation-div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    @media (max-width: 600px) {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-direction: column;
-        margin-top: 20px;
-    }
-}
-
-.jinxes {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-
-    .jinx-text-area {
-        margin-top: 10px;
-    }
-}
-
-.only-my-favorites-div {
-    font-size: 18px;
-    margin-top: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 }
