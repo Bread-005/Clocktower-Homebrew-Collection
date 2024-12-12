@@ -72,6 +72,43 @@ textarea {
 }
 
 .main-page {
+    .role-display-settings {
+        display: flex;
+        justify-content: space-between;
+
+        .role-filter {
+            display: flex;
+            flex-direction: column;
+
+            .filter-section {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        .sorting-roles-div {
+            font-size: 18px;
+        }
+
+        @media (max-width: 600px) {
+            flex-direction: column;
+            align-items: center;
+
+            .sorting-roles-div {
+                margin-top: 10px;
+                font-size: 18px;
+            }
+
+            .only-filter {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+        }
+    }
+
     .homebrew-display {
         margin-top: 1.25rem;
         display: flex;
@@ -98,6 +135,12 @@ textarea {
                 margin-right: 10px;
             }
 
+            .role-buttons {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
             @media (max-width: 600px) {
                 justify-content: center;
                 flex-direction: column;
@@ -122,6 +165,10 @@ textarea {
         display: flex;
         justify-content: center;
         margin-top: 2rem;
+    }
+
+    .blue {
+        background-color: lightskyblue;
     }
 }
 
@@ -225,6 +272,11 @@ textarea {
         justify-content: center;
         align-items: center;
         flex-direction: column;
+
+        .comment {
+            overflow-wrap: break-word;
+            max-width: 800px;
+        }
     }
 
     .delete-role-div {
@@ -239,68 +291,6 @@ textarea {
     }
 }
 
-.roles-filter {
-    display: flex;
-    justify-content: space-between;
-
-    .sorting-roles-div {
-        font-size: 18px;
-    }
-
-    @media (max-width: 600px) {
-        flex-direction: column;
-        align-items: center;
-        .sorting-roles-div {
-            margin-top: 10px;
-            font-size: 18px;
-        }
-
-        .only-filter {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-    }
-}
-
-.margin {
-    margin: 5px;
-}
-
-.flex-start {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-}
-
-.next-to-each-other {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.blue {
-    background-color: lightskyblue;
-}
-
-.comment {
-    overflow-wrap: break-word;
-    max-width: 800px;
-}
-
-.flex-end {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-end;
-}
-
-.margin-top-10 {
-    margin-top: 10px;
-}
-
 .delete-popup-background {
     background-color: rgba(150, 150, 150, 0.7);
     top: 0;
@@ -309,13 +299,6 @@ textarea {
     position: fixed;
     height: 100%;
     display: none;
-}
-
-.space-between {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
 }
 
 .delete-confirmation-popup {

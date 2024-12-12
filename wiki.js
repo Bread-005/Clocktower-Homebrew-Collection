@@ -59,6 +59,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const deleteConfirmationCancelButton = document.getElementById("delete-confirmation-cancel-button");
     const deletePopupBackground = document.getElementById("delete-popup-background");
 
+    const allTags = ["Misinformation", "Extra Death", "Protection", "Wincondition", "Character Changing", "Setup",
+        "Madness", "Noms Votes Exes", "ST Consult", "When You Die", "Resurrection", "Alignment Switching", "Public", "Seating Order"];
+
     for (const role of websiteStorage.roleIdeas) {
         if (role.createdAt !== id) {
             continue;
@@ -248,12 +251,10 @@ document.addEventListener("DOMContentLoaded", function () {
         function setupTagsDisplay() {
 
             showTags();
-            const tags = ["Misinformation", "Extra Death", "Protection", "Wincondition", "Character Changing", "Setup",
-                "Madness", "Noms Votes Exes", "ST Consult"];
             editTags.style.display = "flex";
             editTags.innerText = "";
 
-            for (const tagString of tags) {
+            for (const tagString of allTags) {
                 const div = document.createElement("div");
                 const id = tagString.replaceAll(" ", "-").toLowerCase() + "-tag";
                 const label = document.createElement("label");

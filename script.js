@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const jsonInputDiv = document.getElementById("json-input-div");
     const jsonInputTextarea = document.getElementById("json-input-textarea");
     const jsonAddRoleButton = document.getElementById("add-role-button");
-    const rolesFilter = document.getElementById("roles-filter");
+    const rolesFilter = document.querySelector(".roles-filter");
     const roleSearch = document.getElementById("role-search");
     roleSearch.value = websiteStorage.user.roleSearch;
     const characterTypeSelection = document.getElementById("character-type-selection");
@@ -100,9 +100,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const homebrewRolesDisplay = document.getElementById("homebrewroles");
     const roleIdeaPageSelection = document.querySelector(".role-idea-page-selection");
 
+    const allTags = ["Misinformation", "Extra Death", "Protection", "Wincondition", "Character Changing",
+        "Setup", "Madness", "Noms Votes Exes", "ST Consult", "When You Die", "Resurrection", "Alignment Switching",
+        "Public", "Seating Order"];
+
     mobileSupportSetup();
     addRole();
     setupScriptSelection();
+    setupTagFilterSelection();
     displayRoles();
     clearSearches();
 
@@ -135,7 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
             roleText.textContent = role["name"] + " (" + role["characterType"] + "): " + role["ability"];
 
             const buttons = document.createElement("div");
-            buttons.setAttribute("class", "next-to-each-other role-buttons");
+            buttons.setAttribute("class", "role-buttons");
 
             const rateInput = document.createElement("input");
             rateInput.setAttribute("class", "rate-input");
@@ -506,7 +511,18 @@ document.addEventListener("DOMContentLoaded", function () {
             rolesFilter.append(document.getElementById("tag-div"));
             rolesFilter.append(document.getElementById("only-my-favorites-div"));
             rolesFilter.append(document.getElementById("clear-searches-button"));
-            rolesFilter.append(document.getElementById("sorting-roles-div"));
+            rolesFilter.append(document.querySelector(".sorting-role-display"));
+        }
+    }
+
+    function setupTagFilterSelection() {
+        tagFilterSelection.innerText = "";
+        const modifiedAllTags = ["None"].concat(allTags);
+        for (const tag of modifiedAllTags) {
+            const option = document.createElement("option");
+            option.innerHTML = tag;
+            option.setAttribute("value", tag);
+            tagFilterSelection.append(option);
         }
     }
 });
