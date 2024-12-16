@@ -1,4 +1,4 @@
-import {copyJsonString} from "./functions.js";
+import {copyJsonString, showCopyPopup} from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -99,6 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
         addComments();
         downloadJsonButton.addEventListener("click", function () {
             copyJsonString(role);
+            showCopyPopup(downloadJsonButton);
         });
         deleteRoleListener();
 

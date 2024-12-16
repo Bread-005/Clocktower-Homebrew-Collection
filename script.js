@@ -1,4 +1,4 @@
-import {copyJsonString} from "./functions.js";
+import {copyJsonString, showCopyPopup} from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const jsonInputDiv = document.querySelector(".json-input-div");
     const jsonInputTextarea = document.getElementById("json-input-textarea");
     const jsonAddRoleButton = document.getElementById("add-role-button");
-    const rolesFilter = document.querySelector(".roles-filter");
+    const roleFilter = document.querySelector(".role-filter");
     const roleSearch = document.getElementById("role-search");
     roleSearch.value = websiteStorage.user.roleSearch;
     const characterTypeSelection = document.getElementById("character-type-selection");
@@ -184,6 +184,7 @@ document.addEventListener("DOMContentLoaded", function () {
             favoriteButton.append(favoriteIcon);
 
             const downloadJsonButton = document.createElement("button");
+            downloadJsonButton.style.position = "relative";
             const downloadIcon = document.createElement("i");
             downloadIcon.setAttribute("class", "fa-solid fa-download");
             downloadJsonButton.append(downloadIcon);
@@ -223,29 +224,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
             downloadJsonButton.addEventListener("click", function () {
                 copyJsonString(role);
+                showCopyPopup(downloadJsonButton);
             });
         }
         showPages(roles, roleIdeaArray);
     }
 
-    sortingDropDownMenu.addEventListener("change", function () {
-        onChangeFilter(sortingDropDownMenu, "sorting");
-    });
-    characterTypeSelection.addEventListener("change", function () {
-        onChangeFilter(characterTypeSelection, "characterType");
-    });
-    roleSearch.addEventListener("input", function () {
-        onChangeFilter(roleSearch, "roleSearch");
-    });
-    onlyMyFavoritesCheckBox.addEventListener("change", function () {
-        onChangeFilter(onlyMyFavoritesCheckBox, "onlyMyFavorites");
-    });
-    tagFilterSelection.addEventListener("change", function () {
-        onChangeFilter(tagFilterSelection, "tagFilter");
-    });
-    scriptFilterSelection.addEventListener("change", function () {
-        onChangeFilter(scriptFilterSelection, "scriptFilter");
-    });
+    for (const filter of document.querySelectorAll(".filter")) {
+        filter.addEventListener(filter === roleSearch ? "input" : "change", function () {
+            websiteStorage.user.roleSearch = roleSearch.value;
+            websiteStorage.user.characterType = characterTypeSelection.value;
+            websiteStorage.user.scriptFilter = scriptFilterSelection.value;
+            websiteStorage.user.tagFilter = tagFilterSelection.value;
+            websiteStorage.user.onlyMyFavorites = onlyMyFavoritesCheckBox.checked;
+            websiteStorage.user.sorting = sortingDropDownMenu.value;
+            saveLocalStorage();
+            displayRoles();
+        });
+    }
 
     function sortRoles(roles) {
         const input = sortingDropDownMenu.value;
@@ -423,12 +419,6 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem(storageString, JSON.stringify(websiteStorage));
     }
 
-    function onChangeFilter(element, storageComponent) {
-        websiteStorage.user[storageComponent] = element === onlyMyFavoritesCheckBox ? element.checked : element.value;
-        saveLocalStorage();
-        displayRoles();
-    }
-
     changeRoleCreationButton.addEventListener("click", function (event) {
         event.preventDefault();
         normalRoleCreation = !normalRoleCreation;
@@ -505,13 +495,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function mobileSupportSetup() {
         if (window.innerWidth <= 400) {
-            rolesFilter.append(document.getElementById("role-search-div"));
-            rolesFilter.append(document.getElementById("character-type-selection-div"));
-            rolesFilter.append(document.getElementById("script-filter-selection-div"));
-            rolesFilter.append(document.querySelector(".tag-div"));
-            rolesFilter.append(document.getElementById("only-my-favorites-div"));
-            rolesFilter.append(document.getElementById("clear-searches-button"));
-            rolesFilter.append(document.querySelector(".sorting-role-display"));
+            roleFilter.append(document.getElementById("role-search"));
+            document.querySelector(".character-type-selection-div").style.marginTop = "10px";
+            roleFilter.append(document.querySelector(".character-type-selection-div"));
+            roleFilter.append(document.getElementById("script-filter-selection-div"));
+            roleFilter.append(document.querySelector(".tag-div"));
+            roleFilter.append(document.getElementById("only-my-favorites-div"));
+            roleFilter.append(document.getElementById("clear-searches-button"));
+            roleFilter.append(document.querySelector(".sorting-role-display"));
         }
     }
 
