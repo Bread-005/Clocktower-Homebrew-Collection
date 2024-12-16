@@ -81,7 +81,6 @@ function showCopyPopup(element) {
     const copyPopup = document.createElement("div");
     copyPopup.setAttribute("class", "copy-popup");
     copyPopup.textContent = "Role Json copied to Clipboard";
-    console.log(element.textContent);
     if (element.textContent.length < 2) {
         copyPopup.style.left = "-35px";
     }

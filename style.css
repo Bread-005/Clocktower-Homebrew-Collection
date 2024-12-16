@@ -22,7 +22,7 @@ li {
 
 .input {
     padding: 4px;
-    margin-left: 2px;
+    margin: 2px;
 }
 
 button:hover {
@@ -129,6 +129,10 @@ h1, h2, h3 {
                 align-items: center;
                 gap: 10px;
 
+                #role-search {
+                    padding: 6px;
+                }
+
                 .character-type-selection {
                     padding: 6px;
                 }
@@ -136,14 +140,11 @@ h1, h2, h3 {
                 .script-selection {
                     max-width: 125px;
                     padding: 6px;
+                    margin-top: 5px;
                 }
 
                 .only-my-favorites-div {
-                    font-size: 18px;
-                    margin-top: 10px;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
+                    margin-top: 5px;
                 }
             }
 
@@ -186,12 +187,12 @@ h1, h2, h3 {
             justify-content: space-between;
             align-items: center;
             max-width: 1200px;
+            gap: 10px;
 
             .role-image-and-text {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                margin-right: 10px;
 
                 .clocktower-icon-role-idea {
                     width: 50px;

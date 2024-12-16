@@ -495,7 +495,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function mobileSupportSetup() {
         if (window.innerWidth <= 400) {
-            roleFilter.append(document.getElementById("role-search"));
+            roleFilter.append(roleSearch);
             document.querySelector(".character-type-selection-div").style.marginTop = "10px";
             roleFilter.append(document.querySelector(".character-type-selection-div"));
             roleFilter.append(document.getElementById("script-filter-selection-div"));
