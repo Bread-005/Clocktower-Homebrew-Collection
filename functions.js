@@ -91,4 +91,16 @@ function showCopyPopup(element) {
     }, 3500);
 }
 
-export {copyJsonString, showCopyPopup}
+function roleWasEdited(originalRole, newRole) {
+    for (const attribute in originalRole) {
+        if (attribute === "rating" || attribute === "isFavorite" || attribute === "comments") {
+            continue;
+        }
+        if (originalRole[attribute] !== newRole[attribute]) {
+            return true;
+        }
+    }
+    return false;
+}
+
+export {copyJsonString, showCopyPopup, roleWasEdited}

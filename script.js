@@ -1,4 +1,4 @@
-import {copyJsonString, showCopyPopup} from "./functions.js";
+import {copyJsonString, roleWasEdited, showCopyPopup} from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -14,7 +14,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 sorting: "Newest first",
                 onlyMyFavorites: false,
                 scriptFilter: "All",
-                tagFilter: "None"
+                tagFilter: "None",
+                tempRole: {
+                    createdAt: "0"
+                }
             },
             archive: []
         }
@@ -31,7 +34,10 @@ document.addEventListener("DOMContentLoaded", function () {
             sorting: "Newest first",
             onlyMyFavorites: false,
             scriptFilter: "All",
-            tagFilter: "None"
+            tagFilter: "None",
+            tempRole: {
+                createdAt: "0"
+            }
         }
         localStorage.setItem(storageString, JSON.stringify(websiteStorage));
     }
@@ -69,8 +75,19 @@ document.addEventListener("DOMContentLoaded", function () {
         if (Array.isArray(role.rating)) role.rating = 0;
         if (role.special === undefined) role.special = [];
         if (role.reminders === undefined) role.reminders = [];
+        if (role.lastEdited === undefined) role.lastEdited = role.createdAt;
 
         role.tags = role.tags.filter(tag => tag.toString() !== "Does Not Wake");
+    }
+
+    for (const role of websiteStorage.roleIdeas) {
+        if (role.createdAt === websiteStorage.user.tempRole.createdAt) {
+            if (roleWasEdited(role, websiteStorage.user.tempRole)) {
+                role.lastEdited = Date.now().toString();
+                websiteStorage.user.tempRole.createdAt = "";
+                break;
+            }
+        }
     }
 
     if (websiteStorage.users) {
@@ -217,6 +234,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 displayRoles();
             });
 
+            wikiButton.addEventListener("click", function () {
+                websiteStorage.user.tempRole = role;
+                saveLocalStorage();
+            });
+
             favoriteButton.addEventListener("click", function () {
                 role.isFavorite = !role.isFavorite;
                 displayRoles();
@@ -361,7 +383,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 reminders: [],
                 special: [],
                 script: "",
-                comments: []
+                comments: [],
+                lastEdited: Date.now().toString()
             }
             websiteStorage.roleIdeas.push(role);
             saveLocalStorage();
