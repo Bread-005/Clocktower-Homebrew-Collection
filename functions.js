@@ -100,10 +100,8 @@ function roleWasEdited(originalRole, newRole) {
         let newRoleString = newRole[attribute];
         if (Array.isArray(originalRoleString)) originalRoleString = originalRoleString.join();
         if (Array.isArray(newRoleString)) newRoleString = newRoleString.join();
-        
+
         if (originalRoleString !== newRoleString) {
-            console.log(originalRole[attribute])
-            console.log(newRole[attribute])
             return true;
         }
     }
