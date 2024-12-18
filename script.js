@@ -539,6 +539,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             role.tags = role.tags.filter(tag => tag.toString() !== "Does Not Wake");
         }
+
+        if (websiteStorage.user.tempRole === undefined) websiteStorage.user.tempRole = {createdAt: "0"}
+
         saveLocalStorage();
     }
 });
