@@ -96,7 +96,14 @@ function roleWasEdited(originalRole, newRole) {
         if (attribute === "rating" || attribute === "isFavorite" || attribute === "comments") {
             continue;
         }
-        if (originalRole[attribute] !== newRole[attribute]) {
+        let originalRoleString = originalRole[attribute];
+        let newRoleString = newRole[attribute];
+        if (Array.isArray(originalRoleString)) originalRoleString = originalRoleString.join();
+        if (Array.isArray(newRoleString)) newRoleString = newRoleString.join();
+        
+        if (originalRoleString !== newRoleString) {
+            console.log(originalRole[attribute])
+            console.log(newRole[attribute])
             return true;
         }
     }
