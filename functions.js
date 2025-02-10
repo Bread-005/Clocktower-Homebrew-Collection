@@ -24,7 +24,7 @@ function copyJsonString(role) {
         jsonRole.otherNightReminder = role.otherNightReminder;
     }
     if (role.reminders.length > 0) {
-        jsonRole.reminders = "xyRemovexy[" + '"' + role.reminders.toString().replaceAll(",", "xyReminderTokenxy") + '"' + "]xyRemove1xy";
+        jsonRole.reminders = role.reminders;
     }
     if (role.ability.includes("[") && role.ability.includes("]") || role.tags.includes("Setup")) {
         jsonRole.setup = true;
@@ -46,35 +46,17 @@ function copyJsonString(role) {
                 name: special.name,
                 type: special.type
             }
-            if (special.value !== "") {
+            if (special.value) {
                 tempSpecial.value = special.value;
             }
-            if (special.time !== "") {
+            if (special.time) {
                 tempSpecial.time = special.time;
             }
             jsonRole.special.push(tempSpecial);
         }
     }
-    const preString = JSON.stringify(jsonRole) + "xyEndxy";
-    const emptyStrings = "        ";
-    const jsonString = preString.replaceAll("},{", "},\n" + emptyStrings + emptyStrings + "  " + "{")
-        .replaceAll(',"reason"', "xyReasonxy")
-        .replaceAll(',"type"', "xyTypexy")
-        .replaceAll(',"value"', "xyValuexy")
-        .replaceAll(',"time"', "xyTimexy")
-        .replace("{", "{\n" + emptyStrings)
-        .replaceAll(',"', ',\n' + emptyStrings + '"')
-        .replace("}xyEndxy", "\n}")
-        .replaceAll("xyReasonxy", ',"reason"')
-        .replaceAll("xyTypexy", ',"type"')
-        .replaceAll("xyValuexy", ',"value"')
-        .replaceAll("xyTimexy", ',"time"')
-        .replaceAll("xyCommaxy", ",")
-        .replaceAll("xyReminderTokenxy", '","')
-        .replace('"xyRemovexy', "")
-        .replace('xyRemove1xy"', "")
-        .replaceAll("\\", "");
-    navigator.clipboard.writeText(jsonString).then();
+    const jsonRoleObject = JSON.stringify(jsonRole, null, 4);
+    navigator.clipboard.writeText(jsonRoleObject).then();
 }
 
 function showCopyPopup(element) {

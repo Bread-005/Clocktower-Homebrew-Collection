@@ -416,6 +416,7 @@ document.addEventListener("DOMContentLoaded", function () {
         role.characterType = role.team[0].toUpperCase() + role.team.substring(1);
         role.team = undefined;
         if (role.image === undefined) role.image = "";
+        role.image = role.image.replaceAll("\\", "");
         if (role.firstNight === undefined) role.firstNight = 0;
         if (role.firstNightReminder === undefined) role.firstNightReminder = "";
         if (role.otherNight === undefined) role.otherNight = 0;
@@ -538,6 +539,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (role.lastEdited === undefined) role.lastEdited = new Date(role.createdAt);
 
             role.tags = role.tags.filter(tag => tag.toString() !== "Does Not Wake");
+            role.image = role.image.replaceAll("\\", "");
         }
 
         if (websiteStorage.user.tempRole === undefined) websiteStorage.user.tempRole = {createdAt: "0"}
