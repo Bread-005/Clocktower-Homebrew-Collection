@@ -1,5 +1,9 @@
 import {copyJsonString, roleWasEdited, showCopyPopup} from "./functions.js";
 
+const allTags = ["Misinformation", "Extra Death", "Protection", "Wincondition", "Character Changing",
+    "Setup", "Madness", "Noms Votes Exes", "ST Consult", "When You Die", "Resurrection", "Alignment Switching",
+    "Public", "Seating Order"];
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const storageString = "websiteStorage1";
@@ -39,9 +43,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    const createMainRoleAttributesForm = document.querySelector(".create-main-role-attributes");
-    const changeRoleCreationButton = document.getElementById("change-role-creation");
-    const jsonInputDiv = document.querySelector(".json-input-div");
     const jsonInputTextarea = document.getElementById("json-input-textarea");
     const jsonAddRoleButton = document.getElementById("add-role-button");
     const roleFilter = document.querySelector(".role-filter");
@@ -55,10 +56,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const homebrewRolesDisplay = document.getElementById("homebrewroles");
     const roleIdeaPageSelection = document.querySelector(".role-idea-page-selection");
 
-    const allTags = ["Misinformation", "Extra Death", "Protection", "Wincondition", "Character Changing",
-        "Setup", "Madness", "Noms Votes Exes", "ST Consult", "When You Die", "Resurrection", "Alignment Switching",
-        "Public", "Seating Order"];
-
     mobileSupportSetup();
     addRole();
     setupScriptSelection();
@@ -66,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
     displayRoles();
     clearSearches();
 
-    let normalRoleCreation = true;
+    let roleCreationMode = 0;
 
     function displayRoles() {
         setFilters();
@@ -383,18 +380,14 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem(storageString, JSON.stringify(websiteStorage));
     }
 
-    changeRoleCreationButton.addEventListener("click", function (event) {
+    document.getElementById("switch-role-creation").addEventListener("click", function (event) {
         event.preventDefault();
-        normalRoleCreation = !normalRoleCreation;
+        roleCreationMode++;
+        if (roleCreationMode === 3) roleCreationMode = 0;
 
-        if (!normalRoleCreation) {
-            createMainRoleAttributesForm.style.display = "none";
-            jsonInputDiv.style.display = "flex";
-        }
-        if (normalRoleCreation) {
-            createMainRoleAttributesForm.style.display = "flex";
-            jsonInputDiv.style.display = "none";
-        }
+        document.querySelector(".create-main-role-attributes").style.display = roleCreationMode === 0 ? "flex" : "none";
+        document.querySelector(".json-input-div").style.display = roleCreationMode === 1 ? "flex" : "none";
+        document.querySelector(".script-upload-div").style.display = roleCreationMode === 2 ? "flex" : "none";
     });
 
     jsonAddRoleButton.addEventListener("click", function (event) {
@@ -406,56 +399,36 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         const role = JSON.parse(text);
 
-        for (const role1 of websiteStorage.roleIdeas) {
-            if (role1.name === role.name && role1.ability === role.ability) {
-                return;
-            }
-        }
+        addRoleViaJson(role);
+    });
 
-        role.createdAt = Date.now().toString();
-        role.characterType = role.team[0].toUpperCase() + role.team.substring(1);
-        role.team = undefined;
-        if (role.image === undefined) role.image = "";
-        role.image = role.image.replaceAll("\\", "");
-        if (role.firstNight === undefined) role.firstNight = 0;
-        if (role.firstNightReminder === undefined) role.firstNightReminder = "";
-        if (role.otherNight === undefined) role.otherNight = 0;
-        if (role.otherNightReminder === undefined) role.otherNightReminder = "";
-        if (role.jinxes === undefined) role.jinxes = [];
-        for (let i = 0; i < role.jinxes.length; i++) {
-            const jinx = role.jinxes[i];
-            jinx.createdAt = (Date.now() + i).toString();
-            jinx.jinxedRole = jinx.id[0].toUpperCase();
-            for (let j = 1; j < jinx.id.length; j++) {
-                if (jinx.id[j] === "_" && j + 1 < jinx.id.length) {
-                    jinx.jinxedRole += " " + jinx.id[j + 1].toUpperCase();
-                    j++;
-                    continue;
+    document.getElementById("script-upload").addEventListener("change", function (event) {
+        event.preventDefault();
+
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.readAsText(file);
+
+        reader.addEventListener("load", function (event) {
+            event.preventDefault();
+            const array = JSON.parse(event.target.result);
+            for (const object of array) {
+                if (!object.id || !object.name || !object.ability || !object.team) continue;
+
+                let roleExists = false;
+
+                for (const role of websiteStorage.roleIdeas) {
+                    if (role.name === object.name || role.ability === object.ability) {
+                        roleExists = true;
+                        break;
+                    }
                 }
-                jinx.jinxedRole += jinx.id[j];
+                if (roleExists) continue;
+                addRoleViaJson(object);
             }
-            jinx.id = undefined;
-        }
-        if (role.reminders === undefined) role.reminders = [];
-        if (role.special === undefined) role.special = [];
-        for (const special of role.special) {
-            if (special.time === undefined) {
-                special.time = "";
-            }
-            if (special.value === undefined) {
-                special.value = "";
-            }
-        }
-        role.rating = 0;
-        role.isFavorite = false;
-        role.tags = [];
-        role.howToRun = "";
-        role.script = "";
-        role.comments = [];
-        websiteStorage.roleIdeas.push(role);
-        saveLocalStorage();
-        jsonInputTextarea.value = "";
-        displayRoles();
+        });
     });
 
     function mobileSupportSetup() {
@@ -545,5 +518,64 @@ document.addEventListener("DOMContentLoaded", function () {
         if (websiteStorage.user.tempRole === undefined) websiteStorage.user.tempRole = {createdAt: "0"}
 
         saveLocalStorage();
+    }
+
+    function addRoleViaJson(role) {
+        for (const role1 of websiteStorage.roleIdeas) {
+            if (role1.name === role.name && role1.ability === role.ability) {
+                return;
+            }
+        }
+
+        role.createdAt = Date.now().toString();
+        role.characterType = role.team[0].toUpperCase() + role.team.substring(1);
+        role.team = undefined;
+        if (role.image === undefined) role.image = "";
+        role.image = role.image.replaceAll("\\", "");
+        if (role.firstNight === undefined) role.firstNight = 0;
+        if (role.firstNightReminder === undefined) role.firstNightReminder = "";
+        if (role.otherNight === undefined) role.otherNight = 0;
+        if (role.otherNightReminder === undefined) role.otherNightReminder = "";
+        if (role.jinxes === undefined) role.jinxes = [];
+
+        for (let i = 0; i < role.jinxes.length; i++) {
+            const jinx = role.jinxes[i];
+            if (jinx.id === "") jinx.id = undefined;
+            if (!jinx.id || !jinx.reason) continue;
+            jinx.createdAt = (Date.now() + i).toString();
+            jinx.jinxedRole = jinx.id[0].toUpperCase();
+            for (let j = 1; j < jinx.id.length; j++) {
+                if (jinx.id[j] === "_") {
+                    jinx.jinxedRole += " ";
+                    continue;
+                }
+                if (jinx.id[j - 1] === "_") {
+                    jinx.jinxedRole += jinx.id[j].toUpperCase();
+                    continue;
+                }
+                jinx.jinxedRole += jinx.id[j];
+            }
+            jinx.id = undefined;
+        }
+        if (role.reminders === undefined) role.reminders = [];
+        if (role.special === undefined) role.special = [];
+        for (const special of role.special) {
+            if (special.time === undefined) {
+                special.time = "";
+            }
+            if (special.value === undefined) {
+                special.value = "";
+            }
+        }
+        role.rating = 0;
+        role.isFavorite = false;
+        role.tags = [];
+        role.howToRun = "";
+        role.script = "";
+        role.comments = [];
+        websiteStorage.roleIdeas.push(role);
+        saveLocalStorage();
+        jsonInputTextarea.value = "";
+        displayRoles();
     }
 });
