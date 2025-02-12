@@ -47,11 +47,18 @@ document.addEventListener('DOMContentLoaded', function () {
             const div = document.createElement("div");
             div.setAttribute("class", "night-order-img-text-div");
             const img = document.createElement("img");
-            if (role.isOfficial) {
-                img.setAttribute("src", "https://wiki.bloodontheclocktower.com/Special:FilePath/icon_" + role.name.toLowerCase().replaceAll(" ", "") + ".png");
-            }
-            if (!role.isOfficial) {
-                img.setAttribute("src", role.image);
+
+            if (role.name === "Minion info") {
+                img.setAttribute("src", "https://clocktower.live/img/minion.43365de6.webp");
+            } else if (role.name === "Demon info") {
+                img.setAttribute("src", "https://clocktower.live/img/demon.4669d783.webp");
+            } else {
+                if (role.isOfficial) {
+                    img.setAttribute("src", "https://wiki.bloodontheclocktower.com/Special:FilePath/icon_" + role.name.toLowerCase().replaceAll(" ", "") + ".png");
+                }
+                if (!role.isOfficial) {
+                    img.setAttribute("src", role.image);
+                }
             }
             img.setAttribute("width", "50px");
             img.setAttribute("height", "50px");

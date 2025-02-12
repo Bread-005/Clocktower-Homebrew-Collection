@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const roleImage = document.createElement("img");
             roleImage.setAttribute("class", "clocktower-icon clocktower-icon-role-idea");
             roleImage.setAttribute("src", "https://i.postimg.cc/qM09f8cD/placeholder-icon.png");
-            roleImage.setAttribute("alt", "Icon");
+            roleImage.setAttribute("alt", role.name);
             if (role["image"]) {
                 roleImage.setAttribute("src", role["image"]);
             }
@@ -446,7 +446,7 @@ document.addEventListener("DOMContentLoaded", function () {
             roleFilter.append(document.querySelector(".character-type-selection-div"));
             roleFilter.append(document.getElementById("script-filter-selection-div"));
             roleFilter.append(document.querySelector(".tag-div"));
-            roleFilter.append(document.getElementById("only-my-favorites-div"));
+            roleFilter.append(document.querySelector(".only-my-favorites-div"));
             roleFilter.append(document.getElementById("clear-searches-button"));
             roleFilter.append(document.querySelector(".sorting-role-display"));
         }
