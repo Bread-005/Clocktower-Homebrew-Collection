@@ -1,7 +1,4 @@
-import {copyJsonString, showCopyPopup, firstNightList, otherNightList} from "./functions.js";
-
-const allTags = ["Misinformation", "Extra Death", "Protection", "Wincondition", "Character Changing", "Setup",
-    "Madness", "Noms Votes Exes", "ST Consult", "When You Die", "Resurrection", "Alignment Switching", "Public", "Seating Order"];
+import {copyJsonString, showCopyPopup, firstNightList, otherNightList, allTags} from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -555,7 +552,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function fillOtherNightInfoTextArea() {
             for (let i = 0; i < otherNightList.length; i++) {
-                otherNightInfoText.innerHTML += (i + 2) + " " + otherNightList[i] + "<br>";
+                otherNightInfoText.innerHTML += (i + 7) + " " + otherNightList[i] + "<br>";
             }
         }
 

@@ -1,8 +1,4 @@
-import {copyJsonString, roleWasEdited, showCopyPopup, allRoles} from "./functions.js";
-
-const allTags = ["Misinformation", "Extra Death", "Protection", "Wincondition", "Character Changing",
-    "Setup", "Madness", "Noms Votes Exes", "ST Consult", "When You Die", "Resurrection", "Alignment Switching",
-    "Public", "Seating Order"];
+import {copyJsonString, roleWasEdited, showCopyPopup, allRoles, allTags} from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -530,7 +526,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (role.lastEdited === undefined) role.lastEdited = new Date(role.createdAt);
             if (role.otherImage === undefined) role.otherImage = "";
 
-            role.tags = role.tags.filter(tag => tag.toString() !== "Does Not Wake");
+            role.tags = role.tags.filter(tag => tag.toString() !== "Does Not Wake" && tag.toString() !== "Noms Votes Exes");
             role.image = role.image.replaceAll("\\", "");
         }
 
@@ -613,6 +609,7 @@ document.addEventListener("DOMContentLoaded", function () {
         role.rating = 0;
         role.isFavorite = false;
         role.tags = [];
+        autoAddTags(role);
         role.howToRun = "";
         if (!role.script) role.script = "";
         role.comments = [];
@@ -620,5 +617,58 @@ document.addEventListener("DOMContentLoaded", function () {
         saveLocalStorage();
         jsonInputTextarea.value = "";
         displayRoles();
+    }
+
+    function autoAddTags(role) {
+        const tags = [];
+
+        function has(string) {
+            return role.ability.toLowerCase().includes(string.toLowerCase());
+        }
+
+        if (has("drunk") || has("poison") || has("false info")) {
+            tags.push("Misinformation");
+        }
+        if ((has("die") && (has("you") || has("player") || has("choose")) && (!has("cannot") || !has("can´t"))) && role.characterType !== "Demon") {
+            tags.push("Extra Death");
+        }
+        if (has("safe") || has("cannot die") || has("can´t die")) {
+            tags.push("Protection");
+        }
+        if (has("win") || has("lose") && !has("ability")) {
+            tags.push("Wincondition");
+        }
+        if (has("become") && !has("alignment") && !has("evil") && !has("good") || has("swap")) {
+            tags.push("Character Changing");
+        }
+        if (has("[") && has("]")) {
+            tags.push("Setup");
+        }
+        if (has("mad")) {
+            tags.push("Madness");
+        }
+        if (has("nominat") || has("vot") || has("execut") || has("nominee")) {
+            tags.push("Nomination Phase");
+        }
+        if (has("visit") || has("Storyteller") || has("privately")) {
+            tags.push("ST Consult");
+        }
+        if (has("When you die") || has("If you die")) {
+            tags.push("When You Die");
+        }
+        if (has("revive") || has("resurrect")) {
+            tags.push("Resurrection");
+        }
+        if ((has("become") || has("turn")) && (has("alignment") || has("evil") || has("good"))) {
+            tags.push("Alignment Switching");
+        }
+        if (has("public")) {
+            tags.push("Public");
+        }
+        if (has("neighbour") || has("neighbor") || has("step") || has("closest")) {
+            tags.push("Seating Order");
+        }
+
+        role.tags = tags;
     }
 });

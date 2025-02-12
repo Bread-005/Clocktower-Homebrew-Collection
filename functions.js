@@ -152,4 +152,7 @@ const allRoles = [
     "Hells Librarian", "Revolutionary", "Sentinel", "Spirit of Ivory", "Storm Catcher", "Toymaker"
 ];
 
-export {copyJsonString, showCopyPopup, roleWasEdited, firstNightList, otherNightList, allRoles}
+const allTags = ["Misinformation", "Extra Death", "Protection", "Wincondition", "Character Changing", "Setup",
+    "Madness", "Nomination Phase", "ST Consult", "When You Die", "Resurrection", "Alignment Switching", "Public", "Seating Order"];
+
+export {copyJsonString, showCopyPopup, roleWasEdited, firstNightList, otherNightList, allRoles, allTags}
