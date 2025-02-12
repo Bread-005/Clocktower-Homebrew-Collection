@@ -255,6 +255,14 @@ h1, h2, h3 {
     .blue {
         background-color: lightskyblue;
     }
+
+    .night-order-link {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 2rem;
+    }
 }
 
 .wiki {
@@ -552,6 +560,33 @@ h1, h2, h3 {
             justify-content: center;
             align-items: center;
             flex-direction: column;
+        }
+    }
+}
+
+.full-night-order-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 2rem;
+
+    .night-order-display {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+
+    .first-night-order-display-div, .other-night-order-display-div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        .night-order-img-text-div {
+            display: flex;
+            align-items: center;
         }
     }
 }
