@@ -77,6 +77,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const roleDiv = document.createElement("div");
             roleDiv.setAttribute("class", "role-div");
+
+            if (role.characterType === "Townsfolk") roleDiv.style.background = "cornflowerblue";
+            if (role.characterType === "Outsider") roleDiv.style.background = "lightblue";
+            if (role.characterType === "Minion") roleDiv.style.background = "orange";
+            if (role.characterType === "Demon") roleDiv.style.background = "red";
+            if (role.characterType === "Traveller") roleDiv.style.background = "purple";
+            if (role.characterType === "Fabled") roleDiv.style.background = "gold";
+
             const roleImageAndText = document.createElement("div");
             roleImageAndText.setAttribute("class", "role-image-and-text");
 
@@ -89,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             const roleText = document.createElement("div");
-            roleText.textContent = role["name"] + " (" + role["characterType"] + "): " + role["ability"];
+            roleText.textContent = role.name + " (" + role.characterType + "): " + role.ability;
 
             const buttons = document.createElement("div");
             buttons.setAttribute("class", "role-buttons");
@@ -413,7 +421,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         reader.addEventListener("load", function (event) {
             event.preventDefault();
-            const array = JSON.parse(event.target.result);
+            const array = JSON.parse(event.target.result.toString());
             for (const object of array) {
                 if (!object.id || !object.name || !object.ability || !object.team) continue;
 
