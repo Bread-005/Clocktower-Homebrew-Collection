@@ -111,4 +111,38 @@ const otherNightList = ["Cannibal", "Philosopher", "Poppy Grower", "Sailor", "En
     "Juggler", "Balloonist", "Village Idiot", "King", "Bounty Hunter", "Nightwatchman", "Cult Leader", "Butler",
     "Spy", "High Priestess", "General", "Chambermaid", "Mathematician", "Riot", "Leviathan"];
 
-export {copyJsonString, showCopyPopup, roleWasEdited, firstNightList, otherNightList}
+const allRoles = [
+    "Steward", "Knight", "Chef", "Noble", "Investigator", "Washerwoman", "Clockmaker", "Grandmother", "Librarian", "Shugenja", "Bounty Hunter", "Pixie",
+
+    "Empath", "High Priestess", "Sailor", "Balloonist", "General", "Preacher", "Chambermaid", "Village Idiot", "Snake Charmer", "Mathematician", "King", "Fortuneteller", "Dreamer", "Cult Leader",
+
+    "Flowergirl", "Town Crier", "Oracle", "Undertaker", "Innkeeper", "Monk", "Gambler", "Acrobat", "Lycanthrope", "Exorcist",
+
+    "Gossip", "Savant", "Alsaahir", "Engineer", "Nightwatchman", "Courtier", "Seamstress", "Philosopher", "Huntsman", "Professor", "Artist", "Slayer", "Fisherman",
+
+    "Juggler", "Soldier", "Alchemist", "Cannibal", "Amnesiac", "Farmer", "Minstrel", "Ravenkeeper", "Sage", "Choirboy", "Banshee",
+    "Tea Lady", "Mayor", "Fool", "Virgin", "Magician", "Poppy Grower", "Pacifist", "Atheist",
+
+    "Butler", "Goon", "Ogre", "Lunatic", "Drunk", "Tinker", "Recluse", "Golem", "Sweetheart", "Plague Doctor", "Klutz", "Moonchild",
+    "Saint", "Barber", "Hatter", "Mutant", "Politician", "Zealot", "Damsel", "Snitch", "Heretic", "Puzzlemaster",
+
+    "Mezepheles", "Godfather",
+    "Poisoner", "Devils Advocate", "Spy", "Harpy", "Witch", "Cerenovus", "Fearmonger",
+    "Pit Hag",
+    "Psychopath",
+    "Assassin", "Wizard",
+    "Widow", "Xaan", "Marionette", "Evil Twin", "Summoner",
+    "Goblin", "Boomdandy", "Mastermind", "Scarlet Woman", "Vizier", "Organ Grinder",
+    "Boffin", "Baron",
+
+    "Yaggababble", "Pukka", "Lil Monsta", "No Dashii", "Imp", "Kazali", "Shabaloth", "Ojo", "Po", "Zombuul",
+    "Alhadikhia", "Vigormortis", "Vortox", "Fang Gu", "Legion", "Lord of Typhon", "Lleech", "Leviathan", "Riot",
+
+    "Apprentice", "Barista", "Beggar", "Bishop", "Bone Collector", "Bureaucrat", "Butcher", "Deviant", "Gangster", "Gnome",
+    "Gunslinger", "Harlot", "Judge", "Matron", "Scapegoat", "Thief", "Voudon",
+
+    "Angel", "Bootlegger", "Buddhist", "Djinn", "Doomsayer", "Duchess", "Ferryman", "Fibbin", "Fiddler", "Gardener",
+    "Hells Librarian", "Revolutionary", "Sentinel", "Spirit of Ivory", "Storm Catcher", "Toymaker"
+];
+
+export {copyJsonString, showCopyPopup, roleWasEdited, firstNightList, otherNightList, allRoles}

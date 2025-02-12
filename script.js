@@ -1,4 +1,4 @@
-import {copyJsonString, roleWasEdited, showCopyPopup} from "./functions.js";
+import {copyJsonString, roleWasEdited, showCopyPopup, allRoles} from "./functions.js";
 
 const allTags = ["Misinformation", "Extra Death", "Protection", "Wincondition", "Character Changing",
     "Setup", "Madness", "Noms Votes Exes", "ST Consult", "When You Die", "Resurrection", "Alignment Switching",
@@ -522,12 +522,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function addRoleViaJson(role) {
         for (const role1 of websiteStorage.roleIdeas) {
-            if (role1.name === role.name && role1.ability === role.ability) {
+            if (role1.name === role.name && role1.characterType === role.characterType) {
+                return;
+            }
+        }
+
+        for (const roleName of allRoles) {
+            if (roleName.toLowerCase().replaceAll("_", "").replaceAll(" ", "") ===
+                role.name.toLowerCase().replaceAll("_", "").replaceAll(" ", "")) {
                 return;
             }
         }
 
         role.createdAt = Date.now().toString();
+        for (const role1 of websiteStorage.roleIdeas) {
+            if (role1.createdAt === role.createdAt) {
+                let number = role1.createdAt;
+                number++;
+                role.createdAt = number.toString();
+            }
+        }
         role.characterType = role.team[0].toUpperCase() + role.team.substring(1);
         role.team = undefined;
         if (role.image === undefined) role.image = "";
