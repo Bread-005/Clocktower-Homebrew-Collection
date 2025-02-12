@@ -350,6 +350,7 @@ h1, h2, h3 {
         .set-image-div {
             display: flex;
             align-items: center;
+            margin-top: 0.5rem;
 
             textarea {
                 line-height: 20px;
@@ -369,6 +370,11 @@ h1, h2, h3 {
             align-items: center;
             flex-direction: column;
             max-width: 800px;
+
+            input {
+                transform: scale(1.5);
+                margin-left: 0.5rem;
+            }
         }
     }
 

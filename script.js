@@ -317,6 +317,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 ability: abilityTextInput.value,
                 createdAt: Date.now().toString(),
                 image: "",
+                otherImage: "",
                 rating: 0,
                 isFavorite: false,
                 tags: [],
@@ -422,6 +423,14 @@ document.addEventListener("DOMContentLoaded", function () {
         reader.addEventListener("load", function (event) {
             event.preventDefault();
             const array = JSON.parse(event.target.result.toString());
+            let script = "";
+
+            for (const object of array) {
+                if (object.id === "_meta") {
+                    script = object.name;
+                }
+            }
+
             for (const object of array) {
                 if (!object.id || !object.name || !object.ability || !object.team) continue;
 
@@ -434,6 +443,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 }
                 if (roleExists) continue;
+                object.script = script;
                 addRoleViaJson(object);
             }
         });
@@ -447,7 +457,7 @@ document.addEventListener("DOMContentLoaded", function () {
             roleFilter.append(document.getElementById("script-filter-selection-div"));
             roleFilter.append(document.querySelector(".tag-div"));
             roleFilter.append(document.querySelector(".only-my-favorites-div"));
-            roleFilter.append(document.getElementById("clear-searches-button"));
+            roleFilter.append(clearSearchesButton);
             roleFilter.append(document.querySelector(".sorting-role-display"));
         }
     }
@@ -518,6 +528,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (role.special === undefined) role.special = [];
             if (role.reminders === undefined) role.reminders = [];
             if (role.lastEdited === undefined) role.lastEdited = new Date(role.createdAt);
+            if (role.otherImage === undefined) role.otherImage = "";
 
             role.tags = role.tags.filter(tag => tag.toString() !== "Does Not Wake");
             role.image = role.image.replaceAll("\\", "");
@@ -553,7 +564,17 @@ document.addEventListener("DOMContentLoaded", function () {
         role.characterType = role.team[0].toUpperCase() + role.team.substring(1);
         role.team = undefined;
         if (role.image === undefined) role.image = "";
-        role.image = role.image.replaceAll("\\", "");
+        if (role.otherImage === undefined) role.otherImage = "";
+        if (Array.isArray(role.image)) {
+            const images = role.image;
+            role.image = images[0].replaceAll("\\", "");
+            if (images.length > 0) {
+                role.otherImage = images[1].replaceAll("\\", "");
+            }
+        }
+        if (typeof (role.image) === "string") {
+            role.image = role.image.replaceAll("\\", "");
+        }
         if (role.firstNight === undefined) role.firstNight = 0;
         if (role.firstNightReminder === undefined) role.firstNightReminder = "";
         if (role.otherNight === undefined) role.otherNight = 0;
@@ -593,7 +614,7 @@ document.addEventListener("DOMContentLoaded", function () {
         role.isFavorite = false;
         role.tags = [];
         role.howToRun = "";
-        role.script = "";
+        if (!role.script) role.script = "";
         role.comments = [];
         websiteStorage.roleIdeas.push(role);
         saveLocalStorage();

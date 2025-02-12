@@ -8,8 +8,15 @@ function copyJsonString(role) {
     if (role.script !== "") {
         jsonRole.id += "_" + role.script.toLowerCase().replaceAll(" ", "_");
     }
-    if (role.image !== "") {
+    if (role.image && role.otherImage) {
+        jsonRole.image = [
+            role.image,
+            role.otherImage
+        ];
+    } else if (role.image) {
         jsonRole.image = role.image;
+    } else if (role.otherImage && !role.image) {
+        jsonRole.image = role.otherImage;
     }
     if (role.firstNight !== 0) {
         jsonRole.firstNight = role.firstNight;

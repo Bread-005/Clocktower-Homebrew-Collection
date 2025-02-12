@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const editCharacterTypeInput = document.getElementById("edit-character-type");
     const editAbilityTextInput = document.getElementById("edit-ability-text");
     const uploadImageURL = document.getElementById("image-input-url");
+    const uploadOtherImageURL = document.getElementById("other-image-input-url");
     const imageSubmission = document.querySelector(".image-submission");
     const tagDisplay = document.getElementById("tag-display");
     const editTags = document.querySelector(".edit-tags");
@@ -237,11 +238,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function changeImage() {
             uploadImageURL.value = role.image;
+            uploadOtherImageURL.value = role.otherImage;
             document.getElementById("upload-button").addEventListener("click", function (event) {
                 event.preventDefault();
                 role.image = uploadImageURL.value.replaceAll("\\", "");
                 wikiRoleImage.setAttribute("src", role.image);
                 uploadImageURL.value = role.image;
+                saveLocalStorage();
+            });
+            document.getElementById("other-upload-button").addEventListener("click", function (event) {
+                event.preventDefault();
+                role.otherImage = uploadOtherImageURL.value.replaceAll("\\", "");
+                uploadOtherImageURL.value = role.otherImage;
                 saveLocalStorage();
             });
         }
