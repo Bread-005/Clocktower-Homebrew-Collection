@@ -252,7 +252,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function showTags() {
-            tagDisplay.textContent = "Tags: ";
+            tagDisplay.textContent = "";
             for (let i = 0; i < role.tags.length; i++) {
                 tagDisplay.textContent += role.tags[i];
                 if (i < role.tags.length - 1) {

@@ -59,6 +59,7 @@ textarea {
     object-fit: cover;
     width: 200px;
     height: 200px;
+    background: lightgray;
 }
 
 h1, h2, h3 {
@@ -613,9 +614,19 @@ h1, h2, h3 {
         align-items: center;
         flex-direction: column;
 
+        .night-order-img-text-edit-div {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
         .night-order-img-text-div {
             display: flex;
             align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+            gap: 1rem;
         }
     }
 }
