@@ -398,7 +398,10 @@ document.addEventListener("DOMContentLoaded", function () {
     jsonAddRoleButton.addEventListener("click", function (event) {
         event.preventDefault();
 
-        const text = jsonInputTextarea.value;
+        let text = jsonInputTextarea.value.replaceAll('""', '"');
+        if (text[0] === '"') text = text.substring(1);
+        if (text[text.length - 1] === '"') text = text.substring(0, text.length - 1);
+        if (text[text.length - 1] === ',') text = text.substring(0, text.length - 1);
         if (!text.includes("id") || !text.includes("name") || !text.includes("team") || !text.includes("ability")) {
             return;
         }
@@ -537,7 +540,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function addRoleViaJson(role) {
         for (const role1 of websiteStorage.roleIdeas) {
-            if (role1.name === role.name && role1.characterType === role.characterType) {
+            if (role1.name === role.name && role1.characterType.toLowerCase() === role.team.toLowerCase()) {
                 return;
             }
         }
@@ -564,7 +567,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (Array.isArray(role.image)) {
             const images = role.image;
             role.image = images[0].replaceAll("\\", "");
-            if (images.length > 0) {
+            if (images.length > 1) {
                 role.otherImage = images[1].replaceAll("\\", "");
             }
         }
@@ -608,8 +611,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         role.rating = 0;
         role.isFavorite = false;
-        role.tags = [];
-        autoAddTags(role);
+        role.tags = autoAddTags(role);
         role.howToRun = "";
         if (!role.script) role.script = "";
         role.comments = [];
@@ -629,13 +631,10 @@ document.addEventListener("DOMContentLoaded", function () {
         if (has("drunk") || has("poison") || has("false info")) {
             tags.push("Misinformation");
         }
-        if ((has("die") && (has("you") || has("player") || has("choose")) && (!has("cannot") || !has("can´t"))) && role.characterType !== "Demon") {
-            tags.push("Extra Death");
-        }
         if (has("safe") || has("cannot die") || has("can´t die")) {
             tags.push("Protection");
         }
-        if (has("win") || has("lose") && !has("ability")) {
+        if (has("win") && !has("knowing") || has("lose") && !has("ability")) {
             tags.push("Wincondition");
         }
         if (has("become") && !has("alignment") && !has("evil") && !has("good") || has("swap")) {
@@ -650,7 +649,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (has("nominat") || has("vot") || has("execut") || has("nominee")) {
             tags.push("Nomination Phase");
         }
-        if (has("visit") || has("Storyteller") || has("privately")) {
+        if (has("visit") || has("Storyteller") && (!has("believe") && !has("think")) || has("privately")) {
             tags.push("ST Consult");
         }
         if (has("When you die") || has("If you die")) {
@@ -668,7 +667,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (has("neighbour") || has("neighbor") || has("step") || has("closest")) {
             tags.push("Seating Order");
         }
-
-        role.tags = tags;
+        return tags;
     }
 });

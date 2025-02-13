@@ -71,12 +71,6 @@
         </div>
     </div>
 
-    <div class="tags">
-        <h2>Tags</h2>
-        <p id="tag-display"></p>
-        <div class="edit-tags"></div>
-    </div>
-
     <div class="night-order-div">
         <h2>Night Order</h2>
         <div class="night-order-container">
@@ -104,14 +98,30 @@
         <button id="edit-night-order-button" class="edit-night-order">Save Night Order Changes</button>
     </div>
 
-    <div class="reminder-token">
-        <h2>Reminder Tokens</h2>
-        <div class="edit-reminder-token">
-            <label for="reminder-token-input"></label>
-            <input id="reminder-token-input">
-            <button id="reminder-token-add-button">add Reminder Token</button>
+    <div class="reminder-tokens-tags-script-div">
+        <div class="reminder-token">
+            <h2>Reminder Tokens</h2>
+            <div class="edit-reminder-token">
+                <label for="reminder-token-input"></label>
+                <input id="reminder-token-input">
+                <button id="reminder-token-add-button">add Reminder Token</button>
+            </div>
+            <div class="reminder-token-list"></div>
         </div>
-        <div class="reminder-token-list"></div>
+
+        <div class="tags">
+            <h2>Tags</h2>
+            <div id="tag-display"></div>
+            <div class="edit-tags"></div>
+        </div>
+
+        <div class="script">
+            <h2>Script</h2>
+            <h3 id="script-text"></h3>
+            <label for="script-edit-input"></label>
+            <input id="script-edit-input">
+            <button id="script-edit-button">Change Script</button>
+        </div>
     </div>
 
     <div class="jinxes">
@@ -184,13 +194,6 @@
             <button id="special-add-button">Add Special</button>
         </div>
         <ul id="special-display"></ul>
-    </div>
-
-    <div class="script">
-        <h3 id="script-text"></h3>
-        <label for="script-edit-input"></label>
-        <input id="script-edit-input">
-        <button id="script-edit-button">Change Script</button>
     </div>
 
     <div class="how-to-run">

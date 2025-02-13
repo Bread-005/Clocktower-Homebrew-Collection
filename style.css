@@ -358,26 +358,6 @@ h1, h2, h3 {
         }
     }
 
-    .tags {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-
-        .edit-tags {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            max-width: 800px;
-
-            input {
-                transform: scale(1.5);
-                margin-left: 0.5rem;
-            }
-        }
-    }
-
     .night-order-div {
 
         display: flex;
@@ -427,28 +407,76 @@ h1, h2, h3 {
         }
     }
 
-    .reminder-token {
+    .reminder-tokens-tags-script-div {
+        width: 100%;
         display: flex;
         justify-content: center;
-        align-items: center;
-        flex-direction: column;
+        align-items: flex-start;
+        gap: 3rem;
 
-        h2 {
-            margin-bottom: 0;
-        }
-
-        .edit-reminder-token {
-            display: none;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        .reminder-token-list {
+        .reminder-token {
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
+
+            h2 {
+                margin-bottom: 0.5rem;
+            }
+
+            .edit-reminder-token {
+                display: none;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+
+            .reminder-token-list {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+        }
+
+        .tags {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+
+            h2 {
+                margin-bottom: 0.5rem;
+            }
+
+            .edit-tags {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                max-width: 800px;
+
+                input {
+                    transform: scale(1.5);
+                    margin-left: 0.5rem;
+                }
+            }
+        }
+
+        .script {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 200px;
+
+            h2 {
+                margin-bottom: 0.5rem;
+            }
+
+            h3 {
+                margin-top: 0;
+            }
         }
     }
 
@@ -499,17 +527,6 @@ h1, h2, h3 {
                     flex-direction: column;
                 }
             }
-        }
-    }
-
-    .script {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-
-        h3 {
-            margin-bottom: 0.25rem;
         }
     }
 

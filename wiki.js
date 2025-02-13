@@ -557,7 +557,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function showScript() {
-            scriptText.textContent = "Script: " + role.script;
+            scriptText.textContent = role.script;
         }
 
         function editScript() {
