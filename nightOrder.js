@@ -15,19 +15,23 @@ document.addEventListener('DOMContentLoaded', function () {
     fillList(otherNightList, otherNightOrderList, 7);
 
     for (const role of websiteStorage.roleIdeas) {
-        const tempRole = {
-            name: role.name,
-            isOfficial: false,
-            image: role.image,
-            ability: role.ability
-        }
         if (role.firstNight) {
-            tempRole.number = role.firstNight;
-            firstNightOrderList.push(tempRole);
+            firstNightOrderList.push({
+                name: role.name,
+                number: role.firstNight,
+                isOfficial: false,
+                image: role.image,
+                ability: role.ability
+            });
         }
         if (role.otherNight) {
-            tempRole.number = role.otherNight;
-            otherNightOrderList.push(tempRole);
+            otherNightOrderList.push({
+                name: role.name,
+                number: role.otherNight,
+                isOfficial: false,
+                image: role.image,
+                ability: role.ability
+            });
         }
     }
 
@@ -129,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         icon.setAttribute("class", "fa-solid fa-pen fa-pen-to-square");
 
                         for (const role1 of websiteStorage.roleIdeas) {
-                            if (role.name === role1.name && role.ability === role1.ability) {
+                            if (role.name === role1.name && role.ability === role1.ability && Number(input.value) instanceof Number) {
                                 if (firstNightOrderDisplayDiv.contains(div)) {
                                     role1.firstNight = Number(input.value);
                                     roleNameAndNumber.textContent = role1.name + ": " + role1.firstNight;
