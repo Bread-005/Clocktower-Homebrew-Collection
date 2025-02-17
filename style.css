@@ -619,6 +619,7 @@ h1, h2, h3 {
             align-items: center;
             justify-content: space-between;
             width: 100%;
+            position: relative;
         }
 
         .night-order-img-text-div {
@@ -627,6 +628,16 @@ h1, h2, h3 {
             justify-content: flex-start;
             width: 100%;
             gap: 1rem;
+        }
+
+        .hover-text {
+            position: absolute;
+            visibility: hidden;
+            bottom: 50px;
+            background: beige;
+            color: black;
+            padding: 5px;
+            border-radius: 15px;
         }
     }
 }

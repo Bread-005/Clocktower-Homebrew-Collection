@@ -15,11 +15,19 @@ document.addEventListener('DOMContentLoaded', function () {
     fillList(otherNightList, otherNightOrderList, 7);
 
     for (const role of websiteStorage.roleIdeas) {
+        const tempRole = {
+            name: role.name,
+            isOfficial: false,
+            image: role.image,
+            ability: role.ability
+        }
         if (role.firstNight) {
-            firstNightOrderList.push({name: role.name, number: role.firstNight, isOfficial: false, image: role.image});
+            tempRole.number = role.firstNight;
+            firstNightOrderList.push(tempRole);
         }
         if (role.otherNight) {
-            otherNightOrderList.push({name: role.name, number: role.otherNight, isOfficial: false, image: role.image});
+            tempRole.number = role.otherNight;
+            otherNightOrderList.push(tempRole);
         }
     }
 
@@ -82,6 +90,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 div.setAttribute("class", "night-order-img-text-div")
             } else {
                 div.append(button);
+
+                const abilityText = document.createElement("div");
+                abilityText.setAttribute("class", "hover-text");
+                abilityText.textContent = role.ability;
+                div.prepend(abilityText);
+
+                img.addEventListener("mouseover", function () {
+                    abilityText.style.visibility = "visible";
+                });
+                img.addEventListener("mouseout", function () {
+                    abilityText.style.visibility = "hidden";
+                });
             }
             div.style.background = "lightskyblue";
             container.append(div);

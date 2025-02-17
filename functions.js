@@ -118,39 +118,49 @@ const otherNightList = ["Cannibal", "Philosopher", "Poppy Grower", "Sailor", "En
     "Juggler", "Balloonist", "Village Idiot", "King", "Bounty Hunter", "Nightwatchman", "Cult Leader", "Butler",
     "Spy", "High Priestess", "General", "Chambermaid", "Mathematician", "Riot", "Leviathan"];
 
-const allRoles = [
+const Townsfolks = [
     "Steward", "Knight", "Chef", "Noble", "Investigator", "Washerwoman", "Clockmaker", "Grandmother", "Librarian", "Shugenja", "Bounty Hunter", "Pixie",
 
-    "Empath", "High Priestess", "Sailor", "Balloonist", "General", "Preacher", "Chambermaid", "Village Idiot", "Snake Charmer", "Mathematician", "King", "Fortuneteller", "Dreamer", "Cult Leader",
+    "Empath", "High Priestess", "Sailor", "Balloonist", "General", "Preacher", "Chambermaid", "Village Idiot", "Snake Charmer", "Mathematician", "King", "Fortune Teller", "Dreamer", "Cult Leader",
 
     "Flowergirl", "Town Crier", "Oracle", "Undertaker", "Innkeeper", "Monk", "Gambler", "Acrobat", "Lycanthrope", "Exorcist",
 
     "Gossip", "Savant", "Alsaahir", "Engineer", "Nightwatchman", "Courtier", "Seamstress", "Philosopher", "Huntsman", "Professor", "Artist", "Slayer", "Fisherman",
 
     "Juggler", "Soldier", "Alchemist", "Cannibal", "Amnesiac", "Farmer", "Minstrel", "Ravenkeeper", "Sage", "Choirboy", "Banshee",
-    "Tea Lady", "Mayor", "Fool", "Virgin", "Magician", "Poppy Grower", "Pacifist", "Atheist",
+    "Tea Lady", "Mayor", "Fool", "Virgin", "Magician", "Poppy Grower", "Pacifist", "Atheist"
+];
 
+const Outsiders = [
     "Butler", "Goon", "Ogre", "Lunatic", "Drunk", "Tinker", "Recluse", "Golem", "Sweetheart", "Plague Doctor", "Klutz", "Moonchild",
     "Saint", "Barber", "Hatter", "Mutant", "Politician", "Zealot", "Damsel", "Snitch", "Heretic", "Puzzlemaster",
+];
 
+const Minions = [
     "Mezepheles", "Godfather",
     "Poisoner", "Devils Advocate", "Spy", "Harpy", "Witch", "Cerenovus", "Fearmonger",
     "Pit Hag",
     "Psychopath",
     "Assassin", "Wizard",
     "Widow", "Xaan", "Marionette", "Evil Twin", "Summoner",
-    "Goblin", "Boomdandy", "Mastermind", "Scarlet Woman", "Vizier", "Organ Grinder",
-    "Boffin", "Baron",
+    "Goblin", "Boomdandy", "Mastermind", "Scarlet Woman", "Vizier", "Organ Grinder", "Boffin", "Baron"
+];
 
+const Demons = [
     "Yaggababble", "Pukka", "Lil Monsta", "No Dashii", "Imp", "Kazali", "Shabaloth", "Ojo", "Po", "Zombuul",
-    "Alhadikhia", "Vigormortis", "Vortox", "Fang Gu", "Legion", "Lord of Typhon", "Lleech", "Leviathan", "Riot",
+    "Al Hadikhia", "Vigormortis", "Vortox", "Fang Gu", "Legion", "Lord of Typhon", "Lleech", "Leviathan", "Riot"
+];
 
+const Travellers = [
     "Apprentice", "Barista", "Beggar", "Bishop", "Bone Collector", "Bureaucrat", "Butcher", "Deviant", "Gangster", "Gnome",
     "Gunslinger", "Harlot", "Judge", "Matron", "Scapegoat", "Thief", "Voudon",
+];
 
+const Fabled = [
     "Angel", "Bootlegger", "Buddhist", "Djinn", "Doomsayer", "Duchess", "Ferryman", "Fibbin", "Fiddler", "Gardener",
     "Hells Librarian", "Revolutionary", "Sentinel", "Spirit of Ivory", "Storm Catcher", "Toymaker"
 ];
+const allRoles = Townsfolks + Outsiders + Minions + Demons + Travellers + Fabled;
 
 const allTags = ["Misinformation", "Extra Death", "Protection", "Wincondition", "Character Changing", "Setup",
     "Madness", "Nomination Phase", "ST Consult", "When You Die", "Resurrection", "Alignment Switching", "Public", "Seating Order"];
