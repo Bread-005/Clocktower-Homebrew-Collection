@@ -27,10 +27,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const otherNightInfoButton = document.getElementById("other-night-info-button");
     const otherNightInfoText = document.getElementById("other-night-info-text");
     const otherNightReminderInput = document.getElementById("other-night-reminder-input");
-    const reminderTokenAddButton = document.getElementById("reminder-token-add-button");
-    const reminderTokenInput = document.getElementById("reminder-token-input");
     const editReminderTokenDiv = document.querySelector(".edit-reminder-token");
-    const reminderTokenList = document.querySelector(".reminder-token-list");
+    const editGlobalReminderTokenDiv = document.querySelector(".edit-global-reminder-token");
+    const globalReminderTokenList = document.querySelector(".global-reminder-token-list");
     const jinxRoleInput = document.getElementById("jinx-role-input");
     const jinxTextInput = document.getElementById("jinx-text-input");
     const jinxAddButton = document.getElementById("jinx-add-button");
@@ -81,8 +80,9 @@ document.addEventListener("DOMContentLoaded", function () {
         editNightOrder();
         fillFirstNightInfoTextArea();
         fillOtherNightInfoTextArea();
-        showReminderTokens();
-        editReminderTokens();
+        displayReminders();
+        editReminderTokens(document.getElementById("reminder-token-add-button"), document.getElementById("reminder-token-input"), role.reminders);
+        editReminderTokens(document.getElementById("global-reminder-token-add-button"), document.getElementById("global-reminder-token-input"), role.remindersGlobal);
         showJinxes();
         editJinxes();
         showSpecial();
@@ -212,7 +212,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     jinxEditDiv.style.display = "flex";
                     showJinxes();
                     editReminderTokenDiv.style.display = "flex";
-                    showReminderTokens();
+                    editGlobalReminderTokenDiv.style.display = "flex";
+                    displayReminders();
                     specialEditDiv.style.display = "flex";
                     showSpecial();
                     scriptEditInput.style.display = "flex";
@@ -225,7 +226,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (!inEditMode) {
                     hideEditStuff();
                     showNightOrder();
-                    showReminderTokens();
+                    displayReminders();
                     showJinxes();
                     showSpecial();
                     showScript();
@@ -450,21 +451,32 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
-        function editReminderTokens() {
+        function editReminderTokens(reminderTokenAddButton, reminderTokenInput, reminderArray) {
             reminderTokenAddButton.addEventListener("click", function () {
                 if (reminderTokenInput.value === "") {
                     return;
                 }
-                role.reminders.push(reminderTokenInput.value);
+                reminderArray.push(reminderTokenInput.value);
                 saveLocalStorage();
                 reminderTokenInput.value = "";
-                showReminderTokens();
+                displayReminders();
             });
         }
 
-        function showReminderTokens() {
+        function displayReminders() {
+            showReminderTokens(document.querySelector(".reminder-token-list"), role.reminders);
+            showReminderTokens(globalReminderTokenList, role.remindersGlobal);
+        }
+
+        function showReminderTokens(reminderTokenList, reminderArray) {
             reminderTokenList.textContent = "";
-            for (const reminderToken of role.reminders) {
+            if (reminderTokenList === globalReminderTokenList) {
+                const header = document.createElement("h3");
+                header.textContent = "Global";
+                header.style.marginBottom = "3px";
+                reminderTokenList.append(header);
+            }
+            for (const reminderToken of reminderArray) {
                 const div = document.createElement("div");
                 div.textContent = reminderToken;
                 if (inEditMode) {
@@ -474,9 +486,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     deleteButton.append(deleteIcon);
                     div.append(deleteButton);
                     deleteButton.addEventListener("click", function () {
-                        role.reminders = role.reminders.filter(reminderToken1 => reminderToken1 !== reminderToken);
+                        reminderArray = reminderArray.filter(reminderToken1 => reminderToken1 !== reminderToken);
                         saveLocalStorage();
-                        showReminderTokens();
+                        displayReminders();
                     });
                 }
                 reminderTokenList.append(div);
@@ -497,6 +509,7 @@ document.addEventListener("DOMContentLoaded", function () {
             howToRunChangeButton.style.display = "none";
             jinxEditDiv.style.display = "none";
             editReminderTokenDiv.style.display = "none";
+            editGlobalReminderTokenDiv.style.display = "none";
             specialEditDiv.style.display = "none";
             scriptEditButton.style.display = "none";
             scriptEditInput.style.display = "none";

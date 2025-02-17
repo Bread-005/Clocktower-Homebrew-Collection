@@ -2,6 +2,14 @@ import {copyJsonString, roleWasEdited, showCopyPopup, allRoles, allTags} from ".
 
 document.addEventListener("DOMContentLoaded", function () {
 
+    let total = 0;
+    for (const item in localStorage) {
+        if (localStorage.hasOwnProperty(item)) {
+            total += ((localStorage[item].length + item.length) * 2);
+        }
+    }
+    console.log(`Total localStorage usage: ${(total / 1024).toFixed(2)} KB`);
+
     const storageString = "websiteStorage1";
 
     if (!localStorage.getItem(storageString)) {
@@ -279,8 +287,11 @@ document.addEventListener("DOMContentLoaded", function () {
         if (characterTypeSelection.value !== "All") {
             roles = roles.filter(role => role.characterType === characterTypeSelection.value);
         }
-        if (tagFilterSelection.value !== "None") {
+        if (tagFilterSelection.value !== "None" && tagFilterSelection.value !== "No Tags") {
             roles = roles.filter(role => role.tags.includes(tagFilterSelection.value));
+        }
+        if (tagFilterSelection.value === "No Tags") {
+            roles = roles.filter(role => role.tags.length === 0);
         }
         if (onlyMyFavoritesCheckBox.checked) {
             roles = roles.filter(role => role.isFavorite);
@@ -324,6 +335,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 howToRun: "",
                 jinxes: [],
                 reminders: [],
+                remindersGlobal: [],
                 special: [],
                 script: "",
                 comments: [],
@@ -357,7 +369,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const scripts = ["All"];
         for (const role of websiteStorage.roleIdeas) {
-            if (!scripts.includes(role.script) && role.script !== "") {
+            if (!scripts.includes(role.script) && role.script) {
                 scripts.push(role.script);
             }
         }
@@ -453,7 +465,7 @@ document.addEventListener("DOMContentLoaded", function () {
             roleFilter.append(roleSearch);
             document.querySelector(".character-type-selection-div").style.marginTop = "10px";
             roleFilter.append(document.querySelector(".character-type-selection-div"));
-            roleFilter.append(document.getElementById("script-filter-selection-div"));
+            roleFilter.append(scriptFilterSelection);
             roleFilter.append(document.querySelector(".tag-div"));
             roleFilter.append(document.querySelector(".only-my-favorites-div"));
             roleFilter.append(clearSearchesButton);
@@ -463,7 +475,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function setupTagFilterSelection() {
         tagFilterSelection.innerText = "";
-        const modifiedAllTags = ["None"].concat(allTags);
+        const modifiedAllTags = ["None"].concat(allTags).concat("No Tags");
         for (const tag of modifiedAllTags) {
             const option = document.createElement("option");
             option.innerHTML = tag;
@@ -526,6 +538,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (Array.isArray(role.rating)) role.rating = 0;
             if (role.special === undefined) role.special = [];
             if (role.reminders === undefined) role.reminders = [];
+            if (role.remindersGlobal === undefined) role.remindersGlobal = [];
             if (role.lastEdited === undefined) role.lastEdited = new Date(role.createdAt);
             if (role.otherImage === undefined) role.otherImage = "";
 
@@ -600,6 +613,7 @@ document.addEventListener("DOMContentLoaded", function () {
             jinx.id = undefined;
         }
         if (role.reminders === undefined) role.reminders = [];
+        if (role.remindersGlobal === undefined) role.remindersGlobal = [];
         if (role.special === undefined) role.special = [];
         for (const special of role.special) {
             if (special.time === undefined) {
@@ -628,7 +642,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return role.ability.toLowerCase().includes(string.toLowerCase());
         }
 
-        if (has("drunk") || has("poison") || has("false info")) {
+        if (has("drunk") || has("poison") || has("false info") || has("register")) {
             tags.push("Misinformation");
         }
         if (has("safe") || has("cannot die") || has("can´t die")) {
@@ -649,7 +663,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (has("nominat") || has("vot") || has("execut") || has("nominee")) {
             tags.push("Nomination Phase");
         }
-        if (has("visit") || has("Storyteller") && (!has("believe") && !has("think")) || has("privately")) {
+        if (has("visit") || has("Storyteller") && !has("believe") && !has("think") || has("privately")) {
             tags.push("ST Consult");
         }
         if (has("When you die") || has("If you die")) {
@@ -664,7 +678,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (has("public")) {
             tags.push("Public");
         }
-        if (has("neighbour") || has("neighbor") || has("step") || has("closest")) {
+        if (has("neighbour") || has("neighbor") || has("step") || has("close") || has("near")) {
             tags.push("Seating Order");
         }
         return tags;

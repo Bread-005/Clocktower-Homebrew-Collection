@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         icon.setAttribute("class", "fa-solid fa-pen fa-pen-to-square");
 
                         for (const role1 of websiteStorage.roleIdeas) {
-                            if (role.name === role1.name) {
+                            if (role.name === role1.name && role.ability === role1.ability) {
                                 if (firstNightOrderDisplayDiv.contains(div)) {
                                     role1.firstNight = Number(input.value);
                                     roleNameAndNumber.textContent = role1.name + ": " + role1.firstNight;

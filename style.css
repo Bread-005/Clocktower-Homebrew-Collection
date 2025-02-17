@@ -425,14 +425,14 @@ h1, h2, h3 {
                 margin-bottom: 0.5rem;
             }
 
-            .edit-reminder-token {
+            .edit-reminder-token, .edit-global-reminder-token {
                 display: none;
                 justify-content: center;
                 align-items: center;
                 flex-direction: column;
             }
 
-            .reminder-token-list {
+            .reminder-token-list, .global-reminder-token-list {
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -456,6 +456,7 @@ h1, h2, h3 {
                 align-items: center;
                 flex-direction: column;
                 max-width: 800px;
+                margin-top: 0.5rem;
 
                 input {
                     transform: scale(1.5);

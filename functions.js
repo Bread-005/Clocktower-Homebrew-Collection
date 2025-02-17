@@ -33,6 +33,9 @@ function copyJsonString(role) {
     if (role.reminders.length > 0) {
         jsonRole.reminders = role.reminders;
     }
+    if (role.remindersGlobal.length > 0) {
+        jsonRole.remindersGlobal = role.remindersGlobal;
+    }
     if (role.ability.includes("[") && role.ability.includes("]") || role.tags.includes("Setup")) {
         jsonRole.setup = true;
     }
