@@ -59,6 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const clearSearchesButton = document.getElementById("clear-searches-button");
     const homebrewRolesDisplay = document.getElementById("homebrewroles");
     const roleIdeaPageSelection = document.querySelector(".role-idea-page-selection");
+    const scriptDownloadButton = document.getElementById("script-download-button");
 
     mobileSupportSetup();
     addRole();
@@ -204,6 +205,9 @@ document.addEventListener("DOMContentLoaded", function () {
             websiteStorage.user.roleSearch = roleSearch.value;
             websiteStorage.user.characterType = characterTypeSelection.value;
             websiteStorage.user.scriptFilter = scriptFilterSelection.value;
+            if (filter === scriptFilterSelection && scriptFilterSelection.value !== "All") {
+                scriptDownloadButton.textContent = "Download " + scriptFilterSelection.value;
+            }
             websiteStorage.user.tagFilter = tagFilterSelection.value;
             websiteStorage.user.onlyMyFavorites = onlyMyFavoritesCheckBox.checked;
             websiteStorage.user.sorting = sortingDropDownMenu.value;
@@ -391,6 +395,7 @@ document.addEventListener("DOMContentLoaded", function () {
         onlyMyFavoritesCheckBox.checked = websiteStorage.user.onlyMyFavorites;
         scriptFilterSelection.value = websiteStorage.user.scriptFilter;
         tagFilterSelection.value = websiteStorage.user.tagFilter;
+        scriptDownloadButton.textContent = "Download " + websiteStorage.user.scriptFilter;
     }
 
     function saveLocalStorage() {
@@ -438,7 +443,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             for (const object of array) {
                 if (object.id === "_meta") {
-                    script = object.name;
+                    script = object.name.split(" v")[0];
+                    break;
                 }
             }
 
@@ -458,6 +464,36 @@ document.addEventListener("DOMContentLoaded", function () {
                 addRoleViaJson(object);
             }
         });
+    });
+
+    scriptDownloadButton.addEventListener("click", function (event) {
+        event.preventDefault();
+
+        if (scriptFilterSelection.value === "All") return;
+
+        let content = [];
+        const script = scriptDownloadButton.textContent.replace("Download ", "");
+
+        const meta = {
+            id: "_meta",
+            name: script
+        }
+
+        content.push(meta);
+        const roles = filterRoles(websiteStorage.roleIdeas);
+
+        if (roles.length === 0) return;
+
+        for (const role of roles) {
+            content.push(copyJsonString(role));
+        }
+
+        const dataUrl = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(content, null, 4));
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        link.download = script + ".json";
+
+        link.click();
     });
 
     function mobileSupportSetup() {

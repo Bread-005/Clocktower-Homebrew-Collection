@@ -67,6 +67,7 @@ function copyJsonString(role) {
     }
     const jsonRoleObject = JSON.stringify(jsonRole, null, 4);
     navigator.clipboard.writeText(jsonRoleObject).then();
+    return jsonRole;
 }
 
 function showCopyPopup(element) {

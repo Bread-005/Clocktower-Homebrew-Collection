@@ -263,7 +263,7 @@ h1, h2, h3 {
         background-color: lightskyblue;
     }
 
-    .night-order-link {
+    .night-order-link, .script-download {
         display: flex;
         justify-content: center;
         align-items: center;
