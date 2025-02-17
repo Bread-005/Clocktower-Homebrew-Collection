@@ -29,6 +29,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const otherNightReminderInput = document.getElementById("other-night-reminder-input");
     const editReminderTokenDiv = document.querySelector(".edit-reminder-token");
     const editGlobalReminderTokenDiv = document.querySelector(".edit-global-reminder-token");
+    const reminderTokenAddButton = document.getElementById("reminder-token-add-button");
+    const globalReminderTokenAddButton = document.getElementById("global-reminder-token-add-button");
+    const reminderTokenList = document.querySelector(".reminder-token-list");
     const globalReminderTokenList = document.querySelector(".global-reminder-token-list");
     const jinxRoleInput = document.getElementById("jinx-role-input");
     const jinxTextInput = document.getElementById("jinx-text-input");
@@ -81,8 +84,8 @@ document.addEventListener("DOMContentLoaded", function () {
         fillFirstNightInfoTextArea();
         fillOtherNightInfoTextArea();
         displayReminders();
-        editReminderTokens(document.getElementById("reminder-token-add-button"), document.getElementById("reminder-token-input"), role.reminders);
-        editReminderTokens(document.getElementById("global-reminder-token-add-button"), document.getElementById("global-reminder-token-input"), role.remindersGlobal);
+        editReminderTokens(reminderTokenAddButton, document.getElementById("reminder-token-input"), role.reminders);
+        editReminderTokens(globalReminderTokenAddButton, document.getElementById("global-reminder-token-input"), role.remindersGlobal);
         showJinxes();
         editJinxes();
         showSpecial();
@@ -451,12 +454,13 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
-        function editReminderTokens(reminderTokenAddButton, reminderTokenInput, reminderArray) {
-            reminderTokenAddButton.addEventListener("click", function () {
+        function editReminderTokens(pReminderTokenAddButton, reminderTokenInput) {
+            pReminderTokenAddButton.addEventListener("click", function () {
                 if (reminderTokenInput.value === "") {
                     return;
                 }
-                reminderArray.push(reminderTokenInput.value);
+                if (pReminderTokenAddButton === reminderTokenAddButton) role.reminders.push(reminderTokenInput.value);
+                if (pReminderTokenAddButton === globalReminderTokenAddButton) role.remindersGlobal.push(reminderTokenInput.value);
                 saveLocalStorage();
                 reminderTokenInput.value = "";
                 displayReminders();
@@ -464,17 +468,17 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function displayReminders() {
-            showReminderTokens(document.querySelector(".reminder-token-list"), role.reminders);
+            showReminderTokens(reminderTokenList, role.reminders);
             showReminderTokens(globalReminderTokenList, role.remindersGlobal);
         }
 
-        function showReminderTokens(reminderTokenList, reminderArray) {
-            reminderTokenList.textContent = "";
-            if (reminderTokenList === globalReminderTokenList) {
+        function showReminderTokens(pReminderTokenList, reminderArray) {
+            pReminderTokenList.textContent = "";
+            if (pReminderTokenList === globalReminderTokenList) {
                 const header = document.createElement("h3");
                 header.textContent = "Global";
                 header.style.marginBottom = "3px";
-                reminderTokenList.append(header);
+                pReminderTokenList.append(header);
             }
             for (const reminderToken of reminderArray) {
                 const div = document.createElement("div");
@@ -486,12 +490,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     deleteButton.append(deleteIcon);
                     div.append(deleteButton);
                     deleteButton.addEventListener("click", function () {
-                        reminderArray = reminderArray.filter(reminderToken1 => reminderToken1 !== reminderToken);
+                        if (pReminderTokenList === reminderTokenList) role.reminders = role.reminders.filter(reminderToken1 => reminderToken1 !== reminderToken);
+                        if (pReminderTokenList === globalReminderTokenList) role.remindersGlobal = role.remindersGlobal.filter(reminderToken1 => reminderToken1 !== reminderToken);
                         saveLocalStorage();
                         displayReminders();
                     });
                 }
-                reminderTokenList.append(div);
+                pReminderTokenList.append(div);
             }
         }
 

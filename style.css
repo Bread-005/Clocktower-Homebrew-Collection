@@ -430,6 +430,7 @@ h1, h2, h3 {
                 justify-content: center;
                 align-items: center;
                 flex-direction: column;
+                margin-top: 1rem;
             }
 
             .reminder-token-list, .global-reminder-token-list {
