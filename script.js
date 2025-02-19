@@ -315,8 +315,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function addRole() {
-        document.getElementById("js-add-role").addEventListener("click", function (event) {
-            event.preventDefault();
+        document.getElementById("js-add-role").addEventListener("click", function () {
             const roleNameInput = document.getElementById("role-name");
             const characterTypeInput = document.getElementById("character-types");
             const abilityTextInput = document.getElementById("ability-text");
@@ -410,8 +409,7 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem(storageString, JSON.stringify(websiteStorage));
     }
 
-    document.getElementById("switch-role-creation").addEventListener("click", function (event) {
-        event.preventDefault();
+    document.getElementById("switch-role-creation").addEventListener("click", function () {
         roleCreationMode++;
         if (roleCreationMode === 3) roleCreationMode = 0;
 
@@ -420,9 +418,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelector(".script-upload-div").style.display = roleCreationMode === 2 ? "flex" : "none";
     });
 
-    jsonAddRoleButton.addEventListener("click", function (event) {
-        event.preventDefault();
-
+    jsonAddRoleButton.addEventListener("click", function () {
         let text = jsonInputTextarea.value.replaceAll('""', '"');
         if (text[0] === '"') text = text.substring(1);
         if (text[text.length - 1] === '"') text = text.substring(0, text.length - 1);
@@ -436,8 +432,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     document.getElementById("script-upload").addEventListener("change", function (event) {
-        event.preventDefault();
-
         const file = event.target.files[0];
         if (!file) return;
 
@@ -445,7 +439,6 @@ document.addEventListener("DOMContentLoaded", function () {
         reader.readAsText(file);
 
         reader.addEventListener("load", function (event) {
-            event.preventDefault();
             const array = JSON.parse(event.target.result.toString());
             let script = "";
 
@@ -474,8 +467,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    scriptDownloadButton.addEventListener("click", function (event) {
-        event.preventDefault();
+    scriptDownloadButton.addEventListener("click", function () {
 
         if (scriptFilterSelection.value === "All") return;
 
@@ -503,8 +495,7 @@ document.addEventListener("DOMContentLoaded", function () {
         link.click();
     });
 
-    localstorageDownloadButton.addEventListener("click", function (event) {
-        event.preventDefault();
+    localstorageDownloadButton.addEventListener("click", function () {
 
         const content = [];
 
@@ -539,6 +530,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 tempRole[attribute] = role[attribute];
             }
+            tempRole.id = tempRole.name.toLowerCase().replaceAll(" ", "_") + "_" + tempRole.script.toLowerCase().replaceAll(" ", "_");
             content.push(tempRole);
         }
 

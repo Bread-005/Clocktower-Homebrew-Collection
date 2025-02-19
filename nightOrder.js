@@ -148,9 +148,15 @@ document.addEventListener('DOMContentLoaded', function () {
                         for (const role1 of websiteStorage.roleIdeas) {
                             if (role.name === role1.name && role.ability === role1.ability) {
                                 if (firstNightOrderDisplayDiv.contains(div)) {
+                                    if (role1.firstNight !== Number.parseFloat(input.value)) {
+                                        role1.lastEdited = new Date();
+                                    }
                                     role1.firstNight = Number.parseFloat(input.value);
                                     roleNameAndNumber.textContent = role1.name + ": " + role1.firstNight;
                                 } else {
+                                    if (role1.otherNight !== Number.parseFloat(input.value)) {
+                                        role1.lastEdited = new Date();
+                                    }
                                     role1.otherNight = Number.parseFloat(input.value);
                                     roleNameAndNumber.textContent = role1.name + ": " + role1.otherNight;
                                 }

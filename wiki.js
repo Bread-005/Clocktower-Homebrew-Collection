@@ -189,8 +189,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function toggleEditMode() {
-            document.getElementById("edit-button").addEventListener("click", function (event) {
-                event.preventDefault();
+            document.getElementById("edit-button").addEventListener("click", function () {
                 inEditMode = !inEditMode;
 
                 if (inEditMode) {
@@ -240,15 +239,13 @@ document.addEventListener("DOMContentLoaded", function () {
         function changeImage() {
             uploadImageURL.value = role.image;
             uploadOtherImageURL.value = role.otherImage;
-            document.getElementById("upload-button").addEventListener("click", function (event) {
-                event.preventDefault();
+            document.getElementById("upload-button").addEventListener("click", function () {
                 role.image = uploadImageURL.value.replaceAll("\\", "");
                 wikiRoleImage.setAttribute("src", role.image);
                 uploadImageURL.value = role.image;
                 saveLocalStorage();
             });
-            document.getElementById("other-upload-button").addEventListener("click", function (event) {
-                event.preventDefault();
+            document.getElementById("other-upload-button").addEventListener("click", function () {
                 role.otherImage = uploadOtherImageURL.value.replaceAll("\\", "");
                 uploadOtherImageURL.value = role.otherImage;
                 saveLocalStorage();
@@ -302,8 +299,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function editNightOrder() {
-            document.getElementById("edit-night-order-button").addEventListener("click", function (event) {
-                event.preventDefault();
+            document.getElementById("edit-night-order-button").addEventListener("click", function () {
                 if (firstNightInput.value === "") {
                     firstNightInput.value = 0;
                 }
@@ -320,8 +316,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function addComments() {
-            addCommentButton.addEventListener("click", function (event) {
-                event.preventDefault();
+            addCommentButton.addEventListener("click", function () {
                 if (inputComment.value === "") {
                     return;
                 }
@@ -338,13 +333,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function deleteRoleListener() {
             deleteConfirmationText.textContent += " " + role.name + "?";
-            document.getElementById("delete-role-button").addEventListener("click", function (event) {
-                event.preventDefault();
+            document.getElementById("delete-role-button").addEventListener("click", function () {
                 deletePopupBackground.style.display = "flex";
             });
 
-            deleteConfirmationYesButton.addEventListener("click", function (event) {
-                event.preventDefault();
+            deleteConfirmationYesButton.addEventListener("click", function () {
                 for (let i = 0; i < websiteStorage.roleIdeas.length; i++) {
                     if (websiteStorage.roleIdeas[i].createdAt === role.createdAt) {
                         websiteStorage.archive.push(websiteStorage.roleIdeas[i]);
@@ -356,15 +349,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 window.location = "index.html";
             });
 
-            deleteConfirmationCancelButton.addEventListener("click", function (event) {
-                event.preventDefault();
+            deleteConfirmationCancelButton.addEventListener("click", function () {
                 deletePopupBackground.style.display = "none";
             });
         }
 
         function editHowToRun() {
-            howToRunChangeButton.addEventListener("click", function (event) {
-                event.preventDefault();
+            howToRunChangeButton.addEventListener("click", function () {
                 role.howToRun = howToRunInput.value;
                 howToRunText.textContent = role.howToRun;
                 saveLocalStorage();
@@ -372,8 +363,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function editMainRole() {
-            document.getElementById("submit-edit-role-button").addEventListener("click", function (event) {
-                event.preventDefault();
+            document.getElementById("submit-edit-role-button").addEventListener("click", function () {
                 if (editRoleNameInput.value === "" || editCharacterTypeInput.value === "" || editAbilityTextInput.value === "") {
                     return;
                 }
@@ -579,8 +569,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function editScript() {
-            scriptEditButton.addEventListener("click", function (event) {
-                event.preventDefault();
+            scriptEditButton.addEventListener("click", function () {
                 role.script = scriptEditInput.value;
                 scriptEditInput.value = "";
                 saveLocalStorage();
