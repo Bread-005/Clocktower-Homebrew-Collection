@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function () {
             roleImageAndText.setAttribute("class", "role-image-and-text");
 
             const roleImage = document.createElement("img");
-            roleImage.setAttribute("class", "clocktower-icon clocktower-icon-role-idea");
+            roleImage.setAttribute("class", "clocktower-icon");
             roleImage.setAttribute("src", "https://i.postimg.cc/qM09f8cD/placeholder-icon.png");
             roleImage.setAttribute("alt", role.name);
             if (role["image"]) {
@@ -164,6 +164,11 @@ document.addEventListener("DOMContentLoaded", function () {
             buttons.append(downloadJsonButton);
             roleDiv.append(buttons);
             homebrewRolesDisplay.append(roleDiv);
+
+            rateInput.addEventListener("input", function () {
+                rateIcon.setAttribute("class", "fa-sharp fa-star");
+                rateIcon.style.color = "black";
+            });
 
             rateButton.addEventListener("click", function () {
                 if (rateInput.value < 0) {
@@ -577,6 +582,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (role.remindersGlobal === undefined) role.remindersGlobal = [];
             if (role.lastEdited === undefined) role.lastEdited = new Date(role.createdAt);
             if (role.otherImage === undefined) role.otherImage = "";
+            if (role.tags === undefined) role.tags = [];
 
             role.tags = role.tags.filter(tag => tag.toString() !== "Does Not Wake" && tag.toString() !== "Noms Votes Exes");
             role.image = role.image.replaceAll("\\", "");

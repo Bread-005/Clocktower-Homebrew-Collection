@@ -87,11 +87,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
             let roleNameAndNumber = document.createElement("div");
             roleNameAndNumber.textContent = role.name + ": " + role.number;
+            roleNameAndNumber.style.marginRight = "0.25rem";
 
             div.append(img);
             div.append(roleNameAndNumber);
             if (allRoles.includes(role.name) || role.name === "Minion info" || role.name === "Demon info") {
-                div.setAttribute("class", "night-order-img-text-div")
+                div.setAttribute("class", "night-order-img-text-div");
             } else {
                 div.append(button);
 
@@ -114,6 +115,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 const editNightOrder = document.createElement("div");
                 const input = document.createElement("input");
+                input.type = "number";
+                input.style.height = "1.5rem";
                 input.value = role.number;
                 input.setAttribute("id", role.name + "night-order-edit-input");
                 const label = document.createElement("label");
@@ -123,7 +126,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 editNightOrder.append(input);
                 input.style.width = "35px";
 
+                input.addEventListener("keydown", function (event) {
+                    if (event.key.toLowerCase() === "e") {
+                        event.preventDefault();
+                    }
+                });
+
                 button.addEventListener("click", function () {
+
+                    if (input.value === "") {
+                        return;
+                    }
 
                     if (icon.className.includes("fa-pen")) {
                         roleNameAndNumber.replaceWith(editNightOrder);
@@ -135,10 +148,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         for (const role1 of websiteStorage.roleIdeas) {
                             if (role.name === role1.name && role.ability === role1.ability) {
                                 if (firstNightOrderDisplayDiv.contains(div)) {
-                                    role1.firstNight = Number(input.value);
+                                    role1.firstNight = Number.parseFloat(input.value);
                                     roleNameAndNumber.textContent = role1.name + ": " + role1.firstNight;
                                 } else {
-                                    role1.otherNight = Number(input.value);
+                                    role1.otherNight = Number.parseFloat(input.value);
                                     roleNameAndNumber.textContent = role1.name + ": " + role1.otherNight;
                                 }
                                 saveLocalStorage();
