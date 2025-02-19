@@ -530,7 +530,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 tempRole[attribute] = role[attribute];
             }
-            tempRole.id = tempRole.name.toLowerCase().replaceAll(" ", "_") + "_" + tempRole.script.toLowerCase().replaceAll(" ", "_");
+            tempRole.id = tempRole.name.toLowerCase().replaceAll(" ", "_");
+            if (tempRole.script) tempRole.id += "_" + tempRole.script.toLowerCase().replaceAll(" ", "_");
             content.push(tempRole);
         }
 
