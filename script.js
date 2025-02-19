@@ -60,6 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const homebrewRolesDisplay = document.getElementById("homebrewroles");
     const roleIdeaPageSelection = document.querySelector(".role-idea-page-selection");
     const scriptDownloadButton = document.getElementById("script-download-button");
+    const localstorageDownloadButton = document.getElementById("localstorage-download-button");
 
     mobileSupportSetup();
     addRole();
@@ -67,6 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
     setupTagFilterSelection();
     displayRoles();
     clearSearches();
+    displayMisc();
 
     let roleCreationMode = 0;
 
@@ -218,6 +220,7 @@ document.addEventListener("DOMContentLoaded", function () {
             websiteStorage.user.sorting = sortingDropDownMenu.value;
             saveLocalStorage();
             displayRoles();
+            displayMisc();
         });
     }
 
@@ -348,7 +351,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 special: [],
                 script: "",
                 comments: [],
-                lastEdited: Date.now().toString()
+                lastEdited: new Date()
             }
             websiteStorage.roleIdeas.push(role);
             saveLocalStorage();
@@ -371,6 +374,7 @@ document.addEventListener("DOMContentLoaded", function () {
             websiteStorage.user.scriptFilter = "All";
             saveLocalStorage();
             displayRoles();
+            displayMisc();
         });
     }
 
@@ -400,7 +404,6 @@ document.addEventListener("DOMContentLoaded", function () {
         onlyMyFavoritesCheckBox.checked = websiteStorage.user.onlyMyFavorites;
         scriptFilterSelection.value = websiteStorage.user.scriptFilter;
         tagFilterSelection.value = websiteStorage.user.tagFilter;
-        scriptDownloadButton.textContent = "Download " + websiteStorage.user.scriptFilter;
     }
 
     function saveLocalStorage() {
@@ -465,7 +468,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 }
                 if (roleExists) continue;
-                object.script = script;
+                if (script) object.script = script;
                 addRoleViaJson(object);
             }
         });
@@ -497,7 +500,54 @@ document.addEventListener("DOMContentLoaded", function () {
         const link = document.createElement("a");
         link.href = dataUrl;
         link.download = script + ".json";
+        link.click();
+    });
 
+    localstorageDownloadButton.addEventListener("click", function (event) {
+        event.preventDefault();
+
+        const content = [];
+
+        for (const role of websiteStorage.roleIdeas) {
+            let tempRole = {};
+
+            for (let attribute in role) {
+                if (!role[attribute]) {
+                    continue;
+                }
+                if (Array.isArray(role[attribute]) && role[attribute].length === 0 && attribute !== "tags") {
+                    continue;
+                }
+                if (attribute === "rating") {
+                    continue;
+                }
+                if (attribute === "characterType") {
+                    tempRole.team = role[attribute];
+                    continue;
+                }
+                if (attribute === "jinxes") {
+                    const jinxes = [];
+
+                    for (const jinx of role.jinxes) {
+                        jinxes.push({
+                            id: jinx.jinxedRole.toLowerCase().replace(" ", "_"),
+                            reason: jinx.reason
+                        });
+                    }
+                    tempRole.jinxes = jinxes;
+                    continue;
+                }
+                tempRole[attribute] = role[attribute];
+            }
+            content.push(tempRole);
+        }
+
+        const dataUrl = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(content, null, 2));
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        const today = new Date();
+        const completeDate = "(" + (today.getDate() < 10 ? "0" : "") + today.getDate() + "." + (today.getMonth() < 9 ? "0" : "") + (today.getMonth() + 1) + "." + today.getUTCFullYear() + " - " + today.getHours() + "." + today.getMinutes() + " Uhr)";
+        link.download = "Clocktower Homebrew Collection " + completeDate + ".json";
         link.click();
     });
 
@@ -580,7 +630,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (role.special === undefined) role.special = [];
             if (role.reminders === undefined) role.reminders = [];
             if (role.remindersGlobal === undefined) role.remindersGlobal = [];
-            if (role.lastEdited === undefined) role.lastEdited = new Date(role.createdAt);
+            if (!role.lastEdited) role.lastEdited = new Date(role.createdAt);
             if (role.otherImage === undefined) role.otherImage = "";
             if (role.tags === undefined) role.tags = [];
 
@@ -667,10 +717,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         role.rating = 0;
         role.isFavorite = false;
-        role.tags = autoAddTags(role);
+        if (!role.tags) {
+            role.tags = autoAddTags(role);
+        }
         role.howToRun = "";
         if (!role.script) role.script = "";
+        role.script = role.script.split(" v")[0];
         role.comments = [];
+        role.lastEdited = new Date();
         websiteStorage.roleIdeas.push(role);
         saveLocalStorage();
         jsonInputTextarea.value = "";
@@ -724,5 +778,14 @@ document.addEventListener("DOMContentLoaded", function () {
             tags.push("Seating Order");
         }
         return tags;
+    }
+
+    function displayMisc() {
+        scriptDownloadButton.textContent = "Download " + websiteStorage.user.scriptFilter;
+        if (scriptFilterSelection.value === "All") {
+            scriptDownloadButton.style.display = "none";
+        } else {
+            scriptDownloadButton.style.display = "flex";
+        }
     }
 });

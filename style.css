@@ -273,12 +273,18 @@ input[type="number"] {
         background-color: lightskyblue;
     }
 
-    .night-order-link, .script-download {
+    .night-order-link {
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
         margin-top: 2rem;
+    }
+
+    .download-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
     }
 }
 
@@ -388,6 +394,11 @@ input[type="number"] {
             justify-content: center;
             align-items: center;
             margin-top: 20px;
+
+            input {
+                width: 3rem;
+                height: 1.5rem;
+            }
         }
 
         .night-order-info-text {
@@ -519,6 +530,17 @@ input[type="number"] {
             justify-content: center;
             align-items: center;
             flex-direction: column;
+
+            input {
+                width: 4rem;
+                height: 1.25rem;
+                margin-top: 0.5rem;
+            }
+
+            select {
+                height: 1.75rem;
+                margin-top: 0.5rem;
+            }
 
             .special-edit-selections {
                 display: flex;
