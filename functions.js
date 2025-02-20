@@ -169,4 +169,14 @@ const allRoles = Townsfolks + Outsiders + Minions + Demons + Travellers + Fabled
 const allTags = ["Misinformation", "Extra Death", "Protection", "Wincondition", "Character Changing", "Setup",
     "Madness", "Nomination Phase", "ST Consult", "When You Die", "Resurrection", "Alignment Switching", "Public", "Seating Order"];
 
-export {copyJsonString, showCopyPopup, roleWasEdited, firstNightList, otherNightList, allRoles, allTags}
+function getTeamColor(team) {
+    if (team.toLowerCase() === "townsfolk") return "cornflowerblue";
+    if (team.toLowerCase() === "outsider") return "cyan";
+    if (team.toLowerCase() === "minion") return "orange";
+    if (team.toLowerCase() === "demon") return "red";
+    if (team.toLowerCase() === "traveller") return "purple";
+    if (team.toLowerCase() === "fabled") return "gold";
+    return "";
+}
+
+export {copyJsonString, showCopyPopup, roleWasEdited, firstNightList, otherNightList, allRoles, allTags, getTeamColor}

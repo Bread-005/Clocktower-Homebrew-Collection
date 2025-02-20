@@ -1,4 +1,4 @@
-import {copyJsonString, roleWasEdited, showCopyPopup, allRoles, allTags} from "./functions.js";
+import {copyJsonString, roleWasEdited, showCopyPopup, allRoles, allTags, getTeamColor} from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -85,12 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const roleDiv = document.createElement("div");
             roleDiv.setAttribute("class", "role-div");
 
-            if (role.characterType === "Townsfolk") roleDiv.style.background = "cornflowerblue";
-            if (role.characterType === "Outsider") roleDiv.style.background = "lightblue";
-            if (role.characterType === "Minion") roleDiv.style.background = "orange";
-            if (role.characterType === "Demon") roleDiv.style.background = "red";
-            if (role.characterType === "Traveller") roleDiv.style.background = "purple";
-            if (role.characterType === "Fabled") roleDiv.style.background = "gold";
+            roleDiv.style.background = getTeamColor(role.characterType);
 
             const roleImageAndText = document.createElement("div");
             roleImageAndText.setAttribute("class", "role-image-and-text");
@@ -450,7 +445,11 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             for (const object of array) {
-                if (!object.id || !object.name || !object.ability || !object.team) continue;
+                if (!object.name || !object.ability || !object.team) continue;
+
+                if (!object.id) {
+                    object.id = object.name.toLowerCase().replaceAll(" ", "_");
+                }
 
                 let roleExists = false;
 
@@ -460,7 +459,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         break;
                     }
                 }
-                if (roleExists) continue;
+                if (roleExists) {
+                    roleExistsMessage(object);
+                    continue;
+                }
                 if (script) object.script = script;
                 addRoleViaJson(object);
             }
@@ -516,12 +518,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     tempRole.team = role[attribute];
                     continue;
                 }
-                if (attribute === "jinxes") {
+                if (attribute === "jinxes" && Array.isArray(role.jinxes)) {
                     const jinxes = [];
 
                     for (const jinx of role.jinxes) {
                         jinxes.push({
-                            id: jinx.jinxedRole.toLowerCase().replace(" ", "_"),
+                            id: jinx.jinxedRole.toLowerCase().replaceAll(" ", "_"),
                             reason: jinx.reason
                         });
                     }
@@ -639,6 +641,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function addRoleViaJson(role) {
         for (const role1 of websiteStorage.roleIdeas) {
             if (role1.name === role.name && role1.characterType.toLowerCase() === role.team.toLowerCase()) {
+                roleExistsMessage(role, true);
                 return;
             }
         }
@@ -779,6 +782,15 @@ document.addEventListener("DOMContentLoaded", function () {
             scriptDownloadButton.style.display = "none";
         } else {
             scriptDownloadButton.style.display = "flex";
+        }
+    }
+
+    function roleExistsMessage(role, showAlert = false) {
+        console.log("Role already exists! \n%c" + role.name + " (" + role.team[0].toUpperCase() + role.team.substring(1) + "): %c" + role.ability,
+            "color: " + getTeamColor(role.team), "color: white");
+
+        if (showAlert) {
+            alert("Role already exists! \n" + role.name + " (" + role.team[0].toUpperCase() + role.team.substring(1) + "): " + role.ability + " already exists!");
         }
     }
 });
