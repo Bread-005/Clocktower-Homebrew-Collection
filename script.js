@@ -547,15 +547,24 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function mobileSupportSetup() {
-        if (window.innerWidth <= 400) {
-            roleFilter.append(roleSearch);
-            document.querySelector(".character-type-selection-div").style.marginTop = "10px";
-            roleFilter.append(document.querySelector(".character-type-selection-div"));
-            roleFilter.append(scriptFilterSelection);
-            roleFilter.append(document.querySelector(".tag-div"));
-            roleFilter.append(document.querySelector(".only-my-favorites-div"));
-            roleFilter.append(clearSearchesButton);
-            roleFilter.append(document.querySelector(".sorting-role-display"));
+
+        setup();
+
+        window.addEventListener("resize", function () {
+            setup();
+        });
+
+        function setup() {
+            if (window.innerWidth <= 400) {
+                roleFilter.append(roleSearch);
+                document.querySelector(".character-type-selection-div").style.marginTop = "10px";
+                roleFilter.append(document.querySelector(".character-type-selection-div"));
+                roleFilter.append(document.getElementById("script-filter-selection-div"));
+                roleFilter.append(document.querySelector(".tag-div"));
+                roleFilter.append(document.querySelector(".only-my-favorites-div"));
+                roleFilter.append(clearSearchesButton);
+                roleFilter.append(document.querySelector(".sorting-role-display"));
+            }
         }
     }
 

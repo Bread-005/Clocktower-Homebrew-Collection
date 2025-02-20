@@ -634,6 +634,13 @@ input[type="number"] {
     align-items: center;
     flex-direction: column;
     margin-top: 2rem;
+    position: relative;
+
+    .header {
+        width: 100%;
+        position: fixed;
+        top: 1rem;
+    }
 
     .night-order-display {
         display: flex;
