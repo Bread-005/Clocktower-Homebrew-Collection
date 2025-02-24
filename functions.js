@@ -5,7 +5,7 @@ function copyJsonString(role) {
         ability: role.ability,
         team: role.characterType.toLowerCase()
     }
-    if (role.script !== "") {
+    if (role.script) {
         jsonRole.id += "_" + role.script.toLowerCase().replaceAll(" ", "_");
     }
     if (role.image && role.otherImage) {
@@ -164,7 +164,7 @@ const Fabled = [
     "Angel", "Bootlegger", "Buddhist", "Djinn", "Doomsayer", "Duchess", "Ferryman", "Fibbin", "Fiddler", "Gardener",
     "Hells Librarian", "Revolutionary", "Sentinel", "Spirit of Ivory", "Storm Catcher", "Toymaker"
 ];
-const allRoles = Townsfolks + Outsiders + Minions + Demons + Travellers + Fabled;
+const allRoles = Townsfolks.concat(Outsiders).concat(Minions).concat(Demons).concat(Travellers).concat(Fabled);
 
 const allTags = ["Misinformation", "Extra Death", "Protection", "Wincondition", "Character Changing", "Setup",
     "Madness", "Nomination Phase", "ST Consult", "When You Die", "Resurrection", "Alignment Switching", "Public", "Seating Order"];
@@ -179,4 +179,25 @@ function getTeamColor(team) {
     return "";
 }
 
-export {copyJsonString, showCopyPopup, roleWasEdited, firstNightList, otherNightList, allRoles, allTags, getTeamColor}
+const characterTypes = ["Townsfolk", "Outsider", "Minion", "Demon", "Traveller", "Fabled"];
+
+const StevenApprovedOrder = ["You start knowing", "Each night,", "Each night*,", "Each day", "Once per game", " "];
+
+export {
+    copyJsonString,
+    showCopyPopup,
+    roleWasEdited,
+    firstNightList,
+    otherNightList,
+    allRoles,
+    allTags,
+    getTeamColor,
+    Townsfolks,
+    Outsiders,
+    Minions,
+    Demons,
+    Travellers,
+    Fabled,
+    characterTypes,
+    StevenApprovedOrder
+}

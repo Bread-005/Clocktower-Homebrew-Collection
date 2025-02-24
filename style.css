@@ -263,7 +263,7 @@ input[type="number"] {
         }
     }
 
-    .clocktower-script-tool-link {
+    .clocktower-script-tool-link, .script-tool {
         display: flex;
         justify-content: center;
         margin-top: 2rem;
@@ -680,5 +680,104 @@ input[type="number"] {
             padding: 5px;
             border-radius: 15px;
         }
+    }
+}
+
+.script-tool {
+
+    .main-content {
+        margin-top: 2rem;
+        display: flex;
+        align-items: flex-start;
+        position: relative;
+    }
+
+    .role-selection {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+
+        .role-selection-section {
+
+            > * {
+                margin-top: 3rem;
+
+                h2 {
+                    margin-bottom: 0.2rem;
+                }
+
+                .role-div {
+                    position: relative;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    height: 2rem;
+                    margin: 0.75rem 0;
+
+                    input {
+                        transform: scale(1.5);
+                    }
+
+                    .ability-text {
+                        display: none;
+                        justify-content: center;
+                        align-items: center;
+                        position: absolute;
+                        left: 12rem;
+                        background: beige;
+                        color: black;
+                        width: 20rem;
+                    }
+                }
+            }
+        }
+
+        .clocktower-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            background: white;
+        }
+    }
+
+    .display {
+        margin-left: 3rem;
+
+        > * {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .role {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0.2rem;
+            width: 50rem;
+            gap: 1rem;
+
+            .img-and-name {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 0.5rem;
+
+                .image {
+                    width: 30px;
+                    height: 30px;
+                    background: white;
+                    border-radius: 25px;
+                }
+            }
+        }
+    }
+
+    .buttons {
+        position: fixed;
+        left: 85%;
+        width: 100%;
     }
 }
