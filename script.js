@@ -228,7 +228,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
         if (input.includes("Alphabet")) {
-            roles.sort((a, b) => sortAlphabetically(a["name"], b["name"]));
+            roles.sort((a, b) => a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1);
             if (input === "Alphabet Z-A") {
                 roles.reverse();
             }
@@ -242,16 +242,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (input === "Last Edited") {
             roles.sort((a, b) => Date.parse(b.lastEdited) - Date.parse(a.lastEdited));
         }
-    }
-
-    function sortAlphabetically(a, b) {
-        if (a.toUpperCase() < b.toUpperCase()) {
-            return -1;
-        }
-        if (a.toUpperCase() > b.toUpperCase()) {
-            return 1;
-        }
-        return 0;
     }
 
     function showPages(array, pageArray) {

@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             div.append(img);
             div.append(roleNameAndNumber);
-            if (allRoles.includes(role.name) || role.name === "Minion info" || role.name === "Demon info") {
+            if (allRoles.map(role1 => role1.name).includes(role.name) || role.name === "Minion info" || role.name === "Demon info") {
                 div.setAttribute("class", "night-order-img-text-div");
             } else {
                 div.append(button);
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
             div.style.background = "lightskyblue";
             container.append(div);
 
-            if (!allRoles.includes(role.name)) {
+            if (!allRoles.map(role1 => role1.name).includes(role.name)) {
 
                 const editNightOrder = document.createElement("div");
                 const input = document.createElement("input");

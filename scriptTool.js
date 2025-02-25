@@ -1,10 +1,4 @@
 import {
-    Townsfolks,
-    Outsiders,
-    Minions,
-    Demons,
-    Travellers,
-    Fabled,
     allRoles,
     characterTypes,
     getTeamColor, copyJsonString,
@@ -21,22 +15,36 @@ document.addEventListener('DOMContentLoaded', function () {
         saveLocalStorage();
     }
 
+    const searchByNameInput = document.getElementById("search-by-name");
     const roleSelectionSection = document.querySelector(".role-selection-section");
+    const scriptNameDisplay = document.getElementById("script-name-display");
+    const scriptAuthorDisplay = document.getElementById("script-author-display");
+    const scriptNameInput = document.getElementById("script-name-input");
+    const scriptAuthorInput = document.getElementById("script-author-input");
     const arrayOfArrays = [[], [], [], [], [], []];
 
     createRoleSelection();
     displaySelectionArea();
     displayScriptRoles();
 
+    searchByNameInput.addEventListener("input", function () {
+        displaySelectionArea();
+    });
+
+    document.getElementById("script-save-namings-button").addEventListener("click", function () {
+        scriptNameDisplay.textContent = scriptNameInput.value;
+        scriptAuthorDisplay.textContent = scriptAuthorInput.value;
+    });
+
     document.getElementById("script-tool-download-json-button").addEventListener("click", function () {
         const script = [];
-        script.push({id: "_meta", name: "TestName", author: "TestAuthor"});
+        script.push({id: "_meta", name: scriptNameDisplay.textContent, author: scriptAuthorDisplay.textContent});
 
         for (const team of characterTypes) {
             for (const role of websiteStorage.scriptToolRoles) {
                 if (role.characterType === team) {
-                    if (allRoles.includes(role.name)) {
-                        script.push(role.name.replaceAll(" ", "_"));
+                    if (allRoles.map(role1 => role1.name).includes(role.name)) {
+                        script.push(role.name.toLowerCase().replaceAll(" ", "_"));
                         continue;
                     }
                     script.push(copyJsonString(role));
@@ -45,6 +53,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         console.log(script);
+
+        const dataUrl = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(script, null, 4));
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        link.download = scriptNameDisplay.textContent + ".json";
+        link.click();
     });
 
     function displayScriptRoles() {
@@ -78,47 +92,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function createRoleSelection() {
         for (const role of allRoles) {
-            if (Townsfolks.includes(role)) {
-                arrayOfArrays[0].push({
-                    name: role,
-                    characterType: "Townsfolk",
-                    image: "https://wiki.bloodontheclocktower.com/Special:FilePath/icon_" + role.toLowerCase().replaceAll(" ", "") + ".png"
-                });
-            }
-            if (Outsiders.includes(role)) {
-                arrayOfArrays[1].push({
-                    name: role,
-                    characterType: "Outsider",
-                    image: "https://wiki.bloodontheclocktower.com/Special:FilePath/icon_" + role.toLowerCase().replaceAll(" ", "") + ".png"
-                });
-            }
-            if (Minions.includes(role)) {
-                arrayOfArrays[2].push({
-                    name: role,
-                    characterType: "Minion",
-                    image: "https://wiki.bloodontheclocktower.com/Special:FilePath/icon_" + role.toLowerCase().replaceAll(" ", "") + ".png"
-                });
-            }
-            if (Demons.includes(role)) {
-                arrayOfArrays[3].push({
-                    name: role,
-                    characterType: "Demon",
-                    image: "https://wiki.bloodontheclocktower.com/Special:FilePath/icon_" + role.toLowerCase().replaceAll(" ", "") + ".png"
-                });
-            }
-            if (Travellers.includes(role)) {
-                arrayOfArrays[4].push({
-                    name: role,
-                    characterType: "Traveller",
-                    image: "https://wiki.bloodontheclocktower.com/Special:FilePath/icon_" + role.toLowerCase().replaceAll(" ", "") + ".png"
-                });
-            }
-            if (Fabled.includes(role)) {
-                arrayOfArrays[5].push({
-                    name: role,
-                    characterType: "Fabled",
-                    image: "https://wiki.bloodontheclocktower.com/Special:FilePath/icon_" + role.toLowerCase().replaceAll(" ", "") + ".png"
-                });
+            for (let i = 0; i < characterTypes.length; i++) {
+                if (role.characterType === characterTypes[i]) {
+                    arrayOfArrays[i].push({
+                        name: role.name,
+                        characterType: role.characterType,
+                        ability: role.ability,
+                        image: "https://wiki.bloodontheclocktower.com/Special:FilePath/icon_" + role.name.toLowerCase().replaceAll(" ", "") + ".png"
+                    });
+                }
             }
         }
 
@@ -142,7 +124,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
         }
-        console.log(arrayOfArrays);
 
         for (const array of arrayOfArrays) {
             array.sort((a, b) => (a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1));
@@ -151,9 +132,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function displaySelectionArea() {
         for (let i = 0; i < arrayOfArrays.length; i++) {
+            document.querySelector(".group-" + characterTypes[i].toLowerCase()).textContent = "";
             const container = document.createElement("div");
 
             for (const role of arrayOfArrays[i]) {
+                if (searchByNameInput.value && !role.name.toLowerCase().startsWith(searchByNameInput.value.toLowerCase())) {
+                    continue;
+                }
+
                 const div = document.createElement("div");
                 const label = document.createElement("label");
                 const checkbox = document.createElement("input");
