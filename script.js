@@ -645,8 +645,8 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
-        for (const roleName of allRoles) {
-            if (roleName.toLowerCase().replaceAll("_", "").replaceAll(" ", "") ===
+        for (const role1 of allRoles) {
+            if (role1.name.toLowerCase().replaceAll("_", "").replaceAll(" ", "") ===
                 role.name.toLowerCase().replaceAll("_", "").replaceAll(" ", "")) {
                 return;
             }
