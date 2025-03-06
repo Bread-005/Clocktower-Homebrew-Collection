@@ -377,7 +377,47 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function editJinxes() {
             jinxAddButton.addEventListener("click", function () {
-                if (jinxRoleInput.value === "" || jinxTextInput.value === "") {
+                if (jinxTextInput.value === "") {
+                    return;
+                }
+                const tempJinxes = jinxTextInput.value.replace('"jinxes": ', "").replace('"jinxes":', "");
+
+                if (tempJinxes.includes('"id"') && tempJinxes.includes('"reason"') && Array.isArray(JSON.parse(tempJinxes))) {
+
+                    const jinxes = JSON.parse(tempJinxes);
+
+                    for (const jinx1 of jinxes) {
+                        if (jinx1.id && jinx1.reason) {
+                            const jinx = {
+                                jinxedRole: jinx1.id[0].toUpperCase(),
+                                reason: jinx1.reason,
+                                createdAt: Date.now().toString()
+                            }
+                            if (role.jinxes.map(jinx2 => jinx2.jinxedRole.toLowerCase()).includes(jinx1.id)) {
+                                continue;
+                            }
+                            for (let j = 1; j < jinx1.id.length; j++) {
+                                if (jinx1.id[j] === "_") {
+                                    jinx.jinxedRole += " ";
+                                    continue;
+                                }
+                                if (jinx1.id[j - 1] === "_") {
+                                    jinx.jinxedRole += jinx1.id[j].toUpperCase();
+                                    continue;
+                                }
+                                jinx.jinxedRole += jinx1.id[j];
+                            }
+                            role.jinxes.push(jinx);
+                        }
+                    }
+                    jinxRoleInput.value = "";
+                    jinxTextInput.value = "";
+                    saveLocalStorage();
+                    showJinxes();
+                    return;
+                }
+
+                if (!jinxRoleInput.value) {
                     return;
                 }
                 const jinx = {
