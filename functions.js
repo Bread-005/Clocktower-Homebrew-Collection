@@ -464,7 +464,11 @@ const allRoles = [
         ability: "The Storyteller can break the game rules, and if executed, good wins, even if you are dead. [No evil character]"
     },
 
-
+    {
+        name: "Hermit",
+        characterType: "Outsider",
+        ability: "You have all Outsider abilities. [-0 or -1 Outsiders]",
+    },
     {
         name: "Butler",
         characterType: "Outsider",
