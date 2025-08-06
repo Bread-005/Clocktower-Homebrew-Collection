@@ -101,7 +101,7 @@ function roleWasEdited(originalRole, newRole) {
     return false;
 }
 
-const firstNightList = ["Lord of Typhon", "Kazali", "Boffin", "Philosopher", "Alchemist", "Poppy Grower",
+const firstNightList = ["Wraith", "Lord of Typhon", "Kazali", "Boffin", "Philosopher", "Alchemist", "Poppy Grower",
     "Yaggababble", "Magician", "Minion info", "Snitch", "Lunatic", "Summoner", "Demon info", "King", "Sailor",
     "Marionette", "Engineer", "Preacher", "Lil Monsta", "Lleech", "Xaan", "Poisoner", "Widow", "Courtier",
     "Wizard", "Snake Charmer", "Godfather", "Organ Grinder", "Devils Advocate", "Evil Twin", "Witch", "Cerenovus",
@@ -111,10 +111,10 @@ const firstNightList = ["Lord of Typhon", "Kazali", "Boffin", "Philosopher", "Al
     "Bounty Hunter", "Nightwatchman", "Cult Leader", "Spy", "Ogre", "High Priestess", "General", "Chambermaid",
     "Mathematician", "Leviathan", "Vizier"];
 
-const otherNightList = ["Cannibal", "Philosopher", "Poppy Grower", "Sailor", "Engineer", "Preacher", "Xaan", "Poisoner",
+const otherNightList = ["Wraith", "Philosopher", "Poppy Grower", "Sailor", "Engineer", "Preacher", "Xaan", "Poisoner",
     "Courtier", "Innkeeper", "Wizard", "Gambler", "Acrobat", "Snake Charmer", "Monk", "Organ Grinder", "Devils Advocate",
     "Witch", "Cerenovus", "Pit Hag", "Fearmonger", "Harpy", "Mezepheles", "Scarlet Woman", "Summoner", "Lunatic",
-    "Exorcist", "Lycanthrope", "Legion", "Imp", "Zombuul", "Pukka", "Shabaloth", "Po", "Fang Gu", "No Dashii",
+    "Exorcist", "Lycanthrope", "Princess", "Legion", "Imp", "Zombuul", "Pukka", "Shabaloth", "Po", "Fang Gu", "No Dashii",
     "Vortox", "Lord of Typhon", "Vigormortis", "Ojo", "Al Hadikhia", "Lleech", "Lil Monsta", "Yaggababble",
     "Kazali", "Assassin", "Godfather", "Gossip", "Hatter", "Barber", "Sweetheart", "Sage", "Banshee", "Professor",
     "Choirboy", "Huntsman", "Damsel", "Amnesiac", "Farmer", "Tinker", "Moonchild", "Grandmother", "Ravenkeeper",
@@ -369,6 +369,11 @@ const allRoles = [
         ability: "Once per game, during the day, visit the Storyteller for some advice to help your team win."
     },
     {
+        name: "Princess",
+        characterType: "Townsfolk",
+        ability: "On your 1st day, if you nominated & executed a player, the Demon doesn't kill tonight."
+    },
+    {
         name: "Juggler",
         characterType: "Townsfolk",
         ability: "On your 1st day, publicly guess up to 5 players' characters. That night, you learn how many you got correct."
@@ -481,7 +486,7 @@ const allRoles = [
     },
     {
         name: "Ogre",
-        characterType: "Townsfolk",
+        characterType: "Outsider",
         ability: "On your 1st night, choose a player (not yourself): you become their alignment (you don´t know which) even if drunk or poisoned."
     },
     {
@@ -541,7 +546,7 @@ const allRoles = [
     },
     {
         name: "Hatter",
-        characterType: "Townsfolk",
+        characterType: "Outsider",
         ability: "If you died today or tonight, the Minion & Demon players may choose new Minion & Demon characters to be."
     },
     {
@@ -551,12 +556,12 @@ const allRoles = [
     },
     {
         name: "Politician",
-        characterType: "Townsfolk",
+        characterType: "Outsider",
         ability: "If your were the player most responsible for your team losing, you change alignment & win, even if dead."
     },
     {
         name: "Zealot",
-        characterType: "Townsfolk",
+        characterType: "Outsider",
         ability: "If there are 5 or more players alive, you must vote for every nomination."
     },
     {
@@ -566,7 +571,7 @@ const allRoles = [
     },
     {
         name: "Snitch",
-        characterType: "Townsfolk",
+        characterType: "Outsider",
         ability: "Each Minion gets 3 bluffs."
     },
     {
@@ -660,6 +665,11 @@ const allRoles = [
         name: "Marionette",
         characterType: "Minion",
         ability: "You think you are a good character, but you are not. The Demon knows who you are. [You neighbor the Demon]"
+    },
+    {
+        name: "Wraith",
+        characterType: "Minion",
+        ability: "You may choose to open your eyes at night. You wake when other evil players do."
     },
     {
         name: "Evil Twin",
