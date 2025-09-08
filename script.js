@@ -10,11 +10,18 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     console.log(`Total localStorage usage: ${(total / 1024).toFixed(2)} KB`);
 
-    fetch("https://clocktower-homebrew-collection.vercel.app/api/roles.js")
+    fetch('http://localhost:3000/api/roles')
         .then(res => res.json())
-        .then(data => console.log("Antwort von API:", data))
-        .catch(err => console.error("Fehler:", err));
-    console.log("h1314");
+        .then(data => console.log(data));
+
+    // fetch('http://localhost:3000/api/roles', {
+    //     method: "POST",
+    //     body: JSON.stringify({
+    //         name: "Mechanic",
+    //         ability: "Each night, repair something",
+    //         characterType: "Townsfolk"
+    //     })
+    // }).then(r => console.log(r));
 
     const storageString = "websiteStorage1";
 
@@ -348,17 +355,6 @@ document.addEventListener("DOMContentLoaded", function () {
             roleNameInput.value = "";
             abilityTextInput.value = "";
             displayRoles();
-
-            // neue Rolle anlegen
-            fetch("https://clocktower-homebrew-collection.vercel.app/api/roles.js", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({
-                    name: role.name,
-                    type: role.characterType,
-                    ability: role.ability
-                })
-            }).then(r => console.log(r));
         });
     }
 
