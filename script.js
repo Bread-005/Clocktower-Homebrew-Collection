@@ -10,6 +10,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     console.log(`Total localStorage usage: ${(total / 1024).toFixed(2)} KB`);
 
+    // alle Rollen laden
+    fetch("https://clocktower-homebrew-collection.vercel.app/api/roles")
+        .then(res => res.json())
+        .then(data => console.log("Rollen: ", data))
+        .catch(err => console.error(err));
+
     const storageString = "websiteStorage1";
 
     if (!localStorage.getItem(storageString)) {
@@ -342,6 +348,17 @@ document.addEventListener("DOMContentLoaded", function () {
             roleNameInput.value = "";
             abilityTextInput.value = "";
             displayRoles();
+
+            // neue Rolle anlegen
+            fetch("https://clocktower-homebrew-collection.vercel.app/api/roles", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    name: role.name,
+                    type: role.characterType,
+                    ability: role.ability
+                })
+            }).then(r => console.log(r));
         });
     }
 
