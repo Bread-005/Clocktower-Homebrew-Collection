@@ -8,8 +8,11 @@ export default async function handler(req, res) {
         return res.status(200).end();
     }
 
+    console.log("hi")
+    console.log(process.env.MONGO_URL);
+
     if (!client) {
-        client = new MongoClient(process.env.MONGO_URL);
+        client = new MongoClient("mongodb+srv://jensjosef2005:fg_X-B23@clocktowergames.hfnkicc.mongodb.net/?retryWrites=true&w=majority&appName=Clocktower_Homebrew_Collection");
         await client.connect();
         database = client.db("Clocktower_Homebrew_Collection");
     }
