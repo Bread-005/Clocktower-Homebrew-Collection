@@ -10,11 +10,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     console.log(`Total localStorage usage: ${(total / 1024).toFixed(2)} KB`);
 
-    // alle Rollen laden
-    fetch("https://clocktower-homebrew-collection.vercel.app/api/roles")
-        .then(res => res.json())
-        .then(data => console.log("Rollen: ", data))
-        .catch(err => console.error(err));
+    fetch("https://clocktower-homebrew-collection.vercel.app/api/roles").then(r => console.log(r));
+
+    // // alle Rollen laden
+    // fetch("https://clocktower-homebrew-collection.vercel.app/api/roles")
+    //     .then(res => res.json())
+    //     .then(data => console.log("Rollen: ", data))
+    //     .catch(err => console.error(err));
 
     const storageString = "websiteStorage1";
 
