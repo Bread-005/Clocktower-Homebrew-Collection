@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     console.log(`Total localStorage usage: ${(total / 1024).toFixed(2)} KB`);
 
-    fetch("https://clocktower-homebrew-collection.vercel.app/api/roles")
+    fetch("https://clocktower-homebrew-collection.vercel.app/api/roles.js")
         .then(res => res.json())
         .then(data => console.log("Antwort von API:", data))
         .catch(err => console.error("Fehler:", err));
@@ -350,7 +350,7 @@ document.addEventListener("DOMContentLoaded", function () {
             displayRoles();
 
             // neue Rolle anlegen
-            fetch("https://clocktower-homebrew-collection.vercel.app/api/roles", {
+            fetch("https://clocktower-homebrew-collection.vercel.app/api/roles.js", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({
