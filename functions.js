@@ -1002,15 +1002,15 @@ const characterTypes = ["Townsfolk", "Outsider", "Minion", "Demon", "Traveller",
 
 const StevenApprovedOrder = ["You start knowing", "Each night,", "Each night*,", "Each day", "Once per game", " "];
 
+async function updateRole(role) {
+    await fetch('http://localhost:3000/api/roles/update', {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(role)
+    });
+}
+
 export {
-    copyJsonString,
-    showCopyPopup,
-    roleWasEdited,
-    firstNightList,
-    otherNightList,
-    allRoles,
-    allTags,
-    getTeamColor,
-    characterTypes,
-    StevenApprovedOrder
+    copyJsonString, showCopyPopup, roleWasEdited, firstNightList, otherNightList, allRoles, allTags,
+    getTeamColor, characterTypes, StevenApprovedOrder, updateRole
 }

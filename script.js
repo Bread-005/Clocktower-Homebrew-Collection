@@ -1,6 +1,6 @@
 import {copyJsonString, roleWasEdited, showCopyPopup, allRoles, allTags, getTeamColor} from "./functions.js";
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
 
     let total = 0;
     for (const item in localStorage) {
@@ -10,18 +10,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     console.log(`Total localStorage usage: ${(total / 1024).toFixed(2)} KB`);
 
-    fetch('http://localhost:3000/api/roles')
-        .then(res => res.json())
-        .then(data => console.log(data));
+    const allRoles1 = [];
 
-    // fetch('http://localhost:3000/api/roles', {
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //         name: "Mechanic",
-    //         ability: "Each night, repair something",
-    //         characterType: "Townsfolk"
-    //     })
-    // }).then(r => console.log(r));
+    await fetch('http://localhost:3000/api/roles')
+        .then(res => res.json())
+        .then(data => data.forEach(item => allRoles1.push(item)));
+
+    console.log(JSON.stringify(allRoles1.map(role => role.name)));
+
+    const div = document.createElement("div");
+    div.textContent = JSON.stringify(allRoles1, null, 2);
+    document.getElementById("test192").append(div);
 
     const storageString = "websiteStorage1";
 
@@ -313,7 +312,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function addRole() {
-        document.getElementById("js-add-role").addEventListener("click", function () {
+        document.getElementById("js-add-role").addEventListener("click", async function () {
             const roleNameInput = document.getElementById("role-name");
             const characterTypeInput = document.getElementById("character-types");
             const abilityTextInput = document.getElementById("ability-text");
@@ -355,6 +354,12 @@ document.addEventListener("DOMContentLoaded", function () {
             roleNameInput.value = "";
             abilityTextInput.value = "";
             displayRoles();
+
+            await fetch('http://localhost:3000/api/roles/create', {
+                method: "POST",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(role)
+            });
         });
     }
 
