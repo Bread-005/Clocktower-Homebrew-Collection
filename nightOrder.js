@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
     fillList(firstNightList, firstNightOrderList, 6);
     fillList(otherNightList, otherNightOrderList, 7);
 
-    for (const role of websiteStorage.roleIdeas) {
+    for (const role of getRoleIdeas()) {
         if (role.firstNight) {
             firstNightOrderList.push({
                 name: role.name,
@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         editNightOrder.replaceWith(roleNameAndNumber);
                         icon.setAttribute("class", "fa-solid fa-pen fa-pen-to-square");
 
-                        for (const role1 of websiteStorage.roleIdeas) {
+                        for (const role1 of getRoleIdeas()) {
                             if (role.name === role1.name && role.ability === role1.ability) {
                                 if (firstNightOrderDisplayDiv.contains(div)) {
                                     if (role1.firstNight !== Number.parseFloat(input.value)) {
@@ -172,5 +172,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function saveLocalStorage() {
         localStorage.setItem(storageString, JSON.stringify(websiteStorage));
+    }
+
+    function getRoleIdeas() {
+        if (websiteStorage.user.databaseUse === "localStorage") return websiteStorage.localRoleIdeas;
+        if (websiteStorage.user.databaseUse === "mongoDB") return websiteStorage.roleIdeas;
     }
 });

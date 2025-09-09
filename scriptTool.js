@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
             roleSelectionSection.append(div);
         }
 
-        for (const role of websiteStorage.roleIdeas) {
+        for (const role of getRoleIdeas()) {
             for (let i = 0; i < arrayOfArrays.length; i++) {
                 if (role.characterType === characterTypes[i]) {
                     arrayOfArrays[i].push(role);
@@ -229,5 +229,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function saveLocalStorage() {
         localStorage.setItem(storageString, JSON.stringify(websiteStorage));
+    }
+
+    function getRoleIdeas() {
+        if (websiteStorage.user.databaseUse === "localStorage") return websiteStorage.localRoleIdeas;
+        if (websiteStorage.user.databaseUse === "mongoDB") return websiteStorage.roleIdeas;
     }
 });

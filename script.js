@@ -1,4 +1,7 @@
-import {copyJsonString, roleWasEdited, showCopyPopup, allRoles, allTags, getTeamColor} from "./functions.js";
+import {
+    copyJsonString, roleWasEdited, showCopyPopup, allRoles, allTags, getTeamColor,
+    updateRole, createRole
+} from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", async function () {
 
@@ -9,18 +12,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
     console.log(`Total localStorage usage: ${(total / 1024).toFixed(2)} KB`);
-
-    const allRoles1 = [];
-
-    await fetch('http://localhost:3000/api/roles')
-        .then(res => res.json())
-        .then(data => data.forEach(item => allRoles1.push(item)));
-
-    console.log(JSON.stringify(allRoles1.map(role => role.name)));
-
-    const div = document.createElement("div");
-    div.textContent = JSON.stringify(allRoles1, null, 2);
-    document.getElementById("test192").append(div);
 
     const storageString = "websiteStorage1";
 
@@ -37,7 +28,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                 tagFilter: "None",
                 tempRole: {
                     createdAt: "0"
-                }
+                },
+                databaseUse: "localStorage"
             },
             archive: []
         }
@@ -45,14 +37,21 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     const websiteStorage = JSON.parse(localStorage.getItem(storageString));
+    if (!websiteStorage.user.databaseUse) websiteStorage.user.databaseUse = "localStorage";
+    if (!websiteStorage.localRoleIdeas) websiteStorage.localRoleIdeas = websiteStorage.roleIdeas;
+    try {
+        websiteStorage.roleIdeas = await fetch('http://localhost:3000/api/roles').then(res => res.json());
+    } catch (error) {
+        websiteStorage.user.databaseUse = "localStorage";
+    }
+    document.getElementById("switch-database-use").textContent = websiteStorage.user.databaseUse;
 
-    adjustLocalStorage();
-
-    for (const role of websiteStorage.roleIdeas) {
+    for (const role of getRoleIdeas()) {
         if (role.createdAt === websiteStorage.user.tempRole.createdAt) {
             if (roleWasEdited(role, websiteStorage.user.tempRole)) {
                 role.lastEdited = new Date();
                 websiteStorage.user.tempRole.createdAt = "";
+                await updateRole(role);
                 saveLocalStorage();
                 break;
             }
@@ -86,7 +85,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     function displayRoles() {
         setFilters();
-        const roles = filterRoles(websiteStorage.roleIdeas);
+        const roles = filterRoles(getRoleIdeas());
         sortRoles(roles);
         const roleIdeaArray = roles.slice((websiteStorage.user.page - 1) * 10, websiteStorage.user.page * 10);
 
@@ -320,7 +319,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 return;
             }
 
-            for (const role of websiteStorage.roleIdeas) {
+            for (const role of getRoleIdeas()) {
                 if (role.name === roleNameInput.value && role.ability === abilityTextInput.value) {
                     return;
                 }
@@ -349,17 +348,14 @@ document.addEventListener("DOMContentLoaded", async function () {
                 comments: [],
                 lastEdited: new Date()
             }
-            websiteStorage.roleIdeas.push(role);
+            if (websiteStorage.user.databaseUse === "localStorage") {
+                websiteStorage.localRoleIdeas.push(role);
+            }
             saveLocalStorage();
             roleNameInput.value = "";
             abilityTextInput.value = "";
+            await createRole(role);
             displayRoles();
-
-            await fetch('http://localhost:3000/api/roles/create', {
-                method: "POST",
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(role)
-            });
         });
     }
 
@@ -383,7 +379,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     function setupScriptSelection() {
 
         const scripts = ["All"];
-        for (const role of websiteStorage.roleIdeas) {
+        for (const role of getRoleIdeas()) {
             if (!scripts.includes(role.script) && role.script) {
                 scripts.push(role.script);
             }
@@ -421,7 +417,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.querySelector(".script-upload-div").style.display = roleCreationMode === 2 ? "flex" : "none";
     });
 
-    jsonAddRoleButton.addEventListener("click", function () {
+    jsonAddRoleButton.addEventListener("click", async function () {
         let text = jsonInputTextarea.value.replaceAll('""', '"');
         if (text[0] === '"') text = text.substring(1);
         if (text[text.length - 1] === '"') text = text.substring(0, text.length - 1);
@@ -431,7 +427,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
         const role = JSON.parse(text);
 
-        addRoleViaJson(role);
+        await addRoleViaJson(role);
     });
 
     document.getElementById("script-upload").addEventListener("change", function (event) {
@@ -441,7 +437,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const reader = new FileReader();
         reader.readAsText(file);
 
-        reader.addEventListener("load", function (event) {
+        reader.addEventListener("load", async function (event) {
             const array = JSON.parse(event.target.result.toString());
             let script = "";
 
@@ -461,7 +457,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 let roleExists = false;
 
-                for (const role of websiteStorage.roleIdeas) {
+                for (const role of getRoleIdeas()) {
                     if (role.name === object.name || role.ability === object.ability) {
                         roleExists = true;
                         break;
@@ -472,9 +468,25 @@ document.addEventListener("DOMContentLoaded", async function () {
                     continue;
                 }
                 if (script) object.script = script;
-                addRoleViaJson(object);
+                await addRoleViaJson(object);
             }
         });
+    });
+
+    document.getElementById("switch-database-use").addEventListener("click", async function () {
+        try {
+            await fetch('http://localhost:3000/api/roles');
+        } catch (error) {
+            return;
+        }
+        if (websiteStorage.user.databaseUse === "localStorage") {
+            websiteStorage.user.databaseUse = "mongoDB";
+        } else {
+            websiteStorage.user.databaseUse = "localStorage";
+        }
+        document.getElementById("switch-database-use").textContent = websiteStorage.user.databaseUse;
+        saveLocalStorage();
+        displayRoles();
     });
 
     scriptDownloadButton.addEventListener("click", function () {
@@ -490,7 +502,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
         content.push(meta);
-        const roles = filterRoles(websiteStorage.roleIdeas);
+        const roles = filterRoles(getRoleIdeas());
 
         if (roles.length === 0) return;
 
@@ -509,7 +521,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         const content = [];
 
-        for (const role of websiteStorage.roleIdeas) {
+        for (const role of getRoleIdeas()) {
             let tempRole = {};
 
             for (let attribute in role) {
@@ -587,76 +599,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
-    function adjustLocalStorage() {
-        if (!websiteStorage.user) {
-            websiteStorage.user = {
-                page: 1,
-                roleSearch: "",
-                characterType: "All",
-                sorting: "Newest first",
-                onlyMyFavorites: false,
-                scriptFilter: "All",
-                tagFilter: "None",
-                tempRole: {
-                    createdAt: "0"
-                }
-            }
-            localStorage.setItem(storageString, JSON.stringify(websiteStorage));
-        }
-
-        if (websiteStorage.page) {
-            websiteStorage.page = undefined;
-        }
-
-        if (websiteStorage.users) {
-            websiteStorage.users = undefined;
-        }
-
-        for (const role of websiteStorage.roleIdeas) {
-            if (role.key !== undefined) {
-                role.createdAt = role.key;
-                role.key = undefined;
-            }
-            if (role.imageUrl !== undefined) {
-                role.image = role.imageUrl;
-                role.imageUrl = undefined;
-            }
-            if (role.reminderTokens !== undefined) {
-                role.reminders = role.reminderTokens;
-                role.reminderTokens = undefined;
-            }
-            if (role.abilityText !== undefined) {
-                role.ability = role.abilityText;
-                role.abilityText = undefined;
-            }
-            if (role.howtorun !== undefined) {
-                role.howToRun = role.howtorun;
-                role.howtorun = undefined;
-            }
-            if (role.owner !== undefined) role.owner = undefined;
-            if (role.inEditMode !== undefined) role.inEditMode = undefined;
-            if (role.onlyPrivateComments !== undefined) role.onlyPrivateComments = undefined;
-            if (role.jinxes === undefined) role.jinxes = [];
-            if (role.isFavorite === undefined) role.isFavorite = false;
-            if (Array.isArray(role.rating)) role.rating = 0;
-            if (role.special === undefined) role.special = [];
-            if (role.reminders === undefined) role.reminders = [];
-            if (role.remindersGlobal === undefined) role.remindersGlobal = [];
-            if (!role.lastEdited) role.lastEdited = new Date(role.createdAt);
-            if (role.otherImage === undefined) role.otherImage = "";
-            if (role.tags === undefined) role.tags = [];
-
-            role.tags = role.tags.filter(tag => tag.toString() !== "Does Not Wake" && tag.toString() !== "Noms Votes Exes");
-            role.image = role.image.replaceAll("\\", "");
-        }
-
-        if (websiteStorage.user.tempRole === undefined) websiteStorage.user.tempRole = {createdAt: "0"}
-
-        saveLocalStorage();
-    }
-
-    function addRoleViaJson(role) {
-        for (const role1 of websiteStorage.roleIdeas) {
+    async function addRoleViaJson(role) {
+        for (const role1 of getRoleIdeas()) {
             if (role1.name === role.name && role1.characterType.toLowerCase() === role.team.toLowerCase()) {
                 roleExistsMessage(role, true);
                 return;
@@ -671,7 +615,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
         role.createdAt = Date.now().toString();
-        for (const role1 of websiteStorage.roleIdeas) {
+        for (const role1 of getRoleIdeas()) {
             if (role1.createdAt === role.createdAt) {
                 let number = role1.createdAt;
                 number++;
@@ -738,7 +682,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         role.script = role.script.split(" v")[0];
         role.comments = [];
         role.lastEdited = new Date();
-        websiteStorage.roleIdeas.push(role);
+        if (websiteStorage.user.databaseUse === "localStorage") {
+            websiteStorage.localRoleIdeas.push(role);
+        }
+        await createRole(role);
         saveLocalStorage();
         jsonInputTextarea.value = "";
         displayRoles();
@@ -809,5 +756,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (showAlert) {
             alert("Role already exists! \n" + role.name + " (" + role.team[0].toUpperCase() + role.team.substring(1) + "): " + role.ability + " already exists!");
         }
+    }
+
+    function getRoleIdeas() {
+        if (websiteStorage.user.databaseUse === "localStorage") return websiteStorage.localRoleIdeas;
+        if (websiteStorage.user.databaseUse === "mongoDB") return websiteStorage.roleIdeas;
     }
 });

@@ -1003,6 +1003,8 @@ const characterTypes = ["Townsfolk", "Outsider", "Minion", "Demon", "Traveller",
 const StevenApprovedOrder = ["You start knowing", "Each night,", "Each night*,", "Each day", "Once per game", " "];
 
 async function updateRole(role) {
+    const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
+    if (websiteStorage.user.databaseUse !== "mongoDB") return;
     await fetch('http://localhost:3000/api/roles/update', {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
@@ -1010,7 +1012,18 @@ async function updateRole(role) {
     });
 }
 
+async function createRole(role) {
+    const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
+    if (websiteStorage.user.databaseUse !== "mongoDB") return;
+    await fetch('http://localhost:3000/api/roles/create', {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(role)
+    });
+    websiteStorage.roleIdeas = await fetch('http://localhost:3000/api/roles').then(res => res.json());
+}
+
 export {
     copyJsonString, showCopyPopup, roleWasEdited, firstNightList, otherNightList, allRoles, allTags,
-    getTeamColor, characterTypes, StevenApprovedOrder, updateRole
+    getTeamColor, characterTypes, StevenApprovedOrder, updateRole, createRole
 }

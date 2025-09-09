@@ -1,4 +1,4 @@
-import {copyJsonString, showCopyPopup, firstNightList, otherNightList, allTags} from "./functions.js";
+import {copyJsonString, showCopyPopup, firstNightList, otherNightList, allTags, updateRole} from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const deleteConfirmationCancelButton = document.getElementById("delete-confirmation-cancel-button");
     const deletePopupBackground = document.querySelector(".delete-popup-background");
 
-    for (const role of websiteStorage.roleIdeas) {
+    for (const role of getRoleIdeas()) {
         if (role.createdAt !== id) {
             continue;
         }
@@ -299,7 +299,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function editNightOrder() {
-            document.getElementById("edit-night-order-button").addEventListener("click", function () {
+            document.getElementById("edit-night-order-button").addEventListener("click", async function () {
                 if (firstNightInput.value === "") {
                     firstNightInput.value = 0;
                 }
@@ -310,6 +310,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 role.firstNightReminder = firstNightReminderInput.value;
                 role.otherNight = Number.parseFloat(otherNightInput.value);
                 role.otherNightReminder = otherNightReminderInput.value;
+                await updateRole(role);
                 saveLocalStorage();
                 showNightOrder();
             });
@@ -338,12 +339,14 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             deleteConfirmationYesButton.addEventListener("click", function () {
-                for (let i = 0; i < websiteStorage.roleIdeas.length; i++) {
-                    if (websiteStorage.roleIdeas[i].createdAt === role.createdAt) {
-                        websiteStorage.archive.push(websiteStorage.roleIdeas[i]);
-                        websiteStorage.roleIdeas.splice(i, 1);
-                        saveLocalStorage();
-                        break;
+                if (websiteStorage.user.databaseUse === "localStorage") {
+                    for (let i = 0; i < websiteStorage.localRoleIdeas.length; i++) {
+                        if (websiteStorage.localRoleIdeas[i].createdAt === role.createdAt) {
+                            websiteStorage.archive.push(websiteStorage.localRoleIdeas[i]);
+                            websiteStorage.localRoleIdeas.splice(i, 1);
+                            saveLocalStorage();
+                            break;
+                        }
                     }
                 }
                 window.location = "index.html";
@@ -616,10 +619,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 showScript();
             });
         }
+    }
 
-        function saveLocalStorage() {
-            localStorage.setItem(storageString, JSON.stringify(websiteStorage));
-        }
+    function saveLocalStorage() {
+        localStorage.setItem(storageString, JSON.stringify(websiteStorage));
+    }
+
+    function getRoleIdeas() {
+        if (websiteStorage.user.databaseUse === "localStorage") return websiteStorage.localRoleIdeas;
+        if (websiteStorage.user.databaseUse === "mongoDB") return websiteStorage.roleIdeas;
     }
 });
 
