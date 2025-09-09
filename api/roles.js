@@ -25,17 +25,29 @@ async function createRole(user) {
 }
 
 app.get('/api/roles', async (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
     const roles = await getRoles();
     console.log(roles.map(role => role.name));
     res.json(roles);
 });
 
 app.post('/api/roles/create', async (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
     const result = await createRole(req.body);
     res.json(result);
 });
 
 app.post('/api/roles/update', async (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
     console.log(req.body);
     const role = req.body;
     const roles = await database();
