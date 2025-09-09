@@ -96,6 +96,20 @@ input[type="number"] {
         text-align: center;
     }
 
+    .sub-page-top {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+
+        .login-area {
+            position: absolute;
+            right: 0;
+            margin-right: 4.5rem;
+            text-align: center;
+        }
+    }
+
     .role-creation-div {
         display: flex;
         justify-content: space-between;
@@ -801,5 +815,33 @@ input[type="number"] {
         position: fixed;
         left: 85%;
         width: 100%;
+    }
+}
+
+.login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .input-div {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .input-row {
+        margin: 2px;
+
+        input {
+            height: 1rem;
+            font-size: 1rem;
+        }
+    }
+
+    #login-page-login-button {
+        display: flex;
+        justify-content: center;
     }
 }

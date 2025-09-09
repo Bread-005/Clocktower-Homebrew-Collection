@@ -116,7 +116,7 @@ const otherNightList = ["Wraith", "Philosopher", "Poppy Grower", "Sailor", "Engi
     "Witch", "Cerenovus", "Pit Hag", "Fearmonger", "Harpy", "Mezepheles", "Scarlet Woman", "Summoner", "Lunatic",
     "Exorcist", "Lycanthrope", "Princess", "Legion", "Imp", "Zombuul", "Pukka", "Shabaloth", "Po", "Fang Gu", "No Dashii",
     "Vortox", "Lord of Typhon", "Vigormortis", "Ojo", "Al Hadikhia", "Lleech", "Lil Monsta", "Yaggababble",
-    "Kazali", "Assassin", "Godfather", "Gossip", "Hatter", "Barber", "Sweetheart", "Sage", "Banshee", "Professor",
+    "Kazali", "Assassin", "Godfather", "Gossip", "Hatter", "Barber", "Sweetheart", "Plague Doctor", "Sage", "Banshee", "Professor",
     "Choirboy", "Huntsman", "Damsel", "Amnesiac", "Farmer", "Tinker", "Moonchild", "Grandmother", "Ravenkeeper",
     "Empath", "Fortune Teller", "Undertaker", "Dreamer", "Flowergirl", "Town Crier", "Oracle", "Seamstress",
     "Juggler", "Balloonist", "Village Idiot", "King", "Bounty Hunter", "Nightwatchman", "Cult Leader", "Butler",

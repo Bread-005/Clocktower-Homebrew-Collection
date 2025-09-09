@@ -1,6 +1,5 @@
 import {
-    copyJsonString, roleWasEdited, showCopyPopup, allRoles, allTags, getTeamColor,
-    updateRole, createRole
+    copyJsonString, roleWasEdited, showCopyPopup, allRoles, allTags, getTeamColor, updateRole, createRole
 } from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -29,33 +28,12 @@ document.addEventListener("DOMContentLoaded", async function () {
                 tempRole: {
                     createdAt: "0"
                 },
-                databaseUse: "localStorage"
+                databaseUse: "localStorage",
+                currentUsername: ""
             },
             archive: []
         }
         localStorage.setItem(storageString, JSON.stringify(storage));
-    }
-
-    const websiteStorage = JSON.parse(localStorage.getItem(storageString));
-    if (!websiteStorage.user.databaseUse) websiteStorage.user.databaseUse = "localStorage";
-    if (!websiteStorage.localRoleIdeas) websiteStorage.localRoleIdeas = websiteStorage.roleIdeas;
-    try {
-        websiteStorage.roleIdeas = await fetch('http://localhost:3000/api/roles').then(res => res.json());
-    } catch (error) {
-        websiteStorage.user.databaseUse = "localStorage";
-    }
-    document.getElementById("switch-database-use").textContent = websiteStorage.user.databaseUse;
-
-    for (const role of getRoleIdeas()) {
-        if (role.createdAt === websiteStorage.user.tempRole.createdAt) {
-            if (roleWasEdited(role, websiteStorage.user.tempRole)) {
-                role.lastEdited = new Date();
-                websiteStorage.user.tempRole.createdAt = "";
-                await updateRole(role);
-                saveLocalStorage();
-                break;
-            }
-        }
     }
 
     const jsonInputTextarea = document.getElementById("json-input-textarea");
@@ -72,6 +50,36 @@ document.addEventListener("DOMContentLoaded", async function () {
     const roleIdeaPageSelection = document.querySelector(".role-idea-page-selection");
     const scriptDownloadButton = document.getElementById("script-download-button");
     const localstorageDownloadButton = document.getElementById("localstorage-download-button");
+    const loginButton = document.querySelector(".login-button");
+
+    const websiteStorage = JSON.parse(localStorage.getItem(storageString));
+    if (!websiteStorage.user.databaseUse) websiteStorage.user.databaseUse = "localStorage";
+    if (!websiteStorage.user.currentUsername) websiteStorage.user.currentUsername = "";
+    if (!websiteStorage.localRoleIdeas) websiteStorage.localRoleIdeas = websiteStorage.roleIdeas;
+    saveLocalStorage();
+    try {
+        websiteStorage.roleIdeas = await fetch('http://localhost:3000/api/roles').then(res => res.json());
+        if (websiteStorage.user.currentUsername) {
+            document.getElementById("current-username-display").textContent = "Username: " + websiteStorage.user.currentUsername;
+            loginButton.textContent = "logout";
+        }
+    } catch (error) {
+        websiteStorage.user.databaseUse = "localStorage";
+        document.querySelector(".login-area").style.display = "none";
+    }
+    document.getElementById("switch-database-use").textContent = websiteStorage.user.databaseUse;
+
+    for (const role of getRoleIdeas()) {
+        if (role.createdAt === websiteStorage.user.tempRole.createdAt) {
+            if (roleWasEdited(role, websiteStorage.user.tempRole)) {
+                role.lastEdited = new Date();
+                websiteStorage.user.tempRole.createdAt = "";
+                await updateRole(role);
+                saveLocalStorage();
+                break;
+            }
+        }
+    }
 
     mobileSupportSetup();
     addRole();
@@ -762,4 +770,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (websiteStorage.user.databaseUse === "localStorage") return websiteStorage.localRoleIdeas;
         if (websiteStorage.user.databaseUse === "mongoDB") return websiteStorage.roleIdeas;
     }
+
+    loginButton.addEventListener("click", () => {
+        if (loginButton.textContent === "logout") {
+            websiteStorage.user.currentUsername = "";
+            saveLocalStorage();
+        }
+        window.location = "login.html";
+    });
 });
