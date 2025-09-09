@@ -3,7 +3,7 @@ const {MongoClient} = require("mongodb");
 const cors = require("cors");
 
 const app = express();
-app.use(cors({origin: 'http://localhost:63342'}));
+app.use(cors({origin: ['http://localhost:63342', 'https://bread-005.github.io']}));
 app.use(express.json());
 
 const client = new MongoClient("mongodb+srv://jensjosef2005:fg_X-B23@clocktowergames.hfnkicc.mongodb.net/?retryWrites=true&w=majority&appName=Clocktower_Homebrew_Collection");
