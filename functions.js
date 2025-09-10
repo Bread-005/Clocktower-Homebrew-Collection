@@ -84,23 +84,6 @@ function showCopyPopup(element) {
     }, 3500);
 }
 
-function roleWasEdited(originalRole, newRole) {
-    for (const attribute in originalRole) {
-        if (attribute === "rating" || attribute === "isFavorite" || attribute === "comments") {
-            continue;
-        }
-        let originalRoleString = originalRole[attribute];
-        let newRoleString = newRole[attribute];
-        if (Array.isArray(originalRoleString)) originalRoleString = originalRoleString.join();
-        if (Array.isArray(newRoleString)) newRoleString = newRoleString.join();
-
-        if (originalRoleString !== newRoleString) {
-            return true;
-        }
-    }
-    return false;
-}
-
 const firstNightList = ["Wraith", "Lord of Typhon", "Kazali", "Boffin", "Philosopher", "Alchemist", "Poppy Grower",
     "Yaggababble", "Magician", "Minion info", "Snitch", "Lunatic", "Summoner", "Demon info", "King", "Sailor",
     "Marionette", "Engineer", "Preacher", "Lil Monsta", "Lleech", "Xaan", "Poisoner", "Widow", "Courtier",
@@ -1003,6 +986,7 @@ const characterTypes = ["Townsfolk", "Outsider", "Minion", "Demon", "Traveller",
 const StevenApprovedOrder = ["You start knowing", "Each night,", "Each night*,", "Each day", "Once per game", " "];
 
 async function updateRole(role) {
+    role.lastEdited = Date.now().toString();
     const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
     if (websiteStorage.user.databaseUse !== "mongoDB") return;
     await fetch('http://localhost:3000/api/roles/update', {
@@ -1010,6 +994,7 @@ async function updateRole(role) {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(role)
     });
+    websiteStorage.roleIdeas = await fetch('http://localhost:3000/api/roles').then(res => res.json());
 }
 
 async function createRole(role) {
@@ -1035,6 +1020,6 @@ async function deleteRole(role) {
 }
 
 export {
-    copyJsonString, showCopyPopup, roleWasEdited, firstNightList, otherNightList, allRoles, allTags,
-    getTeamColor, characterTypes, StevenApprovedOrder, updateRole, createRole, deleteRole
+    copyJsonString, showCopyPopup, firstNightList, otherNightList, allRoles, allTags, getTeamColor, characterTypes,
+    StevenApprovedOrder, updateRole, createRole, deleteRole
 }

@@ -1,6 +1,4 @@
-import {
-    copyJsonString, roleWasEdited, showCopyPopup, allRoles, allTags, getTeamColor, updateRole, createRole
-} from "./functions.js";
+import {copyJsonString, showCopyPopup, allRoles, allTags, getTeamColor, updateRole, createRole} from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", async function () {
 
@@ -25,9 +23,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                 onlyMyFavorites: false,
                 scriptFilter: "All",
                 tagFilter: "None",
-                tempRole: {
-                    createdAt: "0"
-                },
                 databaseUse: "localStorage",
                 currentUsername: ""
             },
@@ -69,18 +64,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.querySelector(".login-area").style.visibility = "hidden";
     }
     document.getElementById("switch-database-use").textContent = websiteStorage.user.databaseUse;
-
-    for (const role of getRoleIdeas()) {
-        if (role.createdAt === websiteStorage.user.tempRole.createdAt) {
-            if (roleWasEdited(role, websiteStorage.user.tempRole)) {
-                role.lastEdited = new Date();
-                websiteStorage.user.tempRole.createdAt = "";
-                await updateRole(role);
-                saveLocalStorage();
-                break;
-            }
-        }
-    }
 
     mobileSupportSetup();
     addRole();
@@ -211,12 +194,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                         await fetch('http://localhost:3000/api/roles');
                     } catch (error) {
                         window.location = "index.html";
-                        return;
                     }
                 }
-
-                websiteStorage.user.tempRole = role;
-                saveLocalStorage();
             });
 
             favoriteButton.addEventListener("click", async function () {
@@ -272,7 +251,19 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         }
         if (input === "Last Edited") {
-            roles.sort((a, b) => Date.parse(b.lastEdited) - Date.parse(a.lastEdited));
+            roles.sort((a, b) => {
+                const aIsNum = !isNaN(Number(a.lastEdited));
+                const bIsNum = !isNaN(Number(b.lastEdited));
+                const aIsDate = !isNaN(Date.parse(a.lastEdited));
+                const bIsDate = !isNaN(Date.parse(b.lastEdited));
+
+                if (aIsNum && !bIsNum) return -1;
+                if (!aIsNum && bIsNum) return 1;
+
+                if (aIsNum && bIsNum) return Number(b.lastEdited) - Number(a.lastEdited);
+                if (aIsDate && bIsDate) return new Date(b.lastEdited) - new Date(a.lastEdited);
+                return 0;
+            });
         }
     }
 
@@ -367,7 +358,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 special: [],
                 script: "",
                 comments: [],
-                lastEdited: new Date()
+                lastEdited: Date.now().toString()
             }
             if (websiteStorage.user.databaseUse === "localStorage") {
                 websiteStorage.localRoleIdeas.push(role);
@@ -709,7 +700,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (!role.script) role.script = "";
         role.script = role.script.split(" v")[0];
         role.comments = [];
-        role.lastEdited = new Date();
+        role.lastEdited = Date.now().toString();
         if (websiteStorage.user.databaseUse === "localStorage") {
             websiteStorage.localRoleIdeas.push(role);
         }
