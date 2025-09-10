@@ -1023,7 +1023,18 @@ async function createRole(role) {
     websiteStorage.roleIdeas = await fetch('http://localhost:3000/api/roles').then(res => res.json());
 }
 
+async function deleteRole(role) {
+    const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
+    if (websiteStorage.user.databaseUse !== "mongoDB") return;
+    await fetch('http://localhost:3000/api/roles/delete', {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(role)
+    });
+    websiteStorage.roleIdeas = await fetch('http://localhost:3000/api/roles').then(res => res.json());
+}
+
 export {
     copyJsonString, showCopyPopup, roleWasEdited, firstNightList, otherNightList, allRoles, allTags,
-    getTeamColor, characterTypes, StevenApprovedOrder, updateRole, createRole
+    getTeamColor, characterTypes, StevenApprovedOrder, updateRole, createRole, deleteRole
 }

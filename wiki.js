@@ -1,4 +1,12 @@
-import {copyJsonString, showCopyPopup, firstNightList, otherNightList, allTags, updateRole} from "./functions.js";
+import {
+    copyJsonString,
+    showCopyPopup,
+    firstNightList,
+    otherNightList,
+    allTags,
+    updateRole,
+    deleteRole
+} from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -120,8 +128,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 list.append(deleteButton);
                 document.getElementById("comments-list").append(list);
 
-                deleteButton.addEventListener("click", function () {
+                deleteButton.addEventListener("click", async function () {
                     role.comments = role.comments.filter(comment1 => comment1.createdAt !== comment.createdAt);
+                    await updateRole(role);
                     saveLocalStorage();
                     displayComments();
                 });
@@ -239,15 +248,17 @@ document.addEventListener("DOMContentLoaded", function () {
         function changeImage() {
             uploadImageURL.value = role.image;
             uploadOtherImageURL.value = role.otherImage;
-            document.getElementById("upload-button").addEventListener("click", function () {
+            document.getElementById("upload-button").addEventListener("click", async function () {
                 role.image = uploadImageURL.value.replaceAll("\\", "");
                 wikiRoleImage.setAttribute("src", role.image);
                 uploadImageURL.value = role.image;
+                await updateRole(role);
                 saveLocalStorage();
             });
-            document.getElementById("other-upload-button").addEventListener("click", function () {
+            document.getElementById("other-upload-button").addEventListener("click", async function () {
                 role.otherImage = uploadOtherImageURL.value.replaceAll("\\", "");
                 uploadOtherImageURL.value = role.otherImage;
+                await updateRole(role);
                 saveLocalStorage();
             });
         }
@@ -279,13 +290,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 tag.setAttribute("class", "tag");
                 tag.setAttribute("name", tagString);
                 tag.setAttribute("type", "checkbox");
-                tag.addEventListener("click", function () {
+                tag.addEventListener("click", async function () {
                     if (tag.checked) {
                         role.tags.push(tagString);
                     }
                     if (!tag.checked) {
                         role.tags = role.tags.filter(tag => tag.toString() !== tagString);
                     }
+                    await updateRole(role);
                     saveLocalStorage();
                     showTags();
                 });
@@ -317,7 +329,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function addComments() {
-            addCommentButton.addEventListener("click", function () {
+            addCommentButton.addEventListener("click", async function () {
                 if (inputComment.value === "") {
                     return;
                 }
@@ -326,6 +338,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     createdAt: Date.now().toString()
                 }
                 role.comments.push(comment);
+                await updateRole(role);
                 saveLocalStorage();
                 inputComment.value = "";
                 displayComments();
@@ -338,17 +351,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 deletePopupBackground.style.display = "flex";
             });
 
-            deleteConfirmationYesButton.addEventListener("click", function () {
+            deleteConfirmationYesButton.addEventListener("click", async function () {
+                websiteStorage.archive.push(role);
                 if (websiteStorage.user.databaseUse === "localStorage") {
-                    for (let i = 0; i < websiteStorage.localRoleIdeas.length; i++) {
-                        if (websiteStorage.localRoleIdeas[i].createdAt === role.createdAt) {
-                            websiteStorage.archive.push(websiteStorage.localRoleIdeas[i]);
-                            websiteStorage.localRoleIdeas.splice(i, 1);
-                            saveLocalStorage();
-                            break;
-                        }
-                    }
+                    websiteStorage.localRoleIdeas = websiteStorage.localRoleIdeas.filter(role1 => role1.createdAt !== role.createdAt);
                 }
+                await deleteRole(role);
+                saveLocalStorage();
                 window.location = "index.html";
             });
 
@@ -358,28 +367,30 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function editHowToRun() {
-            howToRunChangeButton.addEventListener("click", function () {
+            howToRunChangeButton.addEventListener("click", async function () {
                 role.howToRun = howToRunInput.value;
                 howToRunText.textContent = role.howToRun;
+                await updateRole(role);
                 saveLocalStorage();
             });
         }
 
         function editMainRole() {
-            document.getElementById("submit-edit-role-button").addEventListener("click", function () {
+            document.getElementById("submit-edit-role-button").addEventListener("click", async function () {
                 if (editRoleNameInput.value === "" || editCharacterTypeInput.value === "" || editAbilityTextInput.value === "") {
                     return;
                 }
                 role.name = editRoleNameInput.value;
                 role.characterType = editCharacterTypeInput.value;
                 role.ability = editAbilityTextInput.value;
+                await updateRole(role);
                 saveLocalStorage();
                 displayRole();
             });
         }
 
         function editJinxes() {
-            jinxAddButton.addEventListener("click", function () {
+            jinxAddButton.addEventListener("click", async function () {
                 if (jinxTextInput.value === "") {
                     return;
                 }
@@ -415,6 +426,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                     jinxRoleInput.value = "";
                     jinxTextInput.value = "";
+                    await updateRole(role);
                     saveLocalStorage();
                     showJinxes();
                     return;
@@ -432,6 +444,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     role.jinxes.push(jinx);
                     jinxRoleInput.value = "";
                     jinxTextInput.value = "";
+                    await updateRole(role);
                     saveLocalStorage();
                     showJinxes();
                 }
@@ -442,6 +455,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             jinx1.reason = jinx.reason;
                             jinxRoleInput.value = "";
                             jinxTextInput.value = "";
+                            await updateRole(role);
                             saveLocalStorage();
                             showJinxes();
                             break;
@@ -477,8 +491,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         role.tempJinxId = jinx.createdAt;
                     });
 
-                    deleteButton.addEventListener("click", function () {
+                    deleteButton.addEventListener("click", async function () {
                         role.jinxes = role.jinxes.filter(jinx1 => jinx1.jinxedRole !== jinx.jinxedRole);
+                        await updateRole(role);
                         saveLocalStorage();
                         showJinxes();
                     });
@@ -488,12 +503,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function editReminderTokens(pReminderTokenAddButton, reminderTokenInput) {
-            pReminderTokenAddButton.addEventListener("click", function () {
+            pReminderTokenAddButton.addEventListener("click", async function () {
                 if (reminderTokenInput.value === "") {
                     return;
                 }
                 if (pReminderTokenAddButton === reminderTokenAddButton) role.reminders.push(reminderTokenInput.value);
                 if (pReminderTokenAddButton === globalReminderTokenAddButton) role.remindersGlobal.push(reminderTokenInput.value);
+                await updateRole(role);
                 saveLocalStorage();
                 reminderTokenInput.value = "";
                 displayReminders();
@@ -522,9 +538,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     deleteIcon.setAttribute("class", "fa-solid fa-trash");
                     deleteButton.append(deleteIcon);
                     div.append(deleteButton);
-                    deleteButton.addEventListener("click", function () {
+                    deleteButton.addEventListener("click", async function () {
                         if (pReminderTokenList === reminderTokenList) role.reminders = role.reminders.filter(reminderToken1 => reminderToken1 !== reminderToken);
                         if (pReminderTokenList === globalReminderTokenList) role.remindersGlobal = role.remindersGlobal.filter(reminderToken1 => reminderToken1 !== reminderToken);
+                        await updateRole(role);
                         saveLocalStorage();
                         displayReminders();
                     });
@@ -568,8 +585,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     deleteButton.append(deleteIcon);
                     list.append(deleteButton);
 
-                    deleteButton.addEventListener("click", function () {
+                    deleteButton.addEventListener("click", async function () {
                         role.special = role.special.filter(special1 => special1.name !== special.name);
+                        await updateRole(role);
                         saveLocalStorage();
                         showSpecial();
                     });
@@ -579,7 +597,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function addSpecial() {
-            specialAddButton.addEventListener("click", function () {
+            specialAddButton.addEventListener("click", async function () {
                 if (specialTypeSelection.value === "" || specialNameSelection.value === "") {
                     return;
                 }
@@ -590,6 +608,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     time: specialTimeSelection.value === "none" ? "" : specialTimeSelection.value
                 }
                 role.special.push(special);
+                await updateRole(role);
                 saveLocalStorage();
                 showSpecial();
             });
@@ -612,9 +631,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function editScript() {
-            scriptEditButton.addEventListener("click", function () {
+            scriptEditButton.addEventListener("click", async function () {
                 role.script = scriptEditInput.value;
                 scriptEditInput.value = "";
+                await updateRole(role);
                 saveLocalStorage();
                 showScript();
             });

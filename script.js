@@ -186,7 +186,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 rateIcon.style.color = "black";
             });
 
-            rateButton.addEventListener("click", function () {
+            rateButton.addEventListener("click", async function () {
                 if (rateInput.value < 0) {
                     rateInput.value = "0";
                     return;
@@ -199,6 +199,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     return;
                 }
                 role.rating = Number.parseFloat(rateInput.value);
+                await updateRole(role);
                 saveLocalStorage();
                 displayRoles();
             });
@@ -208,8 +209,10 @@ document.addEventListener("DOMContentLoaded", async function () {
                 saveLocalStorage();
             });
 
-            favoriteButton.addEventListener("click", function () {
+            favoriteButton.addEventListener("click", async function () {
                 role.isFavorite = !role.isFavorite;
+                await updateRole(role);
+                saveLocalStorage();
                 displayRoles();
             });
 
@@ -359,10 +362,10 @@ document.addEventListener("DOMContentLoaded", async function () {
             if (websiteStorage.user.databaseUse === "localStorage") {
                 websiteStorage.localRoleIdeas.push(role);
             }
+            await createRole(role);
             saveLocalStorage();
             roleNameInput.value = "";
             abilityTextInput.value = "";
-            await createRole(role);
             displayRoles();
         });
     }

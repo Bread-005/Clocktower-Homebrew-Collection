@@ -68,6 +68,16 @@ app.post('/api/roles/update', async (req, res) => {
     res.json(role);
 });
 
+app.post('/api/roles/delete', async (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+    const collection = await database("roles");
+    const result = await collection.deleteOne({createdAt: req.body.createdAt});
+    res.json(result);
+});
+
 app.get('/api/users', async (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
