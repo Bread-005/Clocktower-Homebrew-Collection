@@ -1,0 +1,20 @@
+{
+  "name": "clocktowerremake",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node api/roles.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Bread-005/Clocktower-Homebrew-Collection.git"
+  },
+  "private": false,
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "mongodb": "^6.19.0"
+  }
+}
