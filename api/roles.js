@@ -1,7 +1,6 @@
 const express = require('express');
 const {MongoClient} = require("mongodb");
 const cors = require("cors");
-const path = require("path");
 
 const app = express();
 app.use(cors({origin: ['http://localhost:63342', 'https://bread-005.github.io']}));
@@ -97,14 +96,6 @@ app.post('/api/users/create', async (req, res) => {
     const collection = await database("users");
     const result = await collection.insertOne(req.body);
     res.json(result);
-});
-
-// Statische Frontend-Dateien bereitstellen
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Fallback: Alle nicht gefundenen Routen auf index.html
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(3000, () => console.log('Server läuft auf http://localhost:3000'));
