@@ -61,6 +61,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     } catch (error) {
         websiteStorage.user.databaseUse = "localStorage";
+    }
+    if (websiteStorage.user.databaseUse === "localStorage") {
         document.querySelector(".login-area").style.visibility = "hidden";
     }
     document.getElementById("switch-database-use").textContent = websiteStorage.user.databaseUse;
@@ -561,6 +563,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     const jinxes = [];
 
                     for (const jinx of role.jinxes) {
+                        console.log(jinx)
                         jinxes.push({
                             id: jinx.jinxedRole.toLowerCase().replaceAll(" ", "_"),
                             reason: jinx.reason
