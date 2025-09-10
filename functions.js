@@ -954,7 +954,7 @@ const allRoles = [
         ability: "The Storyteller assigns 1 or more players' characters."
     },
     {
-        name: "Hell´s Librarian",
+        name: "Hells Librarian",
         characterType: "Fabled",
         ability: "Something bad might happen to whoever talks when the Storyteller has asked for silence."
     },

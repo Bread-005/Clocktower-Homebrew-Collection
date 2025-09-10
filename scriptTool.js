@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const scriptAuthorInput = document.getElementById("script-author-input");
     const arrayOfArrays = [[], [], [], [], [], []];
 
+    const roleNames = getRoleIdeas().map(role => role.name);
+    websiteStorage.scriptToolRoles = websiteStorage.scriptToolRoles.filter(role => roleNames.includes(role.name) || allRoles.map(role1 => role1.name).includes(role.name));
+
     createRoleSelection();
     displaySelectionArea();
     displayScriptRoles();
@@ -79,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     div.setAttribute("class", "role");
                     div.style.background = getTeamColor(role.characterType);
                     imgAndNameDiv.setAttribute("class", "img-and-name");
-                    img.setAttribute("src", role.image);
+                    img.setAttribute("src", role.image ? role.image : "https://i.postimg.cc/qM09f8cD/placeholder-icon.png");
                     img.setAttribute("class", "image");
                     name.textContent = role.name;
                     abilityText.textContent = role.ability;
@@ -153,8 +156,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 div.setAttribute("class", "role-div");
                 img.setAttribute("class", "clocktower-icon");
-                if (role.image) img.setAttribute("src", role.image);
-                if (!role.image) img.setAttribute("src", "https://i.postimg.cc/qM09f8cD/placeholder-icon.png");
+                img.setAttribute("src", role.image ? role.image : "https://i.postimg.cc/qM09f8cD/placeholder-icon.png");
 
                 checkbox.type = "checkbox";
                 checkbox.checked = websiteStorage.scriptToolRoles.map(role1 => role1.name).includes(role.name);
@@ -202,16 +204,10 @@ document.addEventListener('DOMContentLoaded', function () {
                                 }
                             }
                         });
-                        console.log(websiteStorage.scriptToolRoles);
                     }
                     if (!checkbox.checked) {
-                        for (let j = 0; j < websiteStorage.scriptToolRoles.length; j++) {
-                            if (websiteStorage.scriptToolRoles[j].name === role.name) {
-                                websiteStorage.scriptToolRoles.splice(j, 1);
-                            }
-                        }
+                        websiteStorage.scriptToolRoles = websiteStorage.scriptToolRoles.filter(role1 => role1.name !== role.name);
                     }
-
                     saveLocalStorage();
                     displayScriptRoles();
                 });

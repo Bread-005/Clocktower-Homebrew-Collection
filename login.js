@@ -20,15 +20,19 @@ document.addEventListener("DOMContentLoaded", async function () {
         userNames.push(user.name);
     }
 
+    if (websiteStorage.user.tempMessage) {
+        loginMessage.textContent = websiteStorage.user.tempMessage;
+    }
+
     userNameInput.addEventListener("input", () => {
         if (userNames.includes(userNameInput.value)) {
             loginMessage.textContent = "Username exists (might be yours)";
             loginButton.textContent = "Login";
-            confirmPasswordRow.style.display = "none";
+            confirmPasswordRow.style.visibility = "hidden";
         } else {
             loginMessage.textContent = "";
             loginButton.textContent = "Sign Up";
-            confirmPasswordRow.style.display = "unset";
+            confirmPasswordRow.style.visibility = "visible";
         }
     });
 

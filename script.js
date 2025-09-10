@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (!websiteStorage.user.databaseUse) websiteStorage.user.databaseUse = "localStorage";
     if (!websiteStorage.user.currentUsername) websiteStorage.user.currentUsername = "";
     if (!websiteStorage.localRoleIdeas) websiteStorage.localRoleIdeas = websiteStorage.roleIdeas;
+    websiteStorage.user.tempMessage = "";
     saveLocalStorage();
     try {
         websiteStorage.roleIdeas = await fetch('http://localhost:3000/api/roles').then(res => res.json());
@@ -65,7 +66,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     } catch (error) {
         websiteStorage.user.databaseUse = "localStorage";
-        document.querySelector(".login-area").style.display = "none";
+        document.querySelector(".login-area").style.visibility = "hidden";
     }
     document.getElementById("switch-database-use").textContent = websiteStorage.user.databaseUse;
 
@@ -204,7 +205,16 @@ document.addEventListener("DOMContentLoaded", async function () {
                 displayRoles();
             });
 
-            wikiButton.addEventListener("click", function () {
+            wikiButton.addEventListener("click", async function () {
+                if (websiteStorage.user.databaseUse === "mongoDB") {
+                    try {
+                        await fetch('http://localhost:3000/api/roles');
+                    } catch (error) {
+                        window.location = "index.html";
+                        return;
+                    }
+                }
+
                 websiteStorage.user.tempRole = role;
                 saveLocalStorage();
             });
@@ -492,11 +502,18 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
         if (websiteStorage.user.databaseUse === "localStorage") {
             websiteStorage.user.databaseUse = "mongoDB";
+            document.querySelector(".login-area").style.visibility = "visible";
         } else {
             websiteStorage.user.databaseUse = "localStorage";
+            document.querySelector(".login-area").style.visibility = "hidden";
         }
         document.getElementById("switch-database-use").textContent = websiteStorage.user.databaseUse;
         saveLocalStorage();
+        if (websiteStorage.user.databaseUse === "mongoDB" && !websiteStorage.user.currentUsername) {
+            websiteStorage.user.tempMessage = "You have to first create an account / login to use the public database";
+            saveLocalStorage();
+            window.location = "login.html";
+        }
         displayRoles();
     });
 
@@ -753,11 +770,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     function displayMisc() {
         scriptDownloadButton.textContent = "Download " + websiteStorage.user.scriptFilter;
-        if (scriptFilterSelection.value === "All") {
-            scriptDownloadButton.style.display = "none";
-        } else {
-            scriptDownloadButton.style.display = "flex";
-        }
+        scriptDownloadButton.style.display = scriptFilterSelection.value === "All" ? "none" : "flex";
     }
 
     function roleExistsMessage(role, showAlert = false) {

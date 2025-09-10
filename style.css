@@ -719,6 +719,10 @@ input[type="number"] {
         }
 
         .role-selection-section {
+            margin-top: 0.5rem;
+            height: 80vh;
+            overflow-y: visible;
+            overflow-x: hidden;
 
             > * {
                 margin-top: 3rem;
@@ -733,7 +737,7 @@ input[type="number"] {
                     justify-content: space-between;
                     align-items: center;
                     height: 2rem;
-                    margin: 0.75rem 0;
+                    margin: 0.75rem 10px;
 
                     input {
                         transform: scale(1.5);
@@ -744,7 +748,7 @@ input[type="number"] {
                         justify-content: center;
                         align-items: center;
                         position: absolute;
-                        left: 12rem;
+                        left: 110%;
                         background: beige;
                         color: black;
                         width: 20rem;

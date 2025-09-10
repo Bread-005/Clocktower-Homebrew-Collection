@@ -165,11 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function nightOrderInfoButtonListener(button, text) {
             button.addEventListener("click", function () {
-                if (text.style.display === "flex") {
-                    text.style.display = "none";
-                } else {
-                    text.style.display = "flex";
-                }
+                text.style.display = text.style.display === "flex" ? "none" : "flex";
             });
         }
 
