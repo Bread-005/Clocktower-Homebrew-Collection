@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 deleteButton.addEventListener("click", async function () {
                     role.comments = role.comments.filter(comment1 => comment1.createdAt !== comment.createdAt);
-                    await updateRole(role);
+                    await updateRole(role, false);
                     saveLocalStorage();
                     displayComments();
                 });
@@ -330,7 +330,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     owner: websiteStorage.user.currentUsername
                 }
                 role.comments.push(comment);
-                await updateRole(role);
+                await updateRole(role, false);
                 saveLocalStorage();
                 inputComment.value = "";
                 displayComments();

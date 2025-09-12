@@ -985,8 +985,10 @@ const characterTypes = ["Townsfolk", "Outsider", "Minion", "Demon", "Traveller",
 
 const StevenApprovedOrder = ["You start knowing", "Each night,", "Each night*,", "Each day", "Once per game", " "];
 
-async function updateRole(role) {
-    role.lastEdited = Date.now().toString();
+async function updateRole(role, updateLastEdited = true) {
+    if (updateLastEdited) {
+        role.lastEdited = Date.now().toString();
+    }
     const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
     if (websiteStorage.user.databaseUse !== "mongoDB") return;
     await fetch('http://localhost:3000/api/roles/update', {

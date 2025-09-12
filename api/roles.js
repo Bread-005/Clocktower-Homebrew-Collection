@@ -49,7 +49,6 @@ app.post('/api/roles/update', async (req, res) => {
             image: role.image,
             otherImage: role.otherImage,
             rating: role.rating,
-            isFavorite: role.isFavorite,
             tags: role.tags,
             firstNight: role.firstNight,
             firstNightReminder: role.firstNightReminder,
@@ -64,6 +63,7 @@ app.post('/api/roles/update', async (req, res) => {
             comments: role.comments,
             lastEdited: role.lastEdited,
             owner: role.owner,
+            favoriteList: role.favoriteList
         }
     });
     res.json(role);

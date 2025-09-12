@@ -152,11 +152,10 @@ document.addEventListener("DOMContentLoaded", async function () {
             const favoriteButton = document.createElement("button");
             const favoriteIcon = document.createElement("i");
             favoriteIcon.setAttribute("class", "fa-light fa-heart");
-            if (role.isFavorite) {
+            if (role.favoriteList.includes(websiteStorage.user.currentUsername) || websiteStorage.user.databaseUse === "localStorage" && role.favoriteList.length > 0) {
                 favoriteIcon.setAttribute("class", "fa-solid fa-heart");
                 favoriteIcon.classList.add("red");
-            }
-            if (!role.isFavorite) {
+            } else {
                 favoriteIcon.classList.remove("red");
                 favoriteIcon.setAttribute("class", "fa-light fa-heart");
             }
@@ -206,7 +205,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                         score: Number.parseFloat(rateInput.value)
                     });
                 }
-                await updateRole(role);
+                await updateRole(role, false);
                 saveLocalStorage();
                 displayRoles();
             });
@@ -222,8 +221,17 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
 
             favoriteButton.addEventListener("click", async function () {
-                role.isFavorite = !role.isFavorite;
-                await updateRole(role);
+                if (role.favoriteList.includes(websiteStorage.user.currentUsername)) {
+                    if (websiteStorage.user.databaseUse === "localStorage") {
+                        role.favoriteList.length = 0;
+                    }
+                    if (websiteStorage.user.databaseUse === "mongoDB") {
+                        role.favoriteList = role.favoriteList.filter(name => name !== websiteStorage.user.currentUsername);
+                    }
+                } else {
+                    role.favoriteList.push(websiteStorage.user.currentUsername);
+                }
+                await updateRole(role, false);
                 saveLocalStorage();
                 displayRoles();
             });
@@ -338,7 +346,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             roles = roles.filter(role => role.tags.length === 0);
         }
         if (onlyMyFavoritesCheckBox.checked) {
-            roles = roles.filter(role => role.isFavorite);
+            roles = roles.filter(role => role.favoriteList.includes(websiteStorage.user.currentUsername));
         }
         if (scriptFilterSelection.value !== "All") {
             roles = roles.filter(role => role.script === scriptFilterSelection.value);
@@ -372,7 +380,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 image: "",
                 otherImage: "",
                 rating: [],
-                isFavorite: false,
+                favoriteList: [],
                 tags: [],
                 firstNight: 0,
                 firstNightReminder: "",
@@ -522,14 +530,17 @@ document.addEventListener("DOMContentLoaded", async function () {
         try {
             await fetch('http://localhost:3000/api/roles');
         } catch (error) {
+            document.querySelector(".owner-filter").style.display = "none";
             return;
         }
         if (websiteStorage.user.databaseUse === "localStorage") {
             websiteStorage.user.databaseUse = "mongoDB";
             document.querySelector(".login-area").style.visibility = "visible";
+            document.querySelector(".owner-filter").style.display = "flex";
         } else {
             websiteStorage.user.databaseUse = "localStorage";
             document.querySelector(".login-area").style.visibility = "hidden";
+            document.querySelector(".owner-filter").style.display = "none";
         }
         document.getElementById("switch-database-use").textContent = websiteStorage.user.databaseUse;
         saveLocalStorage();
@@ -538,6 +549,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             saveLocalStorage();
             window.location = "login.html";
         }
+        setFilters();
         displayRoles();
     });
 
@@ -725,7 +737,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         }
         role.rating = [];
-        role.isFavorite = false;
+        role.favoriteList = [];
         if (!role.tags) {
             role.tags = autoAddTags(role);
         }
@@ -853,6 +865,10 @@ document.addEventListener("DOMContentLoaded", async function () {
                             score: ratingNumber
                         });
                     }
+                }
+                if (!role.favoriteList) {
+                    role.favoriteList = [];
+                    if (role.isFavorite) role.favoriteList.push(websiteStorage.user.currentUsername);
                 }
             }
             saveLocalStorage();
