@@ -27,7 +27,7 @@
                 <h2 id="character-type"></h2>
                 <h2 id="ability-text" class="ability-text"></h2>
             </div>
-            <div class="edit-role-field">
+            <div class="edit-role-field edit">
                 <div>
                     <label for="edit-role-name">Rolename</label>
                     <input id="edit-role-name" class="input" type="text"/>
@@ -57,7 +57,7 @@
         </div>
     </div>
 
-    <div class="image-submission">
+    <div class="image-submission edit">
         <h2>Change Role Icon</h2>
         <div class="set-image-div">
             <label for="image-input-url"></label>
@@ -75,39 +75,39 @@
         <h2>Night Order</h2>
         <div class="night-order-container">
             <label id="first-night" for="first-night-input">firstNight: </label>
-            <input id="first-night-input" class="edit-night-order night-order-number" type="number" min="0">
-            <button id="first-night-info-button"><i class="fa-regular fa-circle-info"></i></button>
-            <div id="first-night-info-text" class="night-order-info-text"></div>
+            <input id="first-night-input" class="night-order-number edit" type="number" min="0">
+            <button id="first-night-info-button" class="edit"><i class="fa-regular fa-circle-info"></i></button>
+            <div id="first-night-info-text" class="night-order-info-text edit"></div>
         </div>
         <div class="night-reminder-div">
             <label id="first-night-reminder" for="first-night-reminder-input">firstNightReminder: </label>
             <textarea id="first-night-reminder-input" cols="45" rows="4"
-                      class="text-area-input edit-night-order"></textarea>
+                      class="text-area-input edit"></textarea>
         </div>
         <div class="night-order-container">
             <label id="other-night" for="other-night-input">otherNight: </label>
-            <input id="other-night-input" class="edit-night-order night-order-number" type="number" min="0">
-            <button id="other-night-info-button"><i class="fa-regular fa-circle-info"></i></button>
-            <div id="other-night-info-text" class="night-order-info-text"></div>
+            <input id="other-night-input" class="night-order-number edit" type="number" min="0">
+            <button id="other-night-info-button" class="edit"><i class="fa-regular fa-circle-info"></i></button>
+            <div id="other-night-info-text" class="night-order-info-text edit"></div>
         </div>
         <div class="night-reminder-div">
             <label id="other-night-reminder" for="other-night-reminder-input">otherNightReminder: </label>
             <textarea id="other-night-reminder-input" cols="45" rows="4"
-                      class="text-area-input edit-night-order"></textarea>
+                      class="text-area-input edit"></textarea>
         </div>
-        <button id="edit-night-order-button" class="edit-night-order">Save Night Order Changes</button>
+        <button id="edit-night-order-button" class="edit">Save Night Order Changes</button>
     </div>
 
     <div class="reminder-tokens-tags-script-div">
         <div class="reminder-token">
             <h2>Reminder Tokens</h2>
-            <div class="edit-reminder-token">
+            <div class="edit-reminder-token edit">
                 <label for="reminder-token-input"></label>
                 <input id="reminder-token-input">
                 <button id="reminder-token-add-button">add Reminder Token</button>
             </div>
             <div class="reminder-token-list"></div>
-            <div class="edit-global-reminder-token">
+            <div class="edit-global-reminder-token edit">
                 <label for="global-reminder-token-input"></label>
                 <input id="global-reminder-token-input">
                 <button id="global-reminder-token-add-button">add Global Reminder Token</button>
@@ -120,21 +120,21 @@
         <div class="tags">
             <h2>Tags</h2>
             <div id="tag-display"></div>
-            <div class="edit-tags"></div>
+            <div class="edit-tags edit"></div>
         </div>
 
         <div class="script">
             <h2>Script</h2>
             <h3 id="script-text"></h3>
             <label for="script-edit-input"></label>
-            <input id="script-edit-input">
-            <button id="script-edit-button">Change Script</button>
+            <input id="script-edit-input" class="edit">
+            <button id="script-edit-button" class="edit">Change Script</button>
         </div>
     </div>
 
     <div class="jinxes">
         <h2>Jinxes</h2>
-        <div class="jinx-edit-div">
+        <div class="jinx-edit-div edit">
             <label for="jinx-role-input"></label>
             <input id="jinx-role-input" placeholder="Role" style="padding: 3px">
             <label for="jinx-text-input"></label>
@@ -147,7 +147,7 @@
 
     <div class="special">
         <h3>Special</h3>
-        <div id="special-edit-div" class="special-edit">
+        <div id="special-edit-div" class="special-edit edit">
             <div class="special-edit-selections">
                 <div class="required">
                     Required
@@ -208,9 +208,9 @@
         <h2>How To Run</h2>
         <p class="how-to-run-text"></p>
         <label for="how-to-run-input"></label>
-        <textarea id="how-to-run-input" class="text-area-input" cols="60" rows="6"
+        <textarea id="how-to-run-input" class="text-area-input edit" cols="60" rows="6"
                   placeholder="How To Run Text"></textarea>
-        <button id="how-to-run-button" type="submit">Change How To Run Text</button>
+        <button id="how-to-run-button" class="edit" type="submit">Change How To Run Text</button>
     </div>
 
     <div class="rating">
@@ -231,12 +231,12 @@
 
     <button class="download-json-button">Copy Json to clipboard</button>
 
-    <div class="delete-role">
+    <div class="delete-role edit">
         <label for="delete-role-button">Delete Role</label>
         <button id="delete-role-button"><i class="fa-solid fa-trash"></i></button>
     </div>
 
-    <div class="delete-popup-background">
+    <div class="delete-popup-background edit">
         <div class="delete-confirmation-popup">
             <p id="delete-confirmation-text">Are you sure you want to delete</p>
             <div>

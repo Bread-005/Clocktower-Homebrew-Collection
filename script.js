@@ -24,7 +24,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                 scriptFilter: "All",
                 tagFilter: "None",
                 databaseUse: "localStorage",
-                currentUsername: ""
+                currentUsername: "",
+                ownerFilter: "All"
             },
             archive: []
         }
@@ -41,6 +42,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const onlyMyFavoritesCheckBox = document.getElementById("only-my-favorites");
     const scriptFilterSelection = document.getElementById("script-filter-selection");
     const clearSearchesButton = document.getElementById("clear-searches-button");
+    const ownerSelection = document.getElementById("owner-selection");
     const homebrewRolesDisplay = document.getElementById("homebrewroles");
     const roleIdeaPageSelection = document.querySelector(".role-idea-page-selection");
     const scriptDownloadButton = document.getElementById("script-download-button");
@@ -80,6 +82,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     addRole();
     setupScriptSelection();
     setupTagFilterSelection();
+    setupOwnerFilterSelection();
     displayRoles();
     clearSearches();
     displayMisc();
@@ -244,6 +247,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             websiteStorage.user.tagFilter = tagFilterSelection.value;
             websiteStorage.user.onlyMyFavorites = onlyMyFavoritesCheckBox.checked;
             websiteStorage.user.sorting = sortingDropDownMenu.value;
+            websiteStorage.user.ownerFilter = ownerSelection.value;
             saveLocalStorage();
             displayRoles();
             displayMisc();
@@ -339,6 +343,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (scriptFilterSelection.value !== "All") {
             roles = roles.filter(role => role.script === scriptFilterSelection.value);
         }
+        if (websiteStorage.user.databaseUse === "mongoDB" && websiteStorage.user.ownerFilter !== "All") {
+            roles = roles.filter(role => role.owner.includes(websiteStorage.user.ownerFilter));
+        }
         return roles;
     }
 
@@ -406,6 +413,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             websiteStorage.user.onlyMyFavorites = false;
             websiteStorage.user.page = 1;
             websiteStorage.user.scriptFilter = "All";
+            websiteStorage.user.ownerFilter = "All";
             saveLocalStorage();
             displayRoles();
             displayMisc();
@@ -438,6 +446,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         onlyMyFavoritesCheckBox.checked = websiteStorage.user.onlyMyFavorites;
         scriptFilterSelection.value = websiteStorage.user.scriptFilter;
         tagFilterSelection.value = websiteStorage.user.tagFilter;
+        ownerSelection.value = websiteStorage.user.ownerFilter;
     }
 
     function saveLocalStorage() {
@@ -827,7 +836,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                 scriptFilter: "All",
                 tagFilter: "None",
                 databaseUse: "localStorage",
-                currentUsername: ""
+                currentUsername: "",
+                ownerFilter: "All"
             }
             saveLocalStorage();
         }
@@ -846,6 +856,29 @@ document.addEventListener("DOMContentLoaded", async function () {
                 }
             }
             saveLocalStorage();
+        }
+    }
+
+    function setupOwnerFilterSelection() {
+        if (websiteStorage.user.databaseUse === "localStorage") {
+            document.querySelector(".owner-filter").style.display = "none";
+            return;
+        }
+        document.querySelector(".owner-filter").style.display = "flex";
+        ownerSelection.innerText = "";
+        const allOwners = ["All"];
+        for (const role of websiteStorage.roleIdeas) {
+            for (const owner of role.owner) {
+                if (!allOwners.includes(owner)) {
+                    allOwners.push(owner);
+                }
+            }
+        }
+        for (const owner of allOwners) {
+            const option = document.createElement("option");
+            option.innerHTML = owner;
+            option.setAttribute("value", owner);
+            ownerSelection.append(option);
         }
     }
 });

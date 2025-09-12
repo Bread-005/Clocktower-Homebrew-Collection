@@ -18,7 +18,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const wikiRoleImage = document.getElementById("wiki-role-image");
     const editButton = document.getElementById("edit-button");
     const mainRoleDisplay = document.querySelector(".main-role-display");
-    const editRoleFieldDiv = document.querySelector(".edit-role-field");
     const editRoleNameInput = document.getElementById("edit-role-name");
     const editCharacterTypeInput = document.getElementById("edit-character-type");
     const editAbilityTextInput = document.getElementById("edit-ability-text");
@@ -35,8 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const otherNightInfoButton = document.getElementById("other-night-info-button");
     const otherNightInfoText = document.getElementById("other-night-info-text");
     const otherNightReminderInput = document.getElementById("other-night-reminder-input");
-    const editReminderTokenDiv = document.querySelector(".edit-reminder-token");
-    const editGlobalReminderTokenDiv = document.querySelector(".edit-global-reminder-token");
     const reminderTokenAddButton = document.getElementById("reminder-token-add-button");
     const globalReminderTokenAddButton = document.getElementById("global-reminder-token-add-button");
     const reminderTokenList = document.querySelector(".reminder-token-list");
@@ -44,10 +41,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const jinxRoleInput = document.getElementById("jinx-role-input");
     const jinxTextInput = document.getElementById("jinx-text-input");
     const jinxAddButton = document.getElementById("jinx-add-button");
-    const jinxEditDiv = document.querySelector(".jinx-edit-div");
     const jinxList = document.getElementById("jinx-display");
     const specialDisplay = document.getElementById("special-display");
-    const specialEditDiv = document.getElementById("special-edit-div");
     const specialTypeSelection = document.getElementById("special-type-selection");
     const specialNameSelection = document.getElementById("special-name-selection");
     const specialValueInput = document.getElementById("special-value-input");
@@ -64,7 +59,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const addCommentButton = document.getElementById("add-comment-button");
     const commentsList = document.getElementById("comments-list");
     const downloadJsonButton = document.querySelector(".download-json-button");
-    const deleteRoleDiv = document.querySelector(".delete-role");
     const deleteConfirmationText = document.getElementById("delete-confirmation-text");
     const deleteConfirmationYesButton = document.getElementById("delete-confirmation-yes-button");
     const deleteConfirmationCancelButton = document.getElementById("delete-confirmation-cancel-button");
@@ -125,7 +119,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 deleteButtonIcon.setAttribute("class", "js-delete-button fa-solid fa-trash");
 
                 deleteButton.append(deleteButtonIcon);
-                list.append(deleteButton);
+                if (!role.owner || role.owner.includes(websiteStorage.user.currentUsername) || comment.owner === websiteStorage.user.currentUsername) {
+                    list.append(deleteButton);
+                }
                 document.getElementById("comments-list").append(list);
 
                 deleteButton.addEventListener("click", async function () {
@@ -204,7 +200,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 inEditMode = !inEditMode;
 
                 if (inEditMode) {
-                    editRoleFieldDiv.style.display = "flex";
+                    document.querySelectorAll(".edit").forEach(element => element.style.display = "flex");
+                    firstNightInfoText.style.display = "none";
+                    otherNightInfoText.style.display = "none";
+                    deletePopupBackground.style.display = "none";
                     mainRoleDisplay.style.display = "none";
                     editRoleNameInput.value = role.name;
                     editCharacterTypeInput.value = role.characterType;
@@ -213,24 +212,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     howToRunChangeButton.style.display = "block";
                     setupTagsDisplay();
                     imageSubmission.style.display = "block";
-                    deleteRoleDiv.style.display = "flex";
-                    document.querySelectorAll(".edit-night-order").forEach(element => element.style.display = "flex");
                     firstNightInput.value = role.firstNight;
                     firstNightReminderInput.value = role.firstNightReminder;
                     otherNightInput.value = role.otherNight;
                     otherNightReminderInput.value = role.otherNightReminder;
                     showNightOrder();
-                    firstNightInfoButton.style.display = "flex";
-                    otherNightInfoButton.style.display = "flex";
-                    jinxEditDiv.style.display = "flex";
                     showJinxes();
-                    editReminderTokenDiv.style.display = "flex";
-                    editGlobalReminderTokenDiv.style.display = "flex";
                     displayReminders();
-                    specialEditDiv.style.display = "flex";
                     showSpecial();
-                    scriptEditInput.style.display = "flex";
-                    scriptEditButton.style.display = "flex";
                     showScript();
                     if (window.innerWidth <= 600) {
                         imageSubmission.prepend(wikiRoleImage);
@@ -337,7 +326,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 const comment = {
                     text: inputComment.value,
-                    createdAt: Date.now().toString()
+                    createdAt: Date.now().toString(),
+                    owner: websiteStorage.user.currentUsername
                 }
                 role.comments.push(comment);
                 await updateRole(role);
@@ -557,24 +547,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 editButton.style.display = "none";
             }
             mainRoleDisplay.style.display = "flex";
-            editRoleFieldDiv.style.display = "none";
-            imageSubmission.style.display = "none";
-            editTags.style.display = "none";
-            firstNightInfoButton.style.display = "none";
-            firstNightInfoText.style.display = "none";
-            otherNightInfoButton.style.display = "none";
-            otherNightInfoText.style.display = "none";
-            document.querySelectorAll(".edit-night-order").forEach(element => element.style.display = "none");
-            howToRunInput.style.display = "none";
-            howToRunChangeButton.style.display = "none";
-            jinxEditDiv.style.display = "none";
-            editReminderTokenDiv.style.display = "none";
-            editGlobalReminderTokenDiv.style.display = "none";
-            specialEditDiv.style.display = "none";
-            scriptEditButton.style.display = "none";
-            scriptEditInput.style.display = "none";
-            deleteRoleDiv.style.display = "none";
-            deletePopupBackground.style.display = "none";
+            document.querySelectorAll(".edit").forEach(element => element.style.display = "none");
         }
 
         function showSpecial() {
