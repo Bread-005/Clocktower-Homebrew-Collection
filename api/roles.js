@@ -63,6 +63,7 @@ app.post('/api/roles/update', async (req, res) => {
             script: role.script,
             comments: role.comments,
             lastEdited: role.lastEdited,
+            owner: role.owner,
         }
     });
     res.json(role);

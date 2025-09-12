@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     saveLocalStorage();
     try {
         websiteStorage.roleIdeas = await fetch('http://localhost:3000/api/roles').then(res => res.json());
+        saveLocalStorage();
         if (websiteStorage.user.currentUsername) {
             document.getElementById("current-username-display").textContent = "Username: " + websiteStorage.user.currentUsername;
             loginButton.textContent = "logout";
@@ -379,6 +380,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                 comments: [],
                 lastEdited: Date.now().toString()
             }
+            if (websiteStorage.user.databaseUse === "mongoDB") {
+                role.owner = [websiteStorage.user.currentUsername];
+            }
             if (websiteStorage.user.databaseUse === "localStorage") {
                 websiteStorage.localRoleIdeas.push(role);
             }
@@ -387,6 +391,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             roleNameInput.value = "";
             abilityTextInput.value = "";
             displayRoles();
+            window.location.reload();
         });
     }
 
@@ -722,6 +727,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         role.script = role.script.split(" v")[0];
         role.comments = [];
         role.lastEdited = Date.now().toString();
+        if (websiteStorage.user.databaseUse === "mongoDB") {
+            role.owner = [websiteStorage.user.currentUsername];
+        }
         if (websiteStorage.user.databaseUse === "localStorage") {
             websiteStorage.localRoleIdeas.push(role);
         }
@@ -729,6 +737,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         saveLocalStorage();
         jsonInputTextarea.value = "";
         displayRoles();
+        window.location.reload();
     }
 
     function autoAddTags(role) {

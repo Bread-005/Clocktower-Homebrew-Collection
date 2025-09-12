@@ -553,6 +553,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function hideEditStuff() {
+            if (role.owner && !role.owner.includes(websiteStorage.user.currentUsername)) {
+                editButton.style.display = "none";
+            }
             mainRoleDisplay.style.display = "flex";
             editRoleFieldDiv.style.display = "none";
             imageSubmission.style.display = "none";
