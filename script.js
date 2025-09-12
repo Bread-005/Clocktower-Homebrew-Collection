@@ -563,7 +563,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                     const jinxes = [];
 
                     for (const jinx of role.jinxes) {
-                        console.log(jinx)
                         jinxes.push({
                             id: jinx.jinxedRole.toLowerCase().replaceAll(" ", "_"),
                             reason: jinx.reason

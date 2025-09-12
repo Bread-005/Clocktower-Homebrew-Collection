@@ -1,4 +1,4 @@
-import {allRoles, firstNightList, otherNightList} from "./functions.js";
+import {allRoles, firstNightList, otherNightList, updateRole} from "./functions.js";
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -71,10 +71,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 img.setAttribute("src", "https://clocktower.live/img/demon.4669d783.webp");
             } else {
                 if (role.isOfficial) {
-                    img.setAttribute("src", "https://wiki.bloodontheclocktower.com/Special:FilePath/icon_" + role.name.toLowerCase().replaceAll(" ", "") + ".png");
+                    img.setAttribute("src", "./icons/Icon_" + role.name.toLowerCase().replaceAll(" ", "") + ".png");
                 }
                 if (!role.isOfficial) {
-                    img.setAttribute("src", role.image);
+                    img.setAttribute("src", role.image ? role.image : "https://i.postimg.cc/qM09f8cD/placeholder-icon.png");
                 }
             }
             img.setAttribute("width", "50px");
@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
 
-                button.addEventListener("click", function () {
+                button.addEventListener("click", async function () {
 
                     if (input.value === "") {
                         return;
@@ -148,18 +148,13 @@ document.addEventListener('DOMContentLoaded', function () {
                         for (const role1 of getRoleIdeas()) {
                             if (role.name === role1.name && role.ability === role1.ability) {
                                 if (firstNightOrderDisplayDiv.contains(div)) {
-                                    if (role1.firstNight !== Number.parseFloat(input.value)) {
-                                        role1.lastEdited = Date.now().toString();
-                                    }
                                     role1.firstNight = Number.parseFloat(input.value);
                                     roleNameAndNumber.textContent = role1.name + ": " + role1.firstNight;
                                 } else {
-                                    if (role1.otherNight !== Number.parseFloat(input.value)) {
-                                        role1.lastEdited = Date.now().toString();
-                                    }
                                     role1.otherNight = Number.parseFloat(input.value);
                                     roleNameAndNumber.textContent = role1.name + ": " + role1.otherNight;
                                 }
+                                await updateRole(role);
                                 saveLocalStorage();
                             }
                         }

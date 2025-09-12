@@ -1,9 +1,4 @@
-import {
-    allRoles,
-    characterTypes,
-    getTeamColor, copyJsonString,
-    StevenApprovedOrder
-} from "./functions.js";
+import {allRoles, characterTypes, getTeamColor, copyJsonString, StevenApprovedOrder} from "./functions.js";
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -82,7 +77,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     div.setAttribute("class", "role");
                     div.style.background = getTeamColor(role.characterType);
                     imgAndNameDiv.setAttribute("class", "img-and-name");
-                    img.setAttribute("src", role.image ? role.image : "https://i.postimg.cc/qM09f8cD/placeholder-icon.png");
+                    if (role.isOfficial) {
+                        img.setAttribute("src", "./icons/Icon_" + role.name.toLowerCase().replaceAll(" ", "") + ".png");
+                    } else {
+                        img.setAttribute("src", role.image ? role.image : "https://i.postimg.cc/qM09f8cD/placeholder-icon.png");
+                    }
                     img.setAttribute("class", "image");
                     name.textContent = role.name;
                     abilityText.textContent = role.ability;
@@ -101,7 +100,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         name: role.name,
                         characterType: role.characterType,
                         ability: role.ability,
-                        image: "https://wiki.bloodontheclocktower.com/Special:FilePath/icon_" + role.name.toLowerCase().replaceAll(" ", "") + ".png"
+                        image: "https://wiki.bloodontheclocktower.com/Special:FilePath/icon_" + role.name.toLowerCase().replaceAll(" ", "") + ".png",
+                        isOfficial: true
                     });
                 }
             }
@@ -156,7 +156,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 div.setAttribute("class", "role-div");
                 img.setAttribute("class", "clocktower-icon");
-                img.setAttribute("src", role.image ? role.image : "https://i.postimg.cc/qM09f8cD/placeholder-icon.png");
+                if (role.isOfficial) {
+                    img.setAttribute("src", "./icons/Icon_" + role.name.toLowerCase().replaceAll(" ", "") + ".png");
+                } else {
+                    img.setAttribute("src", role.image ? role.image : "https://i.postimg.cc/qM09f8cD/placeholder-icon.png")
+                }
 
                 checkbox.type = "checkbox";
                 checkbox.checked = websiteStorage.scriptToolRoles.map(role1 => role1.name).includes(role.name);
@@ -181,9 +185,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                         for (let k = 0; k < StevenApprovedOrder.length; k++) {
                                             if (a.ability.includes(StevenApprovedOrder[j]) && b.ability.includes(StevenApprovedOrder[k])) {
                                                 if (j === k) {
-                                                    const aAbilityLength = a.ability ? a.ability.length : 0;
-                                                    const bAbilityLength = b.ability ? b.ability.length : 0;
-                                                    return aAbilityLength - bAbilityLength;
+                                                    return a.ability.length - b.ability.length;
                                                 }
                                                 return j - k;
                                             }
