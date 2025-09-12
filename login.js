@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 
     loginButton.addEventListener("click", async () => {
+        if (!userNameInput.value) return;
         if (!userNames.includes(userNameInput.value)) {
 
             if (passwordInput.value !== confirmPasswordInput.value) {
@@ -56,8 +57,12 @@ document.addEventListener("DOMContentLoaded", async function () {
                 body: JSON.stringify(user)
             });
             loginMessage.textContent = "Enter your name and password again to login";
+            saveLocalStorage();
             userNames.push(user.name);
             users.push(user);
+            userNameInput.value = "";
+            passwordInput.value = "";
+            confirmPasswordInput.value = "";
         } else if (userNames.includes(userNameInput.value)) {
             const user = users.find(user => user.name === userNameInput.value);
             if (user.password !== passwordInput.value) {

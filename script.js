@@ -52,6 +52,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (!websiteStorage.user.currentUsername) websiteStorage.user.currentUsername = "";
     if (!websiteStorage.localRoleIdeas) websiteStorage.localRoleIdeas = websiteStorage.roleIdeas;
     websiteStorage.user.tempMessage = "";
+    adjustLocalStorage();
     saveLocalStorage();
     try {
         websiteStorage.roleIdeas = await fetch('http://localhost:3000/api/roles').then(res => res.json());
@@ -61,11 +62,18 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     } catch (error) {
         websiteStorage.user.databaseUse = "localStorage";
+        saveLocalStorage();
     }
     if (websiteStorage.user.databaseUse === "localStorage") {
         document.querySelector(".login-area").style.visibility = "hidden";
     }
     document.getElementById("switch-database-use").textContent = websiteStorage.user.databaseUse;
+
+    if (websiteStorage.user.databaseUse === "mongoDB" && !websiteStorage.user.currentUsername) {
+        websiteStorage.user.tempMessage = "When using the mongoDB Database, you have to login or sign up an account!";
+        saveLocalStorage();
+        window.location = "login.html";
+    }
 
     mobileSupportSetup();
     addRole();
@@ -120,8 +128,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             const rateIcon = document.createElement("i");
             rateIcon.setAttribute("class", "fa-sharp fa-regular fa-star");
 
-            if (role.rating > 0) {
-                rateInput.value = role.rating.toString();
+            if (websiteStorage.user.databaseUse === "localStorage" && role.rating.length > 0 || role.rating.find(rating => rating.user === websiteStorage.user.currentUsername)) {
+                rateInput.value = websiteStorage.user.databaseUse === "localStorage" ? role.rating[0].score : role.rating.find(rating => rating.user === websiteStorage.user.currentUsername).score;
                 rateIcon.setAttribute("class", "fa-solid fa-star");
                 rateIcon.setAttribute("style", "color: #FFD43B;");
             }
@@ -184,7 +192,16 @@ document.addEventListener("DOMContentLoaded", async function () {
                 if (rateInput.value === "") {
                     return;
                 }
-                role.rating = Number.parseFloat(rateInput.value);
+                if (websiteStorage.user.databaseUse === "localStorage" && role.rating.length > 0) {
+                    role.rating[0].score = Number.parseFloat(rateInput.value);
+                } else if (role.rating.find(rating => rating.user === websiteStorage.user.currentUsername)) {
+                    role.rating.find(rating => rating.user === websiteStorage.user.currentUsername).score = Number.parseFloat(rateInput.value);
+                } else {
+                    role.rating.push({
+                        user: websiteStorage.user.currentUsername,
+                        score: Number.parseFloat(rateInput.value)
+                    });
+                }
                 await updateRole(role);
                 saveLocalStorage();
                 displayRoles();
@@ -346,7 +363,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 createdAt: Date.now().toString(),
                 image: "",
                 otherImage: "",
-                rating: 0,
+                rating: [],
                 isFavorite: false,
                 tags: [],
                 firstNight: 0,
@@ -693,13 +710,15 @@ document.addEventListener("DOMContentLoaded", async function () {
                 special.value = "";
             }
         }
-        role.rating = 0;
+        role.rating = [];
         role.isFavorite = false;
         if (!role.tags) {
             role.tags = autoAddTags(role);
         }
         role.howToRun = "";
-        if (!role.script) role.script = "";
+        if (!role.script) {
+            role.script = "";
+        }
         role.script = role.script.split(" v")[0];
         role.comments = [];
         role.lastEdited = Date.now().toString();
@@ -787,4 +806,37 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
         window.location = "login.html";
     });
+
+    function adjustLocalStorage() {
+        if (!websiteStorage.user) {
+            websiteStorage.user = {
+                page: 1,
+                roleSearch: "",
+                characterType: "All",
+                sorting: "Newest first",
+                onlyMyFavorites: false,
+                scriptFilter: "All",
+                tagFilter: "None",
+                databaseUse: "localStorage",
+                currentUsername: ""
+            }
+            saveLocalStorage();
+        }
+
+        if (websiteStorage.user.databaseUse === "localStorage") {
+            for (const role of websiteStorage.localRoleIdeas) {
+                if (typeof role.rating === "number") {
+                    const ratingNumber = role.rating;
+                    role.rating = [];
+                    if (ratingNumber > 0) {
+                        role.rating.push({
+                            user: "",
+                            score: ratingNumber
+                        });
+                    }
+                }
+            }
+            saveLocalStorage();
+        }
+    }
 });

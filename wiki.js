@@ -173,10 +173,16 @@ document.addEventListener("DOMContentLoaded", function () {
         nightOrderInfoButtonListener(otherNightInfoButton, otherNightInfoText);
 
         function showPersonalRating() {
-            personalRoleRating.textContent = "You have not rated this role";
-            if (role.rating > 0) {
-                personalRoleRating.textContent = "Your rating: ";
-                const yellowStarCount = Math.round(role.rating);
+            let totalRatings = 0;
+            for (const rating of role.rating) {
+                totalRatings += rating.score;
+            }
+            if (role.rating.length === 0) {
+                personalRoleRating.textContent = "This role has not been rated yet";
+            }
+            if (role.rating.length > 0) {
+                personalRoleRating.textContent = "Average rating: ";
+                const yellowStarCount = Math.round(totalRatings / role.rating.length);
                 const grayStarCount = 10 - yellowStarCount;
                 for (let i = 0; i < yellowStarCount; i++) {
                     const yellowStarIcon = document.createElement("i");
@@ -189,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     grayStarIcon.setAttribute("class", "fa-regular fa-star");
                     personalRoleRating.append(grayStarIcon);
                 }
-                personalRoleRating.append(" " + role.rating + "/10");
+                personalRoleRating.append(" " + (totalRatings / role.rating.length) + "/10");
             }
         }
 
