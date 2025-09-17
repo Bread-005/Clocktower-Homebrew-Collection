@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const arrayOfArrays = [[], [], [], [], [], []];
 
     const roleNames = getRoleIdeas().map(role => role.name);
-    websiteStorage.scriptToolRoles = websiteStorage.scriptToolRoles.filter(role => roleNames.includes(role.name) || allRoles.map(role1 => role1.name).includes(role.name));
+    websiteStorage.scriptToolRoles = websiteStorage.scriptToolRoles.filter(role => roleNames.includes(role.name) || allRoles.map(role1 => role1.name).includes(role.name) && role.isOfficial);
 
     createRoleSelection();
     displaySelectionArea();
@@ -36,7 +36,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById("script-tool-download-json-button").addEventListener("click", function () {
         const script = [];
-        script.push({id: "_meta", name: scriptNameDisplay.textContent, author: scriptAuthorDisplay.textContent});
+        const scriptHead = {
+            id: "_meta",
+            name: scriptNameDisplay.textContent,
+            author: scriptAuthorDisplay.textContent,
+        }
+        if (!scriptHead.name) delete scriptHead.name;
+        if (!scriptHead.author) delete scriptHead.author;
+        script.push(scriptHead);
 
         for (const team of characterTypes) {
             for (const role of websiteStorage.scriptToolRoles) {

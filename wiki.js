@@ -621,8 +621,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function showOwners() {
-            ownerDisplay.style.display = inEditMode && websiteStorage.user.databaseUse === "mongoDB" ? "flex" : "none";
-            ownerDisplay.innerHTML = `<div>Owners</div>`;
+            if (websiteStorage.user.databaseUse === "localStorage") return;
+            ownerDisplay.style.display = inEditMode ? "flex" : "none";
+            ownerDisplay.innerHTML = `<h2 style="margin: 5px">Owners</h2>`;
             for (const owner of role.owner) {
                 const div = document.createElement("div");
                 div.textContent = owner;

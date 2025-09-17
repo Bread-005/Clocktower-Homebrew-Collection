@@ -195,19 +195,21 @@ input[type="number"] {
                         transform: scale(1.75);
                     }
                 }
-            }
 
-            .tag-div {
-                margin: 5px 0 0 6px;
+                .tag-div {
+                    margin: 5px 0 0 6px;
 
-                .tag-filter-selection {
-                    max-width: 120px;
-                    padding: 6px;
+                    .tag-filter-selection {
+                        max-width: 120px;
+                        padding: 6px;
+                    }
                 }
-            }
 
-            .owner-filter-selection {
-                margin: 5px 0 0 6px;
+                .owner-filter-selection {
+                    max-width: 100px;
+                    padding: 6px;
+                    margin-left: 15px;
+                }
             }
         }
 
