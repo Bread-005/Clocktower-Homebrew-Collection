@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const tagFilterSelection = document.getElementById("tag-filter-selection");
     const onlyMyFavoritesCheckBox = document.getElementById("only-my-favorites");
     const scriptFilterSelection = document.getElementById("script-filter-selection");
-    const clearSearchesButton = document.getElementById("clear-searches-button");
+    const clearFiltersButton = document.getElementById("clear-filters-button");
     const ownerSelection = document.getElementById("owner-selection");
     const homebrewRolesDisplay = document.getElementById("homebrewroles");
     const roleIdeaPageSelection = document.querySelector(".role-idea-page-selection");
@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     setupTagFilterSelection();
     setupOwnerFilterSelection();
     displayRoles();
-    clearSearches();
+    clearFilters();
     displayMisc();
 
     let roleCreationMode = 0;
@@ -307,7 +307,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
         const pages = array.length / 10;
         if (array.length === 0) {
-            homebrewRolesDisplay.innerHTML = "There is no role, that matches your search";
+            homebrewRolesDisplay.innerHTML = "There is no role, that matches your filters";
         }
         roleIdeaPageSelection.innerHTML = "";
         for (let i = 0; i < pages; i++) {
@@ -410,8 +410,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     }
 
-    function clearSearches() {
-        clearSearchesButton.addEventListener("click", function () {
+    function clearFilters() {
+        clearFiltersButton.addEventListener("click", function () {
             websiteStorage.user.roleSearch = "";
             websiteStorage.user.characterType = "All";
             websiteStorage.user.sorting = "Newest first"
@@ -646,7 +646,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 roleFilter.append(document.getElementById("script-filter-selection-div"));
                 roleFilter.append(document.querySelector(".tag-div"));
                 roleFilter.append(document.querySelector(".only-my-favorites-div"));
-                roleFilter.append(clearSearchesButton);
+                roleFilter.append(clearFiltersButton);
                 roleFilter.append(document.querySelector(".sorting-role-display"));
             }
         }
