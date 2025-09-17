@@ -63,6 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const deleteConfirmationYesButton = document.getElementById("delete-confirmation-yes-button");
     const deleteConfirmationCancelButton = document.getElementById("delete-confirmation-cancel-button");
     const deletePopupBackground = document.querySelector(".delete-popup-background");
+    const ownerDisplay = document.querySelector(".owner-display");
 
     for (const role of getRoleIdeas()) {
         if (role.createdAt !== id) {
@@ -233,6 +234,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     showSpecial();
                     showScript();
                 }
+                showOwners();
             });
         }
 
@@ -615,6 +617,47 @@ document.addEventListener("DOMContentLoaded", function () {
                 await updateRole(role);
                 saveLocalStorage();
                 showScript();
+            });
+        }
+
+        function showOwners() {
+            ownerDisplay.style.display = inEditMode && websiteStorage.user.databaseUse === "mongoDB" ? "flex" : "none";
+            ownerDisplay.innerHTML = `<div>Owners</div>`;
+            for (const owner of role.owner) {
+                const div = document.createElement("div");
+                div.textContent = owner;
+                if (websiteStorage.user.currentUsername !== owner) {
+                    const deleteButton = document.createElement("button");
+                    const deleteIcon = document.createElement("i");
+                    deleteIcon.setAttribute("class", "fa-solid fa-trash");
+                    deleteButton.append(deleteIcon);
+                    div.append(deleteButton);
+                    deleteButton.addEventListener("click", async function () {
+                        role.owner = role.owner.filter(owner1 => owner1 !== owner);
+                        await updateRole(role, false);
+                        saveLocalStorage();
+                        showOwners();
+                    });
+                }
+                ownerDisplay.append(div);
+            }
+            const div = document.createElement("div");
+            const input = document.createElement("input");
+            input.style.maxWidth = "85px";
+            input.style.height = "25px";
+            const button = document.createElement("button");
+            const plusIcon = document.createElement("i");
+            plusIcon.setAttribute("class", "fa-solid fa-plus");
+            button.append(plusIcon);
+            div.append(input);
+            div.append(button);
+            ownerDisplay.append(div);
+            button.addEventListener("click", async function () {
+                if (input.value === "") return;
+                role.owner.push(input.value);
+                await updateRole(role, false);
+                saveLocalStorage();
+                showOwners();
             });
         }
     }

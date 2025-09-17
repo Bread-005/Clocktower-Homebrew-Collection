@@ -47,7 +47,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     const roleIdeaPageSelection = document.querySelector(".role-idea-page-selection");
     const scriptDownloadButton = document.getElementById("script-download-button");
     const localstorageDownloadButton = document.getElementById("localstorage-download-button");
+    const loginArea = document.querySelector(".login-area");
     const loginButton = document.querySelector(".login-button");
+    const databaseUseDiv = document.querySelector(".database-use");
+    const switchDatabaseUseButton = document.getElementById("switch-database-use");
+    const ownerFilter = document.querySelector(".owner-filter");
 
     const websiteStorage = JSON.parse(localStorage.getItem(storageString));
     if (!websiteStorage.user.databaseUse) websiteStorage.user.databaseUse = "localStorage";
@@ -66,11 +70,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     } catch (error) {
         websiteStorage.user.databaseUse = "localStorage";
         saveLocalStorage();
+        databaseUseDiv.style.display = "none";
     }
     if (websiteStorage.user.databaseUse === "localStorage") {
-        document.querySelector(".login-area").style.visibility = "hidden";
+        loginArea.style.visibility = "hidden";
     }
-    document.getElementById("switch-database-use").textContent = websiteStorage.user.databaseUse;
+    switchDatabaseUseButton.textContent = websiteStorage.user.databaseUse;
 
     if (websiteStorage.user.databaseUse === "mongoDB" && !websiteStorage.user.currentUsername) {
         websiteStorage.user.tempMessage = "When using the mongoDB Database, you have to login or sign up an account!";
@@ -526,23 +531,24 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     });
 
-    document.getElementById("switch-database-use").addEventListener("click", async function () {
+    switchDatabaseUseButton.addEventListener("click", async function () {
         try {
             await fetch('http://localhost:3000/api/roles');
         } catch (error) {
-            document.querySelector(".owner-filter").style.display = "none";
+            ownerFilter.style.display = "none";
+            databaseUseDiv.style.display = "none";
             return;
         }
         if (websiteStorage.user.databaseUse === "localStorage") {
             websiteStorage.user.databaseUse = "mongoDB";
-            document.querySelector(".login-area").style.visibility = "visible";
-            document.querySelector(".owner-filter").style.display = "flex";
+            loginArea.style.visibility = "visible";
+            ownerFilter.style.display = "flex";
         } else {
             websiteStorage.user.databaseUse = "localStorage";
-            document.querySelector(".login-area").style.visibility = "hidden";
-            document.querySelector(".owner-filter").style.display = "none";
+            loginArea.style.visibility = "hidden";
+            ownerFilter.style.display = "none";
         }
-        document.getElementById("switch-database-use").textContent = websiteStorage.user.databaseUse;
+        switchDatabaseUseButton.textContent = websiteStorage.user.databaseUse;
         saveLocalStorage();
         if (websiteStorage.user.databaseUse === "mongoDB" && !websiteStorage.user.currentUsername) {
             websiteStorage.user.tempMessage = "You have to first create an account / login to use the public database";
@@ -877,10 +883,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     function setupOwnerFilterSelection() {
         if (websiteStorage.user.databaseUse === "localStorage") {
-            document.querySelector(".owner-filter").style.display = "none";
+            ownerFilter.style.display = "none";
             return;
         }
-        document.querySelector(".owner-filter").style.display = "flex";
+        ownerFilter.style.display = "flex";
         ownerSelection.innerText = "";
         const allOwners = ["All"];
         for (const role of websiteStorage.roleIdeas) {

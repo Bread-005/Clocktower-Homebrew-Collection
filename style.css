@@ -145,6 +145,11 @@ input[type="number"] {
             margin-bottom: 15rem;
         }
 
+        .database-use {
+            display: block;
+            flex-direction: column;
+        }
+
         @media (max-width: 600px) {
             display: flex;
             justify-content: space-between;
@@ -643,6 +648,13 @@ input[type="number"] {
             align-items: center;
             flex-direction: column;
         }
+    }
+
+    .owner-display {
+        display: none;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
     }
 }
 
