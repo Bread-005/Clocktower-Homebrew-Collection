@@ -67,6 +67,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             document.getElementById("current-username-display").textContent = "Username: " + websiteStorage.user.currentUsername;
             loginButton.textContent = "logout";
         }
+        if (!websiteStorage.user.currentUsername) {
+            websiteStorage.user.tempMessage = "When using the mongoDB Database, you have to login or sign up an account!";
+            saveLocalStorage();
+            window.location = "login.html";
+        }
     } catch (error) {
         websiteStorage.user.databaseUse = "localStorage";
         saveLocalStorage();
@@ -76,12 +81,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         loginArea.style.visibility = "hidden";
     }
     switchDatabaseUseButton.textContent = websiteStorage.user.databaseUse;
-
-    if (websiteStorage.user.databaseUse === "mongoDB" && !websiteStorage.user.currentUsername) {
-        websiteStorage.user.tempMessage = "When using the mongoDB Database, you have to login or sign up an account!";
-        saveLocalStorage();
-        window.location = "login.html";
-    }
 
     mobileSupportSetup();
     addRole();
