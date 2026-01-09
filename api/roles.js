@@ -3,7 +3,7 @@ const {MongoClient} = require("mongodb");
 const cors = require("cors");
 
 const app = express();
-app.use(cors({origin: ['http://localhost:63342', 'https://bread-005.github.io']}));
+app.use(cors({origin: ['http://localhost:63342', 'https://bread-005.github.io', 'https://control.katabump.com/server/5c8369d4']}));
 app.use(express.json());
 
 async function database(type = "roles") {
