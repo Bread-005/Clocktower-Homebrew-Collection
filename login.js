@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", async function () {
 
     try {
-        await fetch('http://localhost:3000/api/users');
+        await fetch('https://control.katabump.com/server/5c8369d4/api/users');
     } catch (error) {
         window.location = "index.html";
         return;
@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const loginButton = document.getElementById("login-page-login-button");
     const loginMessage = document.getElementById("login-message");
     const userNames = [];
-    let users = await fetch('http://localhost:3000/api/users').then(res => res.json());
+    let users = await fetch('https://control.katabump.com/server/5c8369d4/api/users').then(res => res.json());
     for (const user of users) {
         userNames.push(user.name);
     }
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 createdAt: Date.now().toString()
             }
 
-            await fetch('http://localhost:3000/api/users/create', {
+            await fetch('https://control.katabump.com/server/5c8369d4/api/users/create', {
                 method: "POST",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(user)
