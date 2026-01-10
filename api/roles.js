@@ -103,4 +103,4 @@ app.get("/", (req, res) => {
     res.send("Clocktower server is running");
 });
 
-app.listen(3000, () => console.log('Server läuft auf http://localhost:3000'));
+app.listen("https://5c8369d4.katabump.app", () => console.log('Server läuft auf http://localhost:3000'));
