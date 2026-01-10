@@ -991,34 +991,34 @@ async function updateRole(role, updateLastEdited = true) {
     }
     const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
     if (websiteStorage.user.databaseUse !== "mongoDB") return;
-    await fetch('https://control.katabump.com/server/5c8369d4/api/roles/update', {
+    await fetch('http://localhost:3000/api/roles/update', {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(role)
     });
-    websiteStorage.roleIdeas = await fetch('https://control.katabump.com/server/5c8369d4/api/roles').then(res => res.json());
+    websiteStorage.roleIdeas = await fetch('http://localhost:3000/api/roles').then(res => res.json());
 }
 
 async function createRole(role) {
     const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
     if (websiteStorage.user.databaseUse !== "mongoDB") return;
-    await fetch('https://control.katabump.com/server/5c8369d4/api/roles/create', {
+    await fetch('http://localhost:3000/api/roles/create', {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(role)
     });
-    websiteStorage.roleIdeas = await fetch('https://control.katabump.com/server/5c8369d4/api/roles').then(res => res.json());
+    websiteStorage.roleIdeas = await fetch('http://localhost:3000/api/roles').then(res => res.json());
 }
 
 async function deleteRole(role) {
     const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
     if (websiteStorage.user.databaseUse !== "mongoDB") return;
-    await fetch('https://control.katabump.com/server/5c8369d4/api/roles/delete', {
+    await fetch('http://localhost:3000/api/roles/delete', {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(role)
     });
-    websiteStorage.roleIdeas = await fetch('https://control.katabump.com/server/5c8369d4/api/roles').then(res => res.json());
+    websiteStorage.roleIdeas = await fetch('http://localhost:3000/api/roles').then(res => res.json());
 }
 
 export {

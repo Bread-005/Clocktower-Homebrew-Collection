@@ -3,7 +3,7 @@ const {MongoClient} = require("mongodb");
 const cors = require("cors");
 
 const app = express();
-app.use(cors({origin: ['http://localhost:63342', 'https://bread-005.github.io', 'https://control.katabump.com/server/5c8369d4']}));
+app.use(cors({origin: ['http://localhost:63342', 'https://bread-005.github.io']}));
 app.use(express.json());
 
 async function database(type = "roles") {
@@ -99,4 +99,8 @@ app.post('/api/users/create', async (req, res) => {
     res.json(result);
 });
 
-app.listen(3000, () => console.log('Server läuft auf https://control.katabump.com/server/5c8369d4'));
+app.get("/", (req, res) => {
+    res.send("Clocktower server is running");
+});
+
+app.listen(3000, () => console.log('Server läuft auf http://localhost:3000'));
