@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     adjustLocalStorage();
     saveLocalStorage();
     try {
-        websiteStorage.roleIdeas = await fetch('http://localhost:3000/api/roles').then(res => res.json());
+        websiteStorage.roleIdeas = await fetch('https://clocktower-homebrew-collection-13pz.onrender.com/api/roles').then(res => res.json());
         saveLocalStorage();
         if (websiteStorage.user.currentUsername) {
             document.getElementById("current-username-display").textContent = "Username: " + websiteStorage.user.currentUsername;
@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             wikiButton.addEventListener("click", async function () {
                 if (websiteStorage.user.databaseUse === "mongoDB") {
                     try {
-                        await fetch('http://localhost:3000/api/roles');
+                        await fetch('https://clocktower-homebrew-collection-13pz.onrender.com/api/roles');
                     } catch (error) {
                         window.location = "index.html";
                     }
@@ -532,7 +532,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     switchDatabaseUseButton.addEventListener("click", async function () {
         try {
-            await fetch('http://localhost:3000/api/roles');
+            await fetch('https://clocktower-homebrew-collection-13pz.onrender.com/api/roles');
         } catch (error) {
             ownerFilter.style.display = "none";
             databaseUseDiv.style.display = "none";

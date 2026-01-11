@@ -991,34 +991,34 @@ async function updateRole(role, updateLastEdited = true) {
     }
     const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
     if (websiteStorage.user.databaseUse !== "mongoDB") return;
-    await fetch('http://localhost:3000/api/roles/update', {
+    await fetch('https://clocktower-homebrew-collection-13pz.onrender.com/api/roles/update', {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(role)
     });
-    websiteStorage.roleIdeas = await fetch('http://localhost:3000/api/roles').then(res => res.json());
+    websiteStorage.roleIdeas = await fetch('https://clocktower-homebrew-collection-13pz.onrender.com/api/roles').then(res => res.json());
 }
 
 async function createRole(role) {
     const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
     if (websiteStorage.user.databaseUse !== "mongoDB") return;
-    await fetch('http://localhost:3000/api/roles/create', {
+    await fetch('https://clocktower-homebrew-collection-13pz.onrender.com/api/roles/create', {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(role)
     });
-    websiteStorage.roleIdeas = await fetch('http://localhost:3000/api/roles').then(res => res.json());
+    websiteStorage.roleIdeas = await fetch('https://clocktower-homebrew-collection-13pz.onrender.com/api/roles').then(res => res.json());
 }
 
 async function deleteRole(role) {
     const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
     if (websiteStorage.user.databaseUse !== "mongoDB") return;
-    await fetch('http://localhost:3000/api/roles/delete', {
+    await fetch('https://clocktower-homebrew-collection-13pz.onrender.com/api/roles/delete', {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(role)
     });
-    websiteStorage.roleIdeas = await fetch('http://localhost:3000/api/roles').then(res => res.json());
+    websiteStorage.roleIdeas = await fetch('https://clocktower-homebrew-collection-13pz.onrender.com/api/roles').then(res => res.json());
 }
 
 export {
