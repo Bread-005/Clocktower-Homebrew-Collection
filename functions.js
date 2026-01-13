@@ -992,7 +992,7 @@ async function updateRole(role, updateLastEdited = true) {
     const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
     if (websiteStorage.user.databaseUse !== "mongoDB") return;
     await fetch(API_URL + '/roles/update', {
-        method: "POST",
+        method: "PUT",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(role)
     });
@@ -1014,7 +1014,7 @@ async function deleteRole(role) {
     const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
     if (websiteStorage.user.databaseUse !== "mongoDB") return;
     await fetch(API_URL + '/roles/delete', {
-        method: "POST",
+        method: "DELETE",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(role)
     });
