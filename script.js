@@ -563,6 +563,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             saveLocalStorage();
             window.location = "login.html";
         }
+        websiteStorage.user.scriptFilter = "All";
+        websiteStorage.user.ownerFilter = "All";
+        setupScriptSelection();
         setFilters();
         displayRoles();
     });
