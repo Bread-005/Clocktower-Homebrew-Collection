@@ -991,37 +991,39 @@ async function updateRole(role, updateLastEdited = true) {
     }
     const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
     if (websiteStorage.user.databaseUse !== "mongoDB") return;
-    await fetch('https://clocktower-homebrew-collection-13pz.onrender.com/api/roles/update', {
+    await fetch(API_URL + '/roles/update', {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(role)
     });
-    websiteStorage.roleIdeas = await fetch('https://clocktower-homebrew-collection-13pz.onrender.com/api/roles').then(res => res.json());
+    websiteStorage.roleIdeas = await fetch(API_URL + '/roles').then(res => res.json());
 }
 
 async function createRole(role) {
     const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
     if (websiteStorage.user.databaseUse !== "mongoDB") return;
-    await fetch('https://clocktower-homebrew-collection-13pz.onrender.com/api/roles/create', {
+    await fetch(API_URL + '/roles/create', {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(role)
     });
-    websiteStorage.roleIdeas = await fetch('https://clocktower-homebrew-collection-13pz.onrender.com/api/roles').then(res => res.json());
+    websiteStorage.roleIdeas = await fetch(API_URL + '/roles').then(res => res.json());
 }
 
 async function deleteRole(role) {
     const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
     if (websiteStorage.user.databaseUse !== "mongoDB") return;
-    await fetch('https://clocktower-homebrew-collection-13pz.onrender.com/api/roles/delete', {
+    await fetch(API_URL + '/roles/delete', {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(role)
     });
-    websiteStorage.roleIdeas = await fetch('https://clocktower-homebrew-collection-13pz.onrender.com/api/roles').then(res => res.json());
+    websiteStorage.roleIdeas = await fetch(API_URL + '/roles').then(res => res.json());
 }
+
+const API_URL = "https://clocktower-homebrew-collection-13pz.onrender.com";
 
 export {
     copyJsonString, showCopyPopup, firstNightList, otherNightList, allRoles, allTags, getTeamColor, characterTypes,
-    StevenApprovedOrder, updateRole, createRole, deleteRole
+    StevenApprovedOrder, updateRole, createRole, deleteRole, API_URL
 }

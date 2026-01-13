@@ -1,4 +1,13 @@
-import {copyJsonString, showCopyPopup, allRoles, allTags, getTeamColor, updateRole, createRole} from "./functions.js";
+import {
+    copyJsonString,
+    showCopyPopup,
+    allRoles,
+    allTags,
+    getTeamColor,
+    updateRole,
+    createRole,
+    API_URL
+} from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", async function () {
 
@@ -61,7 +70,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     adjustLocalStorage();
     saveLocalStorage();
     try {
-        websiteStorage.roleIdeas = await fetch('https://clocktower-homebrew-collection-13pz.onrender.com/api/roles').then(res => res.json());
+        websiteStorage.roleIdeas = await fetch(API_URL + '/roles').then(res => res.json());
         saveLocalStorage();
         if (websiteStorage.user.currentUsername) {
             document.getElementById("current-username-display").textContent = "Username: " + websiteStorage.user.currentUsername;
@@ -217,7 +226,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             wikiButton.addEventListener("click", async function () {
                 if (websiteStorage.user.databaseUse === "mongoDB") {
                     try {
-                        await fetch('https://clocktower-homebrew-collection-13pz.onrender.com/api/roles');
+                        await fetch(API_URL + '/roles');
                     } catch (error) {
                         window.location = "index.html";
                     }
@@ -532,7 +541,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     switchDatabaseUseButton.addEventListener("click", async function () {
         try {
-            await fetch('https://clocktower-homebrew-collection-13pz.onrender.com/api/roles');
+            await fetch(API_URL + '/roles');
         } catch (error) {
             ownerFilter.style.display = "none";
             databaseUseDiv.style.display = "none";

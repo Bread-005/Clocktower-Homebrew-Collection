@@ -1,7 +1,9 @@
+import {API_URL} from "./functions";
+
 document.addEventListener("DOMContentLoaded", async function () {
 
     try {
-        await fetch('https://clocktower-homebrew-collection-13pz.onrender.com/api/users');
+        await fetch(API_URL + '/users');
     } catch (error) {
         window.location = "index.html";
         return;
@@ -15,7 +17,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const loginButton = document.getElementById("login-page-login-button");
     const loginMessage = document.getElementById("login-message");
     const userNames = [];
-    let users = await fetch('https://clocktower-homebrew-collection-13pz.onrender.com/api/users').then(res => res.json());
+    let users = await fetch(API_URL + '/users').then(res => res.json());
     for (const user of users) {
         userNames.push(user.name);
     }
@@ -51,7 +53,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 createdAt: Date.now().toString()
             }
 
-            await fetch('https://clocktower-homebrew-collection-13pz.onrender.com/api/users/create', {
+            await fetch(API_URL + '/users/create', {
                 method: "POST",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(user)
