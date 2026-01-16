@@ -1,4 +1,4 @@
-function copyJsonString(role) {
+function getJsonString(role, copyJsonToClipboard = false) {
     const jsonRole = {
         id: role.name.toLowerCase().replaceAll(" ", "_"),
         name: role.name,
@@ -65,23 +65,10 @@ function copyJsonString(role) {
             jsonRole.special.push(tempSpecial);
         }
     }
-    const jsonRoleObject = JSON.stringify(jsonRole, null, 4);
-    navigator.clipboard.writeText(jsonRoleObject).then();
-    return jsonRole;
-}
-
-function showCopyPopup(element) {
-    const copyPopup = document.createElement("div");
-    copyPopup.setAttribute("class", "copy-popup");
-    copyPopup.textContent = "Role Json copied to Clipboard";
-    if (element.textContent.length < 2) {
-        copyPopup.style.left = "-35px";
+    if (copyJsonToClipboard) {
+        navigator.clipboard.writeText(JSON.stringify(jsonRole, null, 4)).then();
     }
-    element.append(copyPopup);
-
-    setTimeout(function () {
-        element.removeChild(copyPopup);
-    }, 3500);
+    return jsonRole;
 }
 
 const firstNightList = ["Wraith", "Lord of Typhon", "Kazali", "Boffin", "Philosopher", "Alchemist", "Poppy Grower",
@@ -1023,7 +1010,28 @@ async function deleteRole(role) {
 
 const API_URL = "https://clocktower-homebrew-collection-13pz.onrender.com";
 
+function createPopup(parentElement, text, duration = 10000, backgroundColor = "red") {
+    const popup = document.createElement("div");
+    popup.classList.add("popup");
+    popup.style.backgroundColor = backgroundColor;
+    popupZIndex++;
+    popup.style.zIndex = popupZIndex.toString();
+    const p = document.createElement("p");
+    p.textContent = text;
+    popup.append(p);
+    parentElement.append(popup);
+
+    setTimeout(() => {
+        parentElement.removeChild(popup);
+        popupZIndex--;
+    }, duration);
+}
+
+let popupZIndex = 1000;
+
+const n = "\n";
+
 export {
-    copyJsonString, showCopyPopup, firstNightList, otherNightList, allRoles, allTags, getTeamColor, characterTypes,
-    StevenApprovedOrder, updateRole, createRole, deleteRole, API_URL
+    getJsonString, firstNightList, otherNightList, allRoles, allTags, getTeamColor, characterTypes,
+    StevenApprovedOrder, updateRole, createRole, deleteRole, API_URL, createPopup, n
 }

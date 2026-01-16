@@ -1,11 +1,5 @@
 import {
-    copyJsonString,
-    showCopyPopup,
-    firstNightList,
-    otherNightList,
-    allTags,
-    updateRole,
-    deleteRole
+    getJsonString, firstNightList, otherNightList, allTags, updateRole, deleteRole, createPopup
 } from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -102,8 +96,8 @@ document.addEventListener("DOMContentLoaded", function () {
         displayComments();
         addComments();
         downloadJsonButton.addEventListener("click", function () {
-            copyJsonString(role);
-            showCopyPopup(downloadJsonButton);
+            getJsonString(role, true);
+            createPopup(downloadJsonButton, "Role Json copied to Clipboard", 3500, "lightblue");
         });
         deleteRoleListener();
 

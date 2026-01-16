@@ -1,12 +1,5 @@
 import {
-    copyJsonString,
-    showCopyPopup,
-    allRoles,
-    allTags,
-    getTeamColor,
-    updateRole,
-    createRole,
-    API_URL
+    getJsonString, allRoles, allTags, getTeamColor, updateRole, createRole, API_URL, createPopup
 } from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -250,8 +243,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
 
             downloadJsonButton.addEventListener("click", function () {
-                copyJsonString(role);
-                showCopyPopup(downloadJsonButton);
+                getJsonString(role, true);
+                createPopup(downloadJsonButton, "Role Json copied to Clipboard", 3500, "lightblue");
             });
         }
         showPages(roles, roleIdeaArray);
@@ -488,12 +481,18 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (text[0] === '"') text = text.substring(1);
         if (text[text.length - 1] === '"') text = text.substring(0, text.length - 1);
         if (text[text.length - 1] === ',') text = text.substring(0, text.length - 1);
-        if (!text.includes("id") || !text.includes("name") || !text.includes("team") || !text.includes("ability")) {
-            return;
-        }
-        const role = JSON.parse(text);
+        try {
+            const role = JSON.parse(text);
 
-        await addRoleViaJson(role);
+            if (!role.id || !role.name || !role.ability || !role.team) {
+                createPopup(document.querySelector(".main-page"), "every role has to have these attributes: id, name, ability, team");
+                return;
+            }
+
+            await addRoleViaJson(role);
+        } catch (err) {
+            createPopup(document.querySelector(".main-page"), "Your role has to be valid JSON!");
+        }
     });
 
     document.getElementById("script-upload").addEventListener("change", function (event) {
@@ -588,7 +587,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (roles.length === 0) return;
 
         for (const role of roles) {
-            content.push(copyJsonString(role));
+            content.push(getJsonString(role));
         }
 
         const dataUrl = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(content, null, 4));
@@ -755,6 +754,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
         role.rating = [];
         role.favoriteList = [];
+        if (role.tags) {
+            role.tags = role.tags.filter(tag => allTags.includes(tag));
+        }
         if (!role.tags) {
             role.tags = autoAddTags(role);
         }

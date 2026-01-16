@@ -1,4 +1,4 @@
-import {allRoles, characterTypes, getTeamColor, copyJsonString, StevenApprovedOrder} from "./functions.js";
+import {allRoles, characterTypes, getTeamColor, getJsonString, StevenApprovedOrder, n} from "./functions.js";
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     document.getElementById("script-tool-download-json-button").addEventListener("click", function () {
-        const script = [];
+        let script = "[";
         const scriptHead = {
             id: "_meta",
             name: scriptNameDisplay.textContent,
@@ -43,23 +43,24 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         if (!scriptHead.name) delete scriptHead.name;
         if (!scriptHead.author) delete scriptHead.author;
-        script.push(scriptHead);
+        script += JSON.stringify(scriptHead) + "," + n;
 
         for (const team of characterTypes) {
             for (const role of websiteStorage.scriptToolRoles) {
                 if (role.characterType === team) {
                     if (allRoles.map(role1 => role1.name).includes(role.name)) {
-                        script.push(role.name.toLowerCase().replaceAll(" ", "_"));
+                        script += '"' + role.name.toLowerCase().replaceAll(" ", "_") + '",' + n;
                         continue;
                     }
-                    script.push(copyJsonString(role));
+                    script += JSON.stringify(getJsonString(role), null, 4) + ',' + n;
                 }
             }
         }
-
+        script += "]";
+        script = script.replace("," + n + "]", n + "]");
         console.log(script);
 
-        const dataUrl = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(script, null, 4));
+        const dataUrl = "data:application/json;charset=utf-8," + script;
         const link = document.createElement("a");
         link.href = dataUrl;
         link.download = scriptNameDisplay.textContent + ".json";
@@ -187,31 +188,19 @@ document.addEventListener('DOMContentLoaded', function () {
                         websiteStorage.scriptToolRoles.sort(function (a, b) {
 
                             if (a.characterType === b.characterType) {
-                                if (a.ability && b.ability) {
-                                    for (let j = 0; j < StevenApprovedOrder.length; j++) {
-                                        for (let k = 0; k < StevenApprovedOrder.length; k++) {
-                                            if (a.ability.includes(StevenApprovedOrder[j]) && b.ability.includes(StevenApprovedOrder[k])) {
-                                                if (j === k) {
-                                                    return a.ability.length - b.ability.length;
-                                                }
-                                                return j - k;
+                                for (let j = 0; j < StevenApprovedOrder.length; j++) {
+                                    for (let k = 0; k < StevenApprovedOrder.length; k++) {
+                                        if (a.ability.includes(StevenApprovedOrder[j]) && b.ability.includes(StevenApprovedOrder[k])) {
+                                            if (j === k) {
+                                                return a.ability.length - b.ability.length;
                                             }
+                                            return j - k;
                                         }
                                     }
                                 }
-
-                                const aAbilityLength = a.ability ? a.ability.length : 0;
-                                const bAbilityLength = b.ability ? b.ability.length : 0;
-                                return aAbilityLength - bAbilityLength;
                             }
 
-                            for (let j = 0; j < characterTypes.length; j++) {
-                                for (let k = 0; k < characterTypes.length; k++) {
-                                    if (a.characterType === characterTypes[j] && b.characterType === characterTypes[k]) {
-                                        return j - k;
-                                    }
-                                }
-                            }
+                            return characterTypes.indexOf(a.characterType) - characterTypes.indexOf(b.characterType);
                         });
                     }
                     if (!checkbox.checked) {
