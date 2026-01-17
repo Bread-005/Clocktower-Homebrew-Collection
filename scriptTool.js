@@ -1,9 +1,9 @@
-import {allRoles, characterTypes, getTeamColor, getJsonString, StevenApprovedOrder, n} from "./functions.js";
+import {
+    allRoles, characterTypes, getTeamColor, getJsonString, StevenApprovedOrder, n, getRoleIdeas, websiteStorage,
+    saveLocalStorage
+} from "./functions.js";
 
 document.addEventListener('DOMContentLoaded', function () {
-
-    const storageString = "websiteStorage1";
-    const websiteStorage = JSON.parse(localStorage.getItem(storageString));
 
     if (!websiteStorage.scriptToolRoles) {
         websiteStorage.scriptToolRoles = [];
@@ -74,9 +74,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (role.characterType === team) {
                     const div = document.createElement("div");
                     const imgAndNameDiv = document.createElement("div");
+                    const removeButton = document.createElement("button");
+                    const i = document.createElement("i");
                     const img = document.createElement("img");
                     const name = document.createElement("div");
                     const abilityText = document.createElement("div");
+                    removeButton.append(i);
+                    imgAndNameDiv.append(removeButton);
                     imgAndNameDiv.append(img);
                     imgAndNameDiv.append(name);
                     div.append(imgAndNameDiv);
@@ -85,6 +89,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     div.setAttribute("class", "role");
                     div.style.background = getTeamColor(role.characterType);
                     imgAndNameDiv.setAttribute("class", "img-and-name");
+                    removeButton.addEventListener("click", function () {
+                        websiteStorage.scriptToolRoles = websiteStorage.scriptToolRoles.filter(role1 => role1.name !== role.name || role1.characterType !== role.characterType);
+                        saveLocalStorage();
+                        displayScriptRoles();
+                        displaySelectionArea();
+                    });
+                    i.setAttribute("class", "fa-solid fa-x");
                     if (role.isOfficial) {
                         img.setAttribute("src", "./icons/Icon_" + role.name.toLowerCase().replaceAll(" ", "") + ".png");
                     } else {
@@ -204,7 +215,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         });
                     }
                     if (!checkbox.checked) {
-                        websiteStorage.scriptToolRoles = websiteStorage.scriptToolRoles.filter(role1 => role1.name !== role.name);
+                        websiteStorage.scriptToolRoles = websiteStorage.scriptToolRoles.filter(role1 => role1.name !== role.name || role1.characterType !== role.characterType);
                     }
                     saveLocalStorage();
                     displayScriptRoles();
@@ -219,14 +230,5 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             document.querySelector(".group-" + characterTypes[i].toLowerCase()).append(container);
         }
-    }
-
-    function saveLocalStorage() {
-        localStorage.setItem(storageString, JSON.stringify(websiteStorage));
-    }
-
-    function getRoleIdeas() {
-        if (websiteStorage.user.databaseUse === "localStorage") return websiteStorage.localRoleIdeas;
-        if (websiteStorage.user.databaseUse === "mongoDB") return websiteStorage.roleIdeas;
     }
 });
