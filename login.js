@@ -1,15 +1,12 @@
-import {API_URL} from "./functions";
+import {API_URL, databaseIsConnected, saveLocalStorage, websiteStorage} from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", async function () {
 
-    try {
-        await fetch(API_URL + '/users');
-    } catch (error) {
+    if (!await databaseIsConnected()) {
         window.location = "index.html";
         return;
     }
 
-    const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
     const userNameInput = document.getElementById("username-input");
     const passwordInput = document.getElementById("password-input");
     const confirmPasswordRow = document.getElementById("confirm-password-row");
@@ -75,13 +72,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             saveLocalStorage();
             window.location = "index.html";
         }
-    })
+    });
 
     document.getElementById("login-page-go-back-button").addEventListener("click", () => {
         window.location = "index.html";
     });
-
-    function saveLocalStorage() {
-        localStorage.setItem("websiteStorage1", JSON.stringify(websiteStorage));
-    }
 });
