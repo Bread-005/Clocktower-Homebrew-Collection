@@ -36,7 +36,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 
     loginButton.addEventListener("click", async () => {
-        if (!userNameInput.value) return;
+        if (!userNameInput.value) {
+            loginMessage.textContent = "You have to provide a username";
+            return;
+        }
         if (!userNames.includes(userNameInput.value)) {
 
             if (passwordInput.value !== confirmPasswordInput.value) {

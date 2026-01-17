@@ -1,11 +1,10 @@
 import {
-    getJsonString, firstNightList, otherNightList, allTags, updateRole, deleteRole, createPopup
+    getJsonString, firstNightList, otherNightList, allTags, updateRole, deleteRole, createPopup, getRoleIdeas,
+    saveLocalStorage, databaseIsConnected, createRole, websiteStorage
 } from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    const storageString = "websiteStorage1";
-    const websiteStorage = JSON.parse(localStorage.getItem(storageString));
     const searchParameters = new URLSearchParams(window.location.search);
     const id = searchParameters.get("r");
     const wikiHeader = document.getElementById("wiki-header");
@@ -97,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
         addComments();
         downloadJsonButton.addEventListener("click", function () {
             getJsonString(role, true);
-            createPopup(downloadJsonButton, "Role Json copied to Clipboard", 3500, "lightblue");
+            createPopup(document.querySelector(".wiki"), "Role Json copied to Clipboard", 3500, "lightblue");
         });
         deleteRoleListener();
 
@@ -191,7 +190,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function toggleEditMode() {
-            document.getElementById("edit-button").addEventListener("click", function () {
+            document.getElementById("edit-button").addEventListener("click", async function () {
+                if (websiteStorage.roleIdeas.map(role1 => role1.name).includes(role.name) && !await databaseIsConnected()) {
+                    createPopup(document.querySelector(".wiki"), "You cannot edit public roles,\nbecause right now there is no database connection!", 5000);
+                    return;
+                }
+
                 inEditMode = !inEditMode;
 
                 if (inEditMode) {
@@ -229,6 +233,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     showScript();
                 }
                 showOwners();
+                showRolePrivacy();
             });
         }
 
@@ -341,9 +346,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             deleteConfirmationYesButton.addEventListener("click", async function () {
                 websiteStorage.archive.push(role);
-                if (websiteStorage.user.databaseUse === "localStorage") {
-                    websiteStorage.localRoleIdeas = websiteStorage.localRoleIdeas.filter(role1 => role1.createdAt !== role.createdAt);
-                }
+                websiteStorage.localRoleIdeas = websiteStorage.localRoleIdeas.filter(role1 => role1.createdAt !== role.createdAt);
                 await deleteRole(role);
                 saveLocalStorage();
                 window.location = "index.html";
@@ -615,7 +618,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function showOwners() {
-            if (websiteStorage.user.databaseUse === "localStorage") return;
             ownerDisplay.style.display = inEditMode ? "flex" : "none";
             ownerDisplay.innerHTML = `<h2 style="margin: 5px">Owners</h2>`;
             for (const owner of role.owner) {
@@ -648,22 +650,53 @@ document.addEventListener("DOMContentLoaded", function () {
             div.append(button);
             ownerDisplay.append(div);
             button.addEventListener("click", async function () {
-                if (input.value === "") return;
+                if (!input.value) return;
                 role.owner.push(input.value);
                 await updateRole(role, false);
                 saveLocalStorage();
                 showOwners();
             });
         }
-    }
 
-    function saveLocalStorage() {
-        localStorage.setItem(storageString, JSON.stringify(websiteStorage));
-    }
+        function showRolePrivacy() {
+            document.querySelector(".edit-privacy-display").style.display = inEditMode ? "flex" : "none";
+            const privacyCheckbox = document.getElementById("privacy-checkbox");
+            privacyCheckbox.checked = role.isPrivate;
+            const privacyStatus = document.getElementById("privacy-status");
+            loadPrivacyStatus();
 
-    function getRoleIdeas() {
-        if (websiteStorage.user.databaseUse === "localStorage") return websiteStorage.localRoleIdeas;
-        if (websiteStorage.user.databaseUse === "mongoDB") return websiteStorage.roleIdeas;
+            function loadPrivacyStatus() {
+                const i = document.createElement("i");
+                i.setAttribute("class", role.isPrivate ? "fa-solid fa-lock" : "fa-solid fa-lock-open");
+                const p = document.createElement("p");
+                p.textContent = role.isPrivate ? "Private (only you see this role)" : "Public (every one sees this role)";
+                privacyStatus.innerHTML = "";
+                privacyStatus.append(i);
+                privacyStatus.append(p);
+            }
+
+            privacyCheckbox.addEventListener("click", async function () {
+                if (!await databaseIsConnected()) {
+                    createPopup(document.querySelector(".wiki"), "There is currently no connection to the database");
+                    return;
+                }
+                role.isPrivate = privacyCheckbox.checked;
+                saveLocalStorage();
+                loadPrivacyStatus();
+
+                if (role.isPrivate) {
+                    websiteStorage.localRoleIdeas.push(role);
+                    saveLocalStorage();
+                    await deleteRole(role);
+                }
+                if (!role.isPrivate) {
+                    websiteStorage.localRoleIdeas = websiteStorage.localRoleIdeas.filter(role1 => role1.createdAt !== role.createdAt);
+                    saveLocalStorage();
+                    await createRole(role);
+                }
+                createPopup(document.querySelector(".wiki"), "Successfully made role " + (role.isPrivate ? "private" : "public"), 5000, "green");
+            });
+        }
     }
 });
 

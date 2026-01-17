@@ -1,16 +1,9 @@
 import {
-    getJsonString, allRoles, allTags, getTeamColor, updateRole, createRole, API_URL, createPopup
+    getJsonString, allRoles, allTags, getTeamColor, updateRole, API_URL, createPopup, databaseIsConnected,
+    getRoleIdeas, websiteStorage, saveLocalStorage
 } from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", async function () {
-
-    let total = 0;
-    for (const item in localStorage) {
-        if (localStorage.hasOwnProperty(item)) {
-            total += ((localStorage[item].length + item.length) * 2);
-        }
-    }
-    console.log(`Total localStorage usage: ${(total / 1024).toFixed(2)} KB`);
 
     const storageString = "websiteStorage1";
 
@@ -25,13 +18,14 @@ document.addEventListener("DOMContentLoaded", async function () {
                 onlyMyFavorites: false,
                 scriptFilter: "All",
                 tagFilter: "None",
-                databaseUse: "localStorage",
-                currentUsername: "",
-                ownerFilter: "All"
+                currentUsername: "User" + (Math.random().toFixed(5) * 10).toString().replace(".", ""),
+                ownerFilter: "All",
+                databaseFilter: "All"
             },
             archive: []
         }
         localStorage.setItem(storageString, JSON.stringify(storage));
+        window.location.reload();
     }
 
     const jsonInputTextarea = document.getElementById("json-input-textarea");
@@ -45,24 +39,20 @@ document.addEventListener("DOMContentLoaded", async function () {
     const scriptFilterSelection = document.getElementById("script-filter-selection");
     const clearFiltersButton = document.getElementById("clear-filters-button");
     const ownerSelection = document.getElementById("owner-selection");
+    const databaseSelection = document.getElementById("database-selection");
     const homebrewRolesDisplay = document.getElementById("homebrewroles");
     const roleIdeaPageSelection = document.querySelector(".role-idea-page-selection");
     const scriptDownloadButton = document.getElementById("script-download-button");
     const localstorageDownloadButton = document.getElementById("localstorage-download-button");
-    const loginArea = document.querySelector(".login-area");
     const loginButton = document.querySelector(".login-button");
-    const databaseUseDiv = document.querySelector(".database-use");
-    const switchDatabaseUseButton = document.getElementById("switch-database-use");
     const ownerFilter = document.querySelector(".owner-filter");
 
-    const websiteStorage = JSON.parse(localStorage.getItem(storageString));
-    if (!websiteStorage.user.databaseUse) websiteStorage.user.databaseUse = "localStorage";
-    if (!websiteStorage.user.currentUsername) websiteStorage.user.currentUsername = "";
-    if (!websiteStorage.localRoleIdeas) websiteStorage.localRoleIdeas = websiteStorage.roleIdeas;
+    if (!websiteStorage.user.currentUsername) websiteStorage.user.currentUsername = "User" + (Math.random().toFixed(5) * 10).toString().replace(".", "");
     websiteStorage.user.tempMessage = "";
     adjustLocalStorage();
     saveLocalStorage();
-    try {
+
+    if (await databaseIsConnected()) {
         websiteStorage.roleIdeas = await fetch(API_URL + '/roles').then(res => res.json());
         saveLocalStorage();
         if (websiteStorage.user.currentUsername) {
@@ -74,15 +64,10 @@ document.addEventListener("DOMContentLoaded", async function () {
             saveLocalStorage();
             window.location = "login.html";
         }
-    } catch (error) {
-        websiteStorage.user.databaseUse = "localStorage";
+    } else {
+        websiteStorage.user.ownerFilter = "All";
         saveLocalStorage();
-        databaseUseDiv.style.display = "none";
     }
-    if (websiteStorage.user.databaseUse === "localStorage") {
-        loginArea.style.visibility = "hidden";
-    }
-    switchDatabaseUseButton.textContent = websiteStorage.user.databaseUse;
 
     mobileSupportSetup();
     addRole();
@@ -115,11 +100,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             const roleImage = document.createElement("img");
             roleImage.setAttribute("class", "clocktower-icon");
-            roleImage.setAttribute("src", "https://i.postimg.cc/qM09f8cD/placeholder-icon.png");
+            roleImage.setAttribute("src", role.image ? role.image : "https://i.postimg.cc/qM09f8cD/placeholder-icon.png");
             roleImage.setAttribute("alt", role.name);
-            if (role["image"]) {
-                roleImage.setAttribute("src", role["image"]);
-            }
 
             const roleText = document.createElement("div");
             roleText.textContent = role.name + " (" + role.characterType + "): " + role.ability;
@@ -138,8 +120,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             const rateIcon = document.createElement("i");
             rateIcon.setAttribute("class", "fa-sharp fa-regular fa-star");
 
-            if (websiteStorage.user.databaseUse === "localStorage" && role.rating.length > 0 || role.rating.find(rating => rating.user === websiteStorage.user.currentUsername)) {
-                rateInput.value = websiteStorage.user.databaseUse === "localStorage" ? role.rating[0].score : role.rating.find(rating => rating.user === websiteStorage.user.currentUsername).score;
+            if (role.rating.find(rating => rating.user === websiteStorage.user.currentUsername && rating.score > 0)) {
+                rateInput.value = role.rating.find(rating => rating.user === websiteStorage.user.currentUsername).score;
                 rateIcon.setAttribute("class", "fa-solid fa-star");
                 rateIcon.setAttribute("style", "color: #FFD43B;");
             }
@@ -158,7 +140,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             const favoriteButton = document.createElement("button");
             const favoriteIcon = document.createElement("i");
             favoriteIcon.setAttribute("class", "fa-light fa-heart");
-            if (role.favoriteList.includes(websiteStorage.user.currentUsername) || websiteStorage.user.databaseUse === "localStorage" && role.favoriteList.length > 0) {
+            if (role.favoriteList.includes(websiteStorage.user.currentUsername)) {
                 favoriteIcon.setAttribute("class", "fa-solid fa-heart");
                 favoriteIcon.classList.add("red");
             } else {
@@ -201,9 +183,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 if (rateInput.value === "") {
                     return;
                 }
-                if (websiteStorage.user.databaseUse === "localStorage" && role.rating.length > 0) {
-                    role.rating[0].score = Number.parseFloat(rateInput.value);
-                } else if (role.rating.find(rating => rating.user === websiteStorage.user.currentUsername)) {
+                if (role.rating.find(rating => rating.user === websiteStorage.user.currentUsername)) {
                     role.rating.find(rating => rating.user === websiteStorage.user.currentUsername).score = Number.parseFloat(rateInput.value);
                 } else {
                     role.rating.push({
@@ -216,24 +196,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                 displayRoles();
             });
 
-            wikiButton.addEventListener("click", async function () {
-                if (websiteStorage.user.databaseUse === "mongoDB") {
-                    try {
-                        await fetch(API_URL + '/roles');
-                    } catch (error) {
-                        window.location = "index.html";
-                    }
-                }
-            });
-
             favoriteButton.addEventListener("click", async function () {
                 if (role.favoriteList.includes(websiteStorage.user.currentUsername)) {
-                    if (websiteStorage.user.databaseUse === "localStorage") {
-                        role.favoriteList.length = 0;
-                    }
-                    if (websiteStorage.user.databaseUse === "mongoDB") {
-                        role.favoriteList = role.favoriteList.filter(name => name !== websiteStorage.user.currentUsername);
-                    }
+                    role.favoriteList = role.favoriteList.filter(name => name !== websiteStorage.user.currentUsername);
                 } else {
                     role.favoriteList.push(websiteStorage.user.currentUsername);
                 }
@@ -244,7 +209,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             downloadJsonButton.addEventListener("click", function () {
                 getJsonString(role, true);
-                createPopup(downloadJsonButton, "Role Json copied to Clipboard", 3500, "lightblue");
+                createPopup(document.querySelector(".main-page"), "Role Json copied to Clipboard", 3500, "lightblue");
             });
         }
         showPages(roles, roleIdeaArray);
@@ -262,6 +227,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             websiteStorage.user.onlyMyFavorites = onlyMyFavoritesCheckBox.checked;
             websiteStorage.user.sorting = sortingDropDownMenu.value;
             websiteStorage.user.ownerFilter = ownerSelection.value;
+            websiteStorage.user.databaseFilter = databaseSelection.value;
             saveLocalStorage();
             displayRoles();
             displayMisc();
@@ -289,19 +255,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         }
         if (input === "Last Edited") {
-            roles.sort((a, b) => {
-                const aIsNum = !isNaN(Number(a.lastEdited));
-                const bIsNum = !isNaN(Number(b.lastEdited));
-                const aIsDate = !isNaN(Date.parse(a.lastEdited));
-                const bIsDate = !isNaN(Date.parse(b.lastEdited));
-
-                if (aIsNum && !bIsNum) return -1;
-                if (!aIsNum && bIsNum) return 1;
-
-                if (aIsNum && bIsNum) return Number(b.lastEdited) - Number(a.lastEdited);
-                if (aIsDate && bIsDate) return new Date(b.lastEdited) - new Date(a.lastEdited);
-                return 0;
-            });
+            roles.sort((a, b) => Number(b.lastEdited) - Number(a.lastEdited));
         }
     }
 
@@ -357,8 +311,14 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (scriptFilterSelection.value !== "All") {
             roles = roles.filter(role => role.script === scriptFilterSelection.value);
         }
-        if (websiteStorage.user.databaseUse === "mongoDB" && websiteStorage.user.ownerFilter !== "All") {
+        if (websiteStorage.user.ownerFilter !== "All") {
             roles = roles.filter(role => role.owner.includes(websiteStorage.user.ownerFilter));
+        }
+        if (websiteStorage.user.databaseFilter === "Only Private") {
+            roles = roles.filter(role => role.isPrivate);
+        }
+        if (websiteStorage.user.databaseFilter === "Only Public") {
+            roles = roles.filter(role => !role.isPrivate);
         }
         return roles;
     }
@@ -399,19 +359,14 @@ document.addEventListener("DOMContentLoaded", async function () {
                 special: [],
                 script: "",
                 comments: [],
-                lastEdited: Date.now().toString()
+                lastEdited: Date.now().toString(),
+                isPrivate: true,
+                owner: [websiteStorage.user.currentUsername]
             }
-            if (websiteStorage.user.databaseUse === "mongoDB") {
-                role.owner = [websiteStorage.user.currentUsername];
-            }
-            if (websiteStorage.user.databaseUse === "localStorage") {
-                websiteStorage.localRoleIdeas.push(role);
-            }
-            await createRole(role);
+            websiteStorage.localRoleIdeas.push(role);
             saveLocalStorage();
             roleNameInput.value = "";
             abilityTextInput.value = "";
-            displayRoles();
             window.location.reload();
         });
     }
@@ -428,6 +383,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             websiteStorage.user.page = 1;
             websiteStorage.user.scriptFilter = "All";
             websiteStorage.user.ownerFilter = "All";
+            websiteStorage.user.databaseFilter = "All";
             saveLocalStorage();
             displayRoles();
             displayMisc();
@@ -461,10 +417,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         scriptFilterSelection.value = websiteStorage.user.scriptFilter;
         tagFilterSelection.value = websiteStorage.user.tagFilter;
         ownerSelection.value = websiteStorage.user.ownerFilter;
-    }
-
-    function saveLocalStorage() {
-        localStorage.setItem(storageString, JSON.stringify(websiteStorage));
+        databaseSelection.value = websiteStorage.user.databaseFilter;
     }
 
     document.getElementById("switch-role-creation").addEventListener("click", function () {
@@ -538,37 +491,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     });
 
-    switchDatabaseUseButton.addEventListener("click", async function () {
-        try {
-            await fetch(API_URL + '/roles');
-        } catch (error) {
-            ownerFilter.style.display = "none";
-            databaseUseDiv.style.display = "none";
-            return;
-        }
-        if (websiteStorage.user.databaseUse === "localStorage") {
-            websiteStorage.user.databaseUse = "mongoDB";
-            loginArea.style.visibility = "visible";
-            ownerFilter.style.display = "flex";
-        } else {
-            websiteStorage.user.databaseUse = "localStorage";
-            loginArea.style.visibility = "hidden";
-            ownerFilter.style.display = "none";
-        }
-        switchDatabaseUseButton.textContent = websiteStorage.user.databaseUse;
-        saveLocalStorage();
-        if (websiteStorage.user.databaseUse === "mongoDB" && !websiteStorage.user.currentUsername) {
-            websiteStorage.user.tempMessage = "You have to first create an account / login to use the public database";
-            saveLocalStorage();
-            window.location = "login.html";
-        }
-        websiteStorage.user.scriptFilter = "All";
-        websiteStorage.user.ownerFilter = "All";
-        setupScriptSelection();
-        setFilters();
-        displayRoles();
-    });
-
     scriptDownloadButton.addEventListener("click", function () {
 
         if (scriptFilterSelection.value === "All") return;
@@ -601,7 +523,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         const content = [];
 
-        for (const role of getRoleIdeas()) {
+        for (const role of websiteStorage.localRoleIdeas) {
             let tempRole = {};
 
             for (let attribute in role) {
@@ -767,16 +689,11 @@ document.addEventListener("DOMContentLoaded", async function () {
         role.script = role.script.split(" v")[0];
         role.comments = [];
         role.lastEdited = Date.now().toString();
-        if (websiteStorage.user.databaseUse === "mongoDB") {
-            role.owner = [websiteStorage.user.currentUsername];
-        }
-        if (websiteStorage.user.databaseUse === "localStorage") {
-            websiteStorage.localRoleIdeas.push(role);
-        }
-        await createRole(role);
+        role.isPrivate = true;
+        role.owner = [websiteStorage.user.currentUsername];
+        websiteStorage.localRoleIdeas.push(role);
         saveLocalStorage();
         jsonInputTextarea.value = "";
-        displayRoles();
         window.location.reload();
     }
 
@@ -843,16 +760,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
-    function getRoleIdeas() {
-        if (websiteStorage.user.databaseUse === "localStorage") return websiteStorage.localRoleIdeas;
-        if (websiteStorage.user.databaseUse === "mongoDB") return websiteStorage.roleIdeas;
-    }
-
     loginButton.addEventListener("click", () => {
-        if (loginButton.textContent === "logout") {
-            websiteStorage.user.currentUsername = "";
-            saveLocalStorage();
-        }
         window.location = "login.html";
     });
 
@@ -866,43 +774,55 @@ document.addEventListener("DOMContentLoaded", async function () {
                 onlyMyFavorites: false,
                 scriptFilter: "All",
                 tagFilter: "None",
-                databaseUse: "localStorage",
-                currentUsername: "",
-                ownerFilter: "All"
+                currentUsername: "User" + (Math.random().toFixed(5) * 10).toString().replace(".", ""),
+                ownerFilter: "All",
+                databaseFilter: "All"
             }
             saveLocalStorage();
+        }
+        if (!websiteStorage.user.currentUsername) {
+            websiteStorage.user.currentUsername = "User" + (Math.random().toFixed(5) * 10).toString().replace(".", "");
+        }
+        if (!websiteStorage.user.databaseFilter) {
+            websiteStorage.user.databaseFilter = "All";
         }
 
-        if (websiteStorage.user.databaseUse === "localStorage") {
-            for (const role of websiteStorage.localRoleIdeas) {
-                if (typeof role.rating === "number") {
-                    const ratingNumber = role.rating;
-                    role.rating = [];
-                    if (ratingNumber > 0) {
-                        role.rating.push({
-                            user: "",
-                            score: ratingNumber
-                        });
-                    }
-                }
-                if (!role.favoriteList) {
-                    role.favoriteList = [];
-                    if (role.isFavorite) role.favoriteList.push(websiteStorage.user.currentUsername);
+        for (const role of websiteStorage.localRoleIdeas) {
+            if (typeof role.rating === "number") {
+                const ratingNumber = role.rating;
+                role.rating = [];
+                if (ratingNumber > 0) {
+                    role.rating.push({
+                        user: websiteStorage.user.currentUsername,
+                        score: ratingNumber
+                    });
                 }
             }
-            saveLocalStorage();
+            if (Array.isArray(role.rating) && role.rating.length === 1 && role.rating[0].user === "") {
+                role.rating[0].user = websiteStorage.user.currentUsername;
+            }
+            if (!role.favoriteList) {
+                role.favoriteList = [];
+                if (role.isFavorite) role.favoriteList.push(websiteStorage.user.currentUsername);
+            }
+            if (role.isPrivate === undefined) {
+                role.isPrivate = true;
+            }
+            if (!role.owner) {
+                role.owner = [websiteStorage.user.currentUsername];
+            }
+            if (role.lastEdited.toString().includes("-")) {
+                role.lastEdited = new Date(role.lastEdited).getTime().toString();
+            }
         }
+        saveLocalStorage();
     }
 
     function setupOwnerFilterSelection() {
-        if (websiteStorage.user.databaseUse === "localStorage") {
-            ownerFilter.style.display = "none";
-            return;
-        }
         ownerFilter.style.display = "flex";
         ownerSelection.innerText = "";
         const allOwners = ["All"];
-        for (const role of websiteStorage.roleIdeas) {
+        for (const role of getRoleIdeas()) {
             for (const owner of role.owner) {
                 if (!allOwners.includes(owner)) {
                     allOwners.push(owner);

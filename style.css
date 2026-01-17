@@ -156,11 +156,6 @@ input[type="number"] {
             margin-bottom: 15rem;
         }
 
-        .database-use {
-            display: block;
-            flex-direction: column;
-        }
-
         @media (max-width: 600px) {
             display: flex;
             justify-content: space-between;
@@ -216,10 +211,21 @@ input[type="number"] {
                     }
                 }
 
-                .owner-filter-selection {
-                    max-width: 100px;
+                .owner-filter {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 10px;
+                    margin-top: 5px;
+
+                    .owner-filter-selection {
+                        max-width: 100px;
+                        padding: 6px;
+                    }
+                }
+
+                #database-selection {
                     padding: 6px;
-                    margin-left: 15px;
                 }
             }
         }
@@ -668,6 +674,31 @@ input[type="number"] {
         justify-content: center;
         align-items: center;
         flex-direction: column;
+        padding: 3rem;
+        border: 2px solid black;
+        background-color: lightblue;
+    }
+
+    .edit-privacy-display {
+        display: none;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        border: 3px solid white;
+        padding: 10px;
+        margin-top: 10px;
+        background-color: lightcoral;
+
+        #privacy-status {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+
+            p {
+                font-weight: bold;
+            }
+        }
     }
 }
 

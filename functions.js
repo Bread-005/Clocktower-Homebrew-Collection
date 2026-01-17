@@ -976,8 +976,8 @@ async function updateRole(role, updateLastEdited = true) {
     if (updateLastEdited) {
         role.lastEdited = Date.now().toString();
     }
+    if (!await databaseIsConnected()) return;
     const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
-    if (websiteStorage.user.databaseUse !== "mongoDB") return;
     await fetch(API_URL + '/roles/update', {
         method: "PUT",
         headers: {'Content-Type': 'application/json'},
@@ -987,8 +987,8 @@ async function updateRole(role, updateLastEdited = true) {
 }
 
 async function createRole(role) {
+    if (!await databaseIsConnected()) return;
     const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
-    if (websiteStorage.user.databaseUse !== "mongoDB") return;
     await fetch(API_URL + '/roles/create', {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
@@ -998,8 +998,8 @@ async function createRole(role) {
 }
 
 async function deleteRole(role) {
+    if (!await databaseIsConnected()) return;
     const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
-    if (websiteStorage.user.databaseUse !== "mongoDB") return;
     await fetch(API_URL + '/roles/delete', {
         method: "DELETE",
         headers: {'Content-Type': 'application/json'},
@@ -1031,7 +1031,30 @@ let popupZIndex = 1000;
 
 const n = "\n";
 
+async function databaseIsConnected() {
+    try {
+        const response = await fetch(API_URL + "/roles");
+        return response.ok;
+    } catch (err) {
+        return false;
+    }
+}
+
+function getRoleIdeas() {
+    const allHomebrewRoles = [];
+    for (const role of websiteStorage.roleIdeas) allHomebrewRoles.push(role);
+    for (const role of websiteStorage.localRoleIdeas) allHomebrewRoles.push(role);
+    return allHomebrewRoles;
+}
+
+const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
+
+function saveLocalStorage() {
+    localStorage.setItem("websiteStorage1", JSON.stringify(websiteStorage));
+}
+
 export {
     getJsonString, firstNightList, otherNightList, allRoles, allTags, getTeamColor, characterTypes,
-    StevenApprovedOrder, updateRole, createRole, deleteRole, API_URL, createPopup, n
+    StevenApprovedOrder, updateRole, createRole, deleteRole, API_URL, createPopup, n, databaseIsConnected,
+    getRoleIdeas, websiteStorage, saveLocalStorage
 }

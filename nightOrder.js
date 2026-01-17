@@ -1,10 +1,6 @@
-import {allRoles, firstNightList, otherNightList, updateRole} from "./functions.js";
+import {allRoles, firstNightList, getRoleIdeas, otherNightList, saveLocalStorage, updateRole} from "./functions.js";
 
 document.addEventListener('DOMContentLoaded', function () {
-
-    const storageString = "websiteStorage1";
-    const websiteStorage = JSON.parse(localStorage.getItem(storageString));
-
     const firstNightOrderDisplayDiv = document.querySelector(".first-night-order-display-div");
     const otherNightOrderDisplayDiv = document.querySelector(".other-night-order-display-div");
 
@@ -163,14 +159,5 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
         return container;
-    }
-
-    function saveLocalStorage() {
-        localStorage.setItem(storageString, JSON.stringify(websiteStorage));
-    }
-
-    function getRoleIdeas() {
-        if (websiteStorage.user.databaseUse === "localStorage") return websiteStorage.localRoleIdeas;
-        if (websiteStorage.user.databaseUse === "mongoDB") return websiteStorage.roleIdeas;
     }
 });
