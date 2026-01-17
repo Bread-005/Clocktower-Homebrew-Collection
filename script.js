@@ -808,7 +808,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             if (role.isPrivate === undefined) {
                 role.isPrivate = true;
             }
-            if (!role.owner) {
+            if (!role.owner && !websiteStorage.user.currentUsername.includes("User")) {
                 role.owner = [websiteStorage.user.currentUsername];
             }
             if (role.lastEdited.toString().includes("-")) {
