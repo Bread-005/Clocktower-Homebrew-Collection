@@ -811,6 +811,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             if (!role.owner && !websiteStorage.user.currentUsername.includes("User")) {
                 role.owner = [websiteStorage.user.currentUsername];
             }
+            if (!role.lastEdited) {
+                role.lastEdited = role.createdAt;
+            }
             if (role.lastEdited.toString().includes("-")) {
                 role.lastEdited = new Date(role.lastEdited).getTime().toString();
             }
