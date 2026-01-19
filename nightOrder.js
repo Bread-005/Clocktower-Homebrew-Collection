@@ -1,4 +1,6 @@
-import {allRoles, firstNightList, getRoleIdeas, otherNightList, saveLocalStorage, updateRole} from "./functions.js";
+import {
+    allRoles, firstNightList, getRoleIdeas, otherNightList, saveLocalStorage, updateRole, websiteStorage
+} from "./functions.js";
 
 document.addEventListener('DOMContentLoaded', function () {
     const firstNightOrderDisplayDiv = document.querySelector(".first-night-order-display-div");
@@ -17,7 +19,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 number: role.firstNight,
                 isOfficial: false,
                 image: role.image,
-                ability: role.ability
+                ability: role.ability,
+                owner: role.owner
             });
         }
         if (role.otherNight) {
@@ -26,7 +29,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 number: role.otherNight,
                 isOfficial: false,
                 image: role.image,
-                ability: role.ability
+                ability: role.ability,
+                owner: role.owner
             });
         }
     }
@@ -62,15 +66,15 @@ document.addEventListener('DOMContentLoaded', function () {
             if (role.image === "") {
                 img.setAttribute("src", "https://i.postimg.cc/qM09f8cD/placeholder-icon.png");
             } else if (role.name === "Minion info") {
-                img.setAttribute("src", "https://clocktower.live/img/minion.43365de6.webp");
+                img.setAttribute("src", "https://clocktower.live/img/minioninfo.43365de6.webp");
             } else if (role.name === "Demon info") {
-                img.setAttribute("src", "https://clocktower.live/img/demon.4669d783.webp");
+                img.setAttribute("src", "https://clocktower.live/img/demoninfo.4669d783.webp");
             } else {
                 if (role.isOfficial) {
                     img.setAttribute("src", "./icons/Icon_" + role.name.toLowerCase().replaceAll(" ", "") + ".png");
                 }
                 if (!role.isOfficial) {
-                    img.setAttribute("src", role.image ? role.image : "https://i.postimg.cc/qM09f8cD/placeholder-icon.png");
+                    img.setAttribute("src", role.image);
                 }
             }
             img.setAttribute("width", "50px");
@@ -87,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             div.append(img);
             div.append(roleNameAndNumber);
-            if (allRoles.map(role1 => role1.name).includes(role.name) || role.name === "Minion info" || role.name === "Demon info") {
+            if (allRoles.map(role1 => role1.name).includes(role.name) || role.name === "Minion info" || role.name === "Demon info" || !role.owner?.includes(websiteStorage.user.currentUsername)) {
                 div.setAttribute("class", "night-order-img-text-div");
             } else {
                 div.append(button);
@@ -141,19 +145,17 @@ document.addEventListener('DOMContentLoaded', function () {
                         editNightOrder.replaceWith(roleNameAndNumber);
                         icon.setAttribute("class", "fa-solid fa-pen fa-pen-to-square");
 
-                        for (const role1 of getRoleIdeas()) {
-                            if (role.name === role1.name && role.ability === role1.ability) {
-                                if (firstNightOrderDisplayDiv.contains(div)) {
-                                    role1.firstNight = Number.parseFloat(input.value);
-                                    roleNameAndNumber.textContent = role1.name + ": " + role1.firstNight;
-                                } else {
-                                    role1.otherNight = Number.parseFloat(input.value);
-                                    roleNameAndNumber.textContent = role1.name + ": " + role1.otherNight;
-                                }
-                                await updateRole(role);
-                                saveLocalStorage();
-                            }
+                        const role1 = getRoleIdeas().find(role2 => role2.name === role.name && role2.ability === role.ability);
+                        if (firstNightOrderDisplayDiv.contains(div)) {
+                            role1.firstNight = Number.parseFloat(input.value);
+                            roleNameAndNumber.textContent = role1.name + ": " + role1.firstNight;
                         }
+                        if (otherNightOrderDisplayDiv.contains(div)) {
+                            role1.otherNight = Number.parseFloat(input.value);
+                            roleNameAndNumber.textContent = role1.name + ": " + role1.otherNight;
+                        }
+                        await updateRole(role1);
+                        saveLocalStorage();
                     }
                 });
             }
