@@ -74,8 +74,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     setupScriptSelection();
     setupTagFilterSelection();
     setupOwnerFilterSelection();
-    displayRoles();
     clearFilters();
+    displayRoles();
     displayMisc();
 
     let roleCreationMode = 0;
@@ -372,6 +372,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     function clearFilters() {
+        if (!getRoleIdeas().find(role => role.script === websiteStorage.user.scriptFilter)) {
+            websiteStorage.user.scriptFilter = "All";
+            saveLocalStorage();
+        }
         clearFiltersButton.addEventListener("click", function () {
             websiteStorage.user.roleSearch = "";
             websiteStorage.user.characterType = "All";
