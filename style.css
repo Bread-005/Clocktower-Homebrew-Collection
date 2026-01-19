@@ -761,17 +761,20 @@ input[type="number"] {
 .script-tool {
 
     .main-content {
-        margin-top: 2rem;
+        margin-top: 0.5rem;
         display: flex;
         align-items: flex-start;
-        position: relative;
+        justify-content: center;
     }
 
     .role-selection {
+        position: fixed;
+        left: 2%;
         display: flex;
         justify-content: center;
         align-items: flex-start;
         flex-direction: column;
+        width: 225px;
 
         .search-by-name-div {
             input {
@@ -827,8 +830,6 @@ input[type="number"] {
     }
 
     .display {
-        margin-left: 3rem;
-
         .script-namings {
             display: flex;
             justify-content: center;
@@ -860,6 +861,19 @@ input[type="number"] {
             width: 50rem;
             gap: 1rem;
 
+            @media (max-width: 1300px) {
+                width: 45rem;
+                margin-left: 10rem;
+
+                @media (max-width: 1100px) {
+                    width: 40rem;
+
+                    @media (max-width: 1000px) {
+                        width: 30rem;
+                    }
+                }
+            }
+
             .img-and-name {
                 display: flex;
                 justify-content: flex-start;
@@ -867,8 +881,8 @@ input[type="number"] {
                 gap: 0.5rem;
 
                 .image {
-                    width: 30px;
-                    height: 30px;
+                    width: 35px;
+                    height: 35px;
                     background: white;
                     border-radius: 25px;
                 }
@@ -878,8 +892,31 @@ input[type="number"] {
 
     .buttons {
         position: fixed;
-        left: 85%;
-        width: 100%;
+        left: 90%;
+        margin-right: 0.75rem;
+
+        .script-tool-script-selection {
+            margin-top: 1rem;
+            height: 80vh;
+            overflow-y: visible;
+            overflow-x: hidden;
+            text-align: center;
+
+            .script {
+                cursor: pointer;
+                background: white;
+                border: 1px solid black;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 3px 0;
+                height: 2.5rem;
+            }
+
+            .selected {
+                background: orange;
+            }
+        }
     }
 }
 

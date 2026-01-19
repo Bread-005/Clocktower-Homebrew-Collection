@@ -5,8 +5,11 @@ import {
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    if (!websiteStorage.scriptToolRoles) {
-        websiteStorage.scriptToolRoles = [];
+    if (!websiteStorage.scriptTool) {
+        websiteStorage.scriptTool = [
+            {name: "Script-Name", author: websiteStorage.user.currentUsername, roles: [], isSelected: true},
+            {name: "Script-Name2", author: websiteStorage.user.currentUsername, roles: [], isSelected: false}
+        ];
         saveLocalStorage();
     }
 
@@ -16,37 +19,53 @@ document.addEventListener('DOMContentLoaded', function () {
     const scriptAuthorDisplay = document.getElementById("script-author-display");
     const scriptNameInput = document.getElementById("script-name-input");
     const scriptAuthorInput = document.getElementById("script-author-input");
+    const scriptSelection = document.querySelector(".script-tool-script-selection");
     const arrayOfArrays = [[], [], [], [], [], []];
 
     const roleNames = getRoleIdeas().map(role => role.name);
-    websiteStorage.scriptToolRoles = websiteStorage.scriptToolRoles.filter(role => roleNames.includes(role.name) || allRoles.map(role1 => role1.name).includes(role.name) && role.isOfficial);
-
+    for (let i = 0; i < websiteStorage.scriptTool.length; i++) {
+        websiteStorage.scriptTool[i].roles = websiteStorage.scriptTool[i].roles.filter(role => roleNames.includes(role.name) || allRoles.map(role1 => role1.name).includes(role.name) && role.isOfficial);
+    }
+    saveLocalStorage();
     createRoleSelection();
-    displaySelectionArea();
+    displayRoleSelection();
     displayScriptRoles();
+    displayScriptSelection();
 
     searchByNameInput.addEventListener("input", function () {
-        displaySelectionArea();
+        displayRoleSelection();
     });
 
     document.getElementById("script-save-namings-button").addEventListener("click", function () {
-        scriptNameDisplay.textContent = scriptNameInput.value;
-        scriptAuthorDisplay.textContent = scriptAuthorInput.value;
+        const selectedScript = websiteStorage.scriptTool.find(script1 => script1.isSelected);
+        if (scriptNameInput.value) {
+            selectedScript.name = scriptNameInput.value;
+            scriptNameDisplay.textContent = scriptNameInput.value;
+        }
+        if (scriptAuthorInput.value) {
+            selectedScript.author = scriptAuthorInput.value;
+            scriptAuthorDisplay.textContent = scriptAuthorInput.value;
+        }
+        scriptNameInput.value = "";
+        scriptAuthorInput.value = "";
+        saveLocalStorage();
+        displayScriptSelection();
     });
 
     document.getElementById("script-tool-download-json-button").addEventListener("click", function () {
+        const selectedScript = websiteStorage.scriptTool.find(script1 => script1.isSelected);
         let script = "[";
         const scriptHead = {
             id: "_meta",
-            name: scriptNameDisplay.textContent,
-            author: scriptAuthorDisplay.textContent,
+            name: selectedScript.name,
+            author: selectedScript.author,
         }
         if (!scriptHead.name) delete scriptHead.name;
         if (!scriptHead.author) delete scriptHead.author;
         script += JSON.stringify(scriptHead) + "," + n;
 
         for (const team of characterTypes) {
-            for (const role of websiteStorage.scriptToolRoles) {
+            for (const role of selectedScript.roles) {
                 if (role.characterType === team) {
                     if (allRoles.map(role1 => role1.name).includes(role.name)) {
                         script += '"' + role.name.toLowerCase().replaceAll(" ", "_") + '",' + n;
@@ -68,9 +87,13 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     function displayScriptRoles() {
+        const selectedScript = websiteStorage.scriptTool.find(script1 => script1.isSelected);
+        scriptNameDisplay.textContent = selectedScript.name;
+        scriptAuthorDisplay.textContent = selectedScript.author;
+
         for (const team of characterTypes) {
             document.querySelector(".display-" + team.toLowerCase()).textContent = "";
-            for (const role of websiteStorage.scriptToolRoles) {
+            for (const role of selectedScript.roles) {
                 if (role.characterType === team) {
                     const div = document.createElement("div");
                     const imgAndNameDiv = document.createElement("div");
@@ -90,10 +113,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     div.style.background = getTeamColor(role.characterType);
                     imgAndNameDiv.setAttribute("class", "img-and-name");
                     removeButton.addEventListener("click", function () {
-                        websiteStorage.scriptToolRoles = websiteStorage.scriptToolRoles.filter(role1 => role1.name !== role.name || role1.characterType !== role.characterType);
+                        selectedScript.roles = selectedScript.roles.filter(role1 => role1.name !== role.name || role1.characterType !== role.characterType);
                         saveLocalStorage();
                         displayScriptRoles();
-                        displaySelectionArea();
+                        displayRoleSelection();
                     });
                     i.setAttribute("class", "fa-solid fa-x");
                     if (role.isOfficial) {
@@ -152,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function displaySelectionArea() {
+    function displayRoleSelection() {
         for (let i = 0; i < arrayOfArrays.length; i++) {
             document.querySelector(".group-" + characterTypes[i].toLowerCase()).textContent = "";
             const container = document.createElement("div");
@@ -182,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 checkbox.type = "checkbox";
-                checkbox.checked = websiteStorage.scriptToolRoles.map(role1 => role1.name).includes(role.name);
+                checkbox.checked = websiteStorage.scriptTool.find(script1 => script1.isSelected).roles.map(role1 => role1.name).includes(role.name);
                 label.textContent = role.name;
                 checkbox.setAttribute("id", role.name + "-checkbox123");
                 label.setAttribute("for", role.name + "-checkbox123");
@@ -194,9 +217,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 checkbox.addEventListener("change", function () {
 
+                    const selectedScript = websiteStorage.scriptTool.find(script1 => script1.isSelected);
+
                     if (checkbox.checked) {
-                        websiteStorage.scriptToolRoles.push(role);
-                        websiteStorage.scriptToolRoles.sort(function (a, b) {
+                        selectedScript.roles.push(role);
+                        selectedScript.roles.sort(function (a, b) {
 
                             if (a.characterType === b.characterType) {
                                 for (let j = 0; j < StevenApprovedOrder.length; j++) {
@@ -215,7 +240,13 @@ document.addEventListener('DOMContentLoaded', function () {
                         });
                     }
                     if (!checkbox.checked) {
-                        websiteStorage.scriptToolRoles = websiteStorage.scriptToolRoles.filter(role1 => role1.name !== role.name || role1.characterType !== role.characterType);
+                        selectedScript.roles = selectedScript.roles.filter(role1 => role1.name !== role.name || role1.characterType !== role.characterType);
+                        if (selectedScript.roles.length === 0 && websiteStorage.scriptTool.length > 1) {
+                            websiteStorage.scriptTool = websiteStorage.scriptTool.filter(script1 => !script1.isSelected);
+                            websiteStorage.scriptTool[0].isSelected = true;
+                            displayRoleSelection();
+                            displayScriptSelection();
+                        }
                     }
                     saveLocalStorage();
                     displayScriptRoles();
@@ -230,5 +261,41 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             document.querySelector(".group-" + characterTypes[i].toLowerCase()).append(container);
         }
+    }
+
+    function displayScriptSelection() {
+        scriptSelection.innerHTML = "";
+        for (const script of websiteStorage.scriptTool) {
+            const div = document.createElement("div");
+            div.textContent = script.name;
+            div.setAttribute("class", "script");
+            if (script.isSelected) div.classList.add("selected");
+            scriptSelection.append(div);
+
+            div.addEventListener("click", () => {
+                for (const script2 of websiteStorage.scriptTool) script2.isSelected = false;
+                script.isSelected = true;
+                saveLocalStorage();
+                displayRoleSelection();
+                displayScriptRoles();
+                displayScriptSelection();
+            });
+        }
+        const button = document.createElement("button");
+        const i = document.createElement("i");
+        i.setAttribute("class", "fa-solid fa-plus");
+        button.append(i);
+        scriptSelection.append(button);
+
+        button.addEventListener("click", () => {
+            websiteStorage.scriptTool.push({
+                name: "Script-Name",
+                author: websiteStorage.user.currentUsername,
+                roles: [],
+                isSelected: false
+            });
+            saveLocalStorage();
+            displayScriptSelection();
+        });
     }
 });
