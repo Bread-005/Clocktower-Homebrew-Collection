@@ -790,6 +790,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (!websiteStorage.user.databaseFilter) {
             websiteStorage.user.databaseFilter = "All";
         }
+        if (websiteStorage.user.currentUsername === "User6852200000000001") {
+            websiteStorage.user.currentUsername = "Born";
+        }
 
         for (const role of websiteStorage.localRoleIdeas) {
             if (typeof role.rating === "number") {
