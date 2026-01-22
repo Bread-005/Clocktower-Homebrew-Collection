@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     if (!localStorage.getItem(storageString)) {
         const storage = {
+            localRoleIdeas: [],
             roleIdeas: [],
             user: {
                 page: 1,
@@ -783,6 +784,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                 databaseFilter: "All"
             }
             saveLocalStorage();
+        }
+        if (!websiteStorage.localRoleIdeas) {
+            websiteStorage.localRoleIdeas = [];
         }
         if (!websiteStorage.user.currentUsername) {
             websiteStorage.user.currentUsername = "User" + (Math.random().toFixed(5) * 10).toString().replace(".", "");
