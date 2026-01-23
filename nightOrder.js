@@ -1,5 +1,5 @@
 import {
-    allRoles, firstNightList, getRoleIdeas, otherNightList, saveLocalStorage, updateRole, websiteStorage
+    firstNightList, getRoleIdeas, imagePath, otherNightList, saveLocalStorage, updateRole, websiteStorage
 } from "./functions.js";
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 img.setAttribute("src", "https://clocktower.live/img/demoninfo.4669d783.webp");
             } else {
                 if (role.isOfficial) {
-                    img.setAttribute("src", "./icons/Icon_" + role.name.toLowerCase().replaceAll(" ", "") + ".png");
+                    img.setAttribute("src", imagePath(role));
                 }
                 if (!role.isOfficial) {
                     img.setAttribute("src", role.image);
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             div.append(img);
             div.append(roleNameAndNumber);
-            if (allRoles.map(role1 => role1.name).includes(role.name) || role.name === "Minion info" || role.name === "Demon info" || !role.owner?.includes(websiteStorage.user.currentUsername)) {
+            if (websiteStorage.officialRoles.map(role1 => role1.name).includes(role.name) || role.name === "Minion info" || role.name === "Demon info" || !role.owner?.includes(websiteStorage.user.currentUsername)) {
                 div.setAttribute("class", "night-order-img-text-div");
             } else {
                 div.append(button);
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
             div.style.background = "lightskyblue";
             container.append(div);
 
-            if (!allRoles.map(role1 => role1.name).includes(role.name)) {
+            if (!websiteStorage.officialRoles.map(role1 => role1.name).includes(role.name)) {
 
                 const editNightOrder = document.createElement("div");
                 const input = document.createElement("input");

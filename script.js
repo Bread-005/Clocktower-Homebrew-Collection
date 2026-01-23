@@ -49,6 +49,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     const loginButton = document.querySelector(".login-button");
     const ownerFilter = document.querySelector(".owner-filter");
 
+    try {
+        websiteStorage.officialRoles = await fetch("https://raw.githubusercontent.com/Bread-005/Clocktower-Homebrew-Collection/main/officialCharacters.json").then(res => res.json());
+    } catch (error) {
+        console.log("Could not reach https://raw.githubusercontent.com/Bread-005/Clocktower-Homebrew-Collection/main/officialCharacters.json");
+    }
     websiteStorage.user.tempMessage = "";
     adjustLocalStorage();
     saveLocalStorage();
@@ -328,7 +333,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     function addRole() {
-        document.getElementById("js-add-role").addEventListener("click", async function () {
+        document.getElementById("js-add-role").addEventListener("click", function () {
             const roleNameInput = document.getElementById("role-name");
             const characterTypeInput = document.getElementById("character-types");
             const abilityTextInput = document.getElementById("ability-text");
@@ -338,6 +343,15 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             for (const role of getRoleIdeas()) {
                 if (role.name === roleNameInput.value && role.ability === abilityTextInput.value) {
+                    roleExistsMessage(role, true);
+                    return;
+                }
+            }
+
+            for (const role of websiteStorage.officialRoles) {
+                if (role.name.toLowerCase().replaceAll("_", "").replaceAll(" ", "") ===
+                    roleNameInput.value.toLowerCase().replaceAll("_", "").replaceAll(" ", "")) {
+                    alert(role.name + " (" + role.characterType + ") is an official role!");
                     return;
                 }
             }
@@ -437,7 +451,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.querySelector(".script-upload-div").style.display = roleCreationMode === 2 ? "flex" : "none";
     });
 
-    jsonAddRoleButton.addEventListener("click", async function () {
+    jsonAddRoleButton.addEventListener("click", function () {
         let text = jsonInputTextarea.value.replaceAll('""', '"');
         if (text[0] === '"') text = text.substring(1);
         if (text[text.length - 1] === '"') text = text.substring(0, text.length - 1);
@@ -450,7 +464,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 return;
             }
 
-            await addRoleViaJson(role);
+            addRoleViaJson(role);
         } catch (err) {
             createPopup(document.querySelector(".main-page"), "Your role has to be valid JSON!");
         }
@@ -463,7 +477,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const reader = new FileReader();
         reader.readAsText(file);
 
-        reader.addEventListener("load", async function (event) {
+        reader.addEventListener("load", function (event) {
             const array = JSON.parse(event.target.result.toString());
             let script = "";
 
@@ -494,7 +508,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     continue;
                 }
                 if (script) object.script = script;
-                await addRoleViaJson(object);
+                addRoleViaJson(object);
             }
         });
     });
@@ -609,7 +623,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
-    async function addRoleViaJson(role) {
+    function addRoleViaJson(role) {
         for (const role1 of getRoleIdeas()) {
             if (role1.name === role.name && role1.characterType.toLowerCase() === role.team.toLowerCase()) {
                 roleExistsMessage(role, true);
@@ -617,9 +631,10 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         }
 
-        for (const role1 of allRoles) {
+        for (const role1 of websiteStorage.officialRoles) {
             if (role1.name.toLowerCase().replaceAll("_", "").replaceAll(" ", "") ===
                 role.name.toLowerCase().replaceAll("_", "").replaceAll(" ", "")) {
+                alert(role.name + " (" + role.characterType + ") is an official role!");
                 return;
             }
         }

@@ -1,6 +1,6 @@
 import {
-    allRoles, characterTypes, getTeamColor, getJsonString, StevenApprovedOrder, n, getRoleIdeas, websiteStorage,
-    saveLocalStorage
+    characterTypes, getTeamColor, getJsonString, StevenApprovedOrder, n, getRoleIdeas, websiteStorage,
+    saveLocalStorage, imagePath
 } from "./functions.js";
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -22,10 +22,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const scriptSelection = document.querySelector(".script-tool-script-selection");
     const arrayOfArrays = [[], [], [], [], [], []];
 
-    const roleNames = getRoleIdeas().map(role => role.name);
-    for (let i = 0; i < websiteStorage.scriptTool.length; i++) {
-        websiteStorage.scriptTool[i].roles = websiteStorage.scriptTool[i].roles.filter(role => roleNames.includes(role.name) || allRoles.map(role1 => role1.name).includes(role.name) && role.isOfficial);
-    }
     saveLocalStorage();
     createRoleSelection();
     displayRoleSelection();
@@ -58,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const scriptHead = {
             id: "_meta",
             name: selectedScript.name,
-            author: selectedScript.author,
+            author: selectedScript.author
         }
         if (!scriptHead.name) delete scriptHead.name;
         if (!scriptHead.author) delete scriptHead.author;
@@ -67,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
         for (const team of characterTypes) {
             for (const role of selectedScript.roles) {
                 if (role.characterType === team) {
-                    if (allRoles.map(role1 => role1.name).includes(role.name)) {
+                    if (websiteStorage.officialRoles.map(role1 => role1.name).includes(role.name)) {
                         script += '"' + role.name.toLowerCase().replaceAll(" ", "_") + '",' + n;
                         continue;
                     }
@@ -77,7 +73,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         script += "]";
         script = script.replace("," + n + "]", n + "]");
-        console.log(script);
 
         const dataUrl = "data:application/json;charset=utf-8," + script;
         const link = document.createElement("a");
@@ -120,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                     i.setAttribute("class", "fa-solid fa-x");
                     if (role.isOfficial) {
-                        img.setAttribute("src", "./icons/Icon_" + role.name.toLowerCase().replaceAll(" ", "") + ".png");
+                        img.setAttribute("src", imagePath(role));
                     } else {
                         img.setAttribute("src", role.image ? role.image : "https://i.postimg.cc/qM09f8cD/placeholder-icon.png");
                     }
@@ -135,14 +130,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function createRoleSelection() {
-        for (const role of allRoles) {
+        for (const role of websiteStorage.officialRoles) {
             for (let i = 0; i < characterTypes.length; i++) {
                 if (role.characterType === characterTypes[i]) {
                     arrayOfArrays[i].push({
                         name: role.name,
                         characterType: role.characterType,
                         ability: role.ability,
-                        image: "https://wiki.bloodontheclocktower.com/Special:FilePath/icon_" + role.name.toLowerCase().replaceAll(" ", "") + ".png",
                         isOfficial: true
                     });
                 }
@@ -199,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 div.setAttribute("class", "role-div");
                 img.setAttribute("class", "clocktower-icon");
                 if (role.isOfficial) {
-                    img.setAttribute("src", "./icons/Icon_" + role.name.toLowerCase().replaceAll(" ", "") + ".png");
+                    img.setAttribute("src", imagePath(role));
                 } else {
                     img.setAttribute("src", role.image ? role.image : "https://i.postimg.cc/qM09f8cD/placeholder-icon.png")
                 }
