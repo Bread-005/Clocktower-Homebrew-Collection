@@ -1556,16 +1556,6 @@
     ]
   },
   {
-    "id": "cacklejack",
-    "name": "Cacklejack",
-    "ability": "Each day, choose a player: a different player changes character tonight.",
-    "characterType": "Traveller",
-    "otherNightReminder": "Replace the character token of any player (besides the player the Cacklejack chose today) with a different character token. Wake that player and show them the 'You are' card and their new character token.",
-    "reminders": [
-      "Not Me"
-    ]
-  },
-  {
     "id": "gangster",
     "name": "Gangster",
     "ability": "Once per day, you may choose to kill an alive neighbor, if your other alive neighbor agrees.",

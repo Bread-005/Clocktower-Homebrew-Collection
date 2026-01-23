@@ -102,10 +102,11 @@ function getTeamColor(team) {
     if (team.toLowerCase() === "demon") return "red";
     if (team.toLowerCase() === "traveller") return "purple";
     if (team.toLowerCase() === "fabled") return "gold";
+    if (team.toLowerCase() === "loric") return "lime";
     return "";
 }
 
-const characterTypes = ["Townsfolk", "Outsider", "Minion", "Demon", "Traveller", "Fabled"];
+const characterTypes = ["Townsfolk", "Outsider", "Minion", "Demon", "Traveller", "Fabled", "Loric"];
 
 const StevenApprovedOrder = ["You start knowing", "Each night,", "Each night*,", "Each day", "Once per game", " "];
 

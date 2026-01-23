@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const scriptNameInput = document.getElementById("script-name-input");
     const scriptAuthorInput = document.getElementById("script-author-input");
     const scriptSelection = document.querySelector(".script-tool-script-selection");
-    const arrayOfArrays = [[], [], [], [], [], []];
+    const arrayOfArrays = [[], [], [], [], [], [], []];
 
     saveLocalStorage();
     createRoleSelection();
