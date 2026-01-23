@@ -109,9 +109,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     imgAndNameDiv.setAttribute("class", "img-and-name");
                     removeButton.addEventListener("click", function () {
                         selectedScript.roles = selectedScript.roles.filter(role1 => role1.name !== role.name || role1.characterType !== role.characterType);
+                        document.getElementById(role.name + role.createdAt + "-checkbox").checked = selectedScript.roles.find(role1 => role1.name === role.name && role1.ability === role.ability);
                         saveLocalStorage();
                         displayScriptRoles();
-                        displayRoleSelection();
                     });
                     i.setAttribute("class", "fa-solid fa-x");
                     if (role.isOfficial) {
@@ -201,9 +201,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 checkbox.type = "checkbox";
                 checkbox.checked = websiteStorage.scriptTool.find(script1 => script1.isSelected).roles.map(role1 => role1.name).includes(role.name);
                 label.textContent = role.name;
-                checkbox.setAttribute("id", role.name + "-checkbox123");
-                label.setAttribute("for", role.name + "-checkbox123");
-                if (role.ability) abilityText.textContent = role.ability;
+                checkbox.setAttribute("id", role.name + role.createdAt + "-checkbox");
+                label.setAttribute("for", role.name + role.createdAt + "-checkbox");
+                abilityText.textContent = role.ability;
                 abilityText.setAttribute("class", "ability-text");
 
                 div.addEventListener("mouseover", () => abilityText.style.display = "flex");

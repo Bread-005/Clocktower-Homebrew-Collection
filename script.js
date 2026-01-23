@@ -22,7 +22,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                 currentUsername: "User12345",
                 ownerFilter: "All",
                 databaseFilter: "All",
-                tempMessage: ""
+                tempMessage: "",
+                roleCreationMode: 0
             },
             archive: []
         }
@@ -86,8 +87,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     clearFilters();
     displayRoles();
     displayMisc();
-
-    let roleCreationMode = 0;
+    displayRoleCreation();
 
     function displayRoles() {
         setFilters();
@@ -443,12 +443,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     document.getElementById("switch-role-creation").addEventListener("click", function () {
-        roleCreationMode++;
-        if (roleCreationMode === 3) roleCreationMode = 0;
-
-        document.querySelector(".create-main-role-attributes").style.display = roleCreationMode === 0 ? "flex" : "none";
-        document.querySelector(".json-input-div").style.display = roleCreationMode === 1 ? "flex" : "none";
-        document.querySelector(".script-upload-div").style.display = roleCreationMode === 2 ? "flex" : "none";
+        websiteStorage.user.roleCreationMode += 1;
+        if (websiteStorage.user.roleCreationMode === 3) websiteStorage.user.roleCreationMode = 0;
+        saveLocalStorage();
+        displayRoleCreation();
     });
 
     jsonAddRoleButton.addEventListener("click", function () {
@@ -800,7 +798,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                 currentUsername: "User12345",
                 ownerFilter: "All",
                 databaseFilter: "All",
-                tempMessage: ""
+                tempMessage: "",
+                roleCreationMode: 0
             }
             saveLocalStorage();
         }
@@ -869,5 +868,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             option.setAttribute("value", owner);
             ownerSelection.append(option);
         }
+    }
+
+    function displayRoleCreation() {
+        document.querySelector(".create-main-role-attributes").style.display = websiteStorage.user.roleCreationMode === 0 ? "flex" : "none";
+        document.querySelector(".json-input-div").style.display = websiteStorage.user.roleCreationMode === 1 ? "flex" : "none";
+        document.querySelector(".script-upload-div").style.display = websiteStorage.user.roleCreationMode === 2 ? "flex" : "none";
     }
 });
