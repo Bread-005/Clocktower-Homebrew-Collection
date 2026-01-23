@@ -1,5 +1,5 @@
 import {
-    getJsonString, allRoles, allTags, getTeamColor, updateRole, API_URL, createPopup, databaseIsConnected,
+    getJsonString, allTags, getTeamColor, updateRole, API_URL, createPopup, databaseIsConnected,
     getRoleIdeas, websiteStorage, saveLocalStorage
 } from "./functions.js";
 
@@ -19,9 +19,10 @@ document.addEventListener("DOMContentLoaded", async function () {
                 onlyMyFavorites: false,
                 scriptFilter: "All",
                 tagFilter: "None",
-                currentUsername: "User" + (Math.random().toFixed(5) * 10).toString().replace(".", ""),
+                currentUsername: "User12345",
                 ownerFilter: "All",
-                databaseFilter: "All"
+                databaseFilter: "All",
+                tempMessage: ""
             },
             archive: []
         }
@@ -48,7 +49,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     const loginButton = document.querySelector(".login-button");
     const ownerFilter = document.querySelector(".owner-filter");
 
-    if (!websiteStorage.user.currentUsername) websiteStorage.user.currentUsername = "User" + (Math.random().toFixed(5) * 10).toString().replace(".", "");
     websiteStorage.user.tempMessage = "";
     adjustLocalStorage();
     saveLocalStorage();
@@ -56,15 +56,18 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (await databaseIsConnected()) {
         websiteStorage.roleIdeas = await fetch(API_URL + '/roles').then(res => res.json());
         saveLocalStorage();
-        if (websiteStorage.user.currentUsername) {
-            document.getElementById("current-username-display").textContent = "Username: " + websiteStorage.user.currentUsername;
-            loginButton.textContent = "logout";
-        }
-        if (!websiteStorage.user.currentUsername) {
-            websiteStorage.user.tempMessage = "When using the mongoDB Database, you have to login or sign up an account!";
+        document.getElementById("current-username-display").textContent = "Username: " + websiteStorage.user.currentUsername;
+        loginButton.textContent = "logout";
+
+        const users = await fetch(API_URL + "/users").then(res => res.json());
+        if (!users.find(user => user.name === websiteStorage.user.currentUsername && user.password === websiteStorage.user.password)) {
+            websiteStorage.user.tempMessage = "To grant access to public roles, you have to login or sign up to an account!";
+            websiteStorage.user.currentUsername = "User12345";
             saveLocalStorage();
             window.location = "login.html";
+            return;
         }
+
     } else {
         websiteStorage.user.ownerFilter = "All";
         saveLocalStorage();
@@ -779,9 +782,10 @@ document.addEventListener("DOMContentLoaded", async function () {
                 onlyMyFavorites: false,
                 scriptFilter: "All",
                 tagFilter: "None",
-                currentUsername: "User" + (Math.random().toFixed(5) * 10).toString().replace(".", ""),
+                currentUsername: "User12345",
                 ownerFilter: "All",
-                databaseFilter: "All"
+                databaseFilter: "All",
+                tempMessage: ""
             }
             saveLocalStorage();
         }
@@ -789,7 +793,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             websiteStorage.localRoleIdeas = [];
         }
         if (!websiteStorage.user.currentUsername) {
-            websiteStorage.user.currentUsername = "User" + (Math.random().toFixed(5) * 10).toString().replace(".", "");
+            websiteStorage.user.currentUsername = "User12345";
         }
         if (!websiteStorage.user.databaseFilter) {
             websiteStorage.user.databaseFilter = "All";
@@ -824,6 +828,10 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
             if (role.lastEdited.toString().includes("-")) {
                 role.lastEdited = new Date(role.lastEdited).getTime().toString();
+            }
+            if (role.owner.includes("User12345")) {
+                role.owner = role.owner.filter(owner => owner !== "User12345");
+                role.owner.push(websiteStorage.user.currentUsername);
             }
         }
         saveLocalStorage();

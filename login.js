@@ -72,6 +72,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 return;
             }
             websiteStorage.user.currentUsername = user.name;
+            websiteStorage.user.password = user.password;
             saveLocalStorage();
             window.location = "index.html";
         }
