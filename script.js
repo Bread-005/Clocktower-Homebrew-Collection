@@ -812,6 +812,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (!websiteStorage.user.databaseFilter) {
             websiteStorage.user.databaseFilter = "All";
         }
+        if (!websiteStorage.user.roleCreationMode) {
+            websiteStorage.user.roleCreationMode = 0;
+        }
 
         for (const role of websiteStorage.localRoleIdeas) {
             if (typeof role.rating === "number") {
