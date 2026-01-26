@@ -1,60 +1,30 @@
-import {
-    firstNightList, getRoleIdeas, imagePath, otherNightList, saveLocalStorage, updateRole, websiteStorage
-} from "./functions.js";
+import {getRoleIdeas, imagePath, saveLocalStorage, updateRole, websiteStorage} from "./functions.js";
 
 document.addEventListener('DOMContentLoaded', function () {
     const firstNightOrderDisplayDiv = document.querySelector(".first-night-order-display-div");
     const otherNightOrderDisplayDiv = document.querySelector(".other-night-order-display-div");
 
-    const firstNightOrderList = [];
+    const firstNightOrderList = [{name: "Minion info", firstNight: 19}, {name: "Demon info", firstNight: 23}];
     const otherNightOrderList = [];
 
-    fillList(firstNightList, firstNightOrderList, 6);
-    fillList(otherNightList, otherNightOrderList, 7);
-
-    for (const role of getRoleIdeas()) {
-        if (role.firstNight) {
-            firstNightOrderList.push({
-                name: role.name,
-                number: role.firstNight,
-                isOfficial: false,
-                image: role.image,
-                ability: role.ability,
-                owner: role.owner
-            });
-        }
-        if (role.otherNight) {
-            otherNightOrderList.push({
-                name: role.name,
-                number: role.otherNight,
-                isOfficial: false,
-                image: role.image,
-                ability: role.ability,
-                owner: role.owner
-            });
-        }
+    for (const role of websiteStorage.officialRoles) {
+        if (role.firstNight) firstNightOrderList.push(role);
+        if (role.otherNight) otherNightOrderList.push(role);
     }
 
-    firstNightOrderList.sort((a, b) => a.number - b.number);
-    otherNightOrderList.sort((a, b) => a.number - b.number);
+    for (const role of getRoleIdeas()) {
+        if (role.firstNight) firstNightOrderList.push(role);
+        if (role.otherNight) otherNightOrderList.push(role);
+    }
+
+    firstNightOrderList.sort((a, b) => a.firstNight - b.firstNight);
+    otherNightOrderList.sort((a, b) => a.otherNight - b.otherNight);
 
     const firstDiv = createDivs(firstNightOrderList);
     const otherDiv = createDivs(otherNightOrderList);
 
     firstNightOrderDisplayDiv.append(firstDiv);
     otherNightOrderDisplayDiv.append(otherDiv);
-
-    function fillList(List, List2, number) {
-        for (const wakingRole of List) {
-            const role = {
-                name: wakingRole,
-                number: number,
-                isOfficial: true
-            }
-            number++;
-            List2.push(role);
-        }
-    }
 
     function createDivs(List) {
         const container = document.createElement("div");
@@ -70,10 +40,9 @@ document.addEventListener('DOMContentLoaded', function () {
             } else if (role.name === "Demon info") {
                 img.setAttribute("src", "https://clocktower.live/img/demoninfo.4669d783.webp");
             } else {
-                if (role.isOfficial) {
+                if (websiteStorage.officialRoles.find(role1 => role1.name === role.name)) {
                     img.setAttribute("src", imagePath(role));
-                }
-                if (!role.isOfficial) {
+                } else {
                     img.setAttribute("src", role.image);
                 }
             }
@@ -86,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
             button.append(icon);
 
             let roleNameAndNumber = document.createElement("div");
-            roleNameAndNumber.textContent = role.name + ": " + role.number;
+            roleNameAndNumber.textContent = role.name + ": " + (List === firstNightOrderList ? role.firstNight : role.otherNight);
             roleNameAndNumber.style.marginRight = "0.25rem";
 
             div.append(img);
@@ -117,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const input = document.createElement("input");
                 input.type = "number";
                 input.style.height = "1.5rem";
-                input.value = role.number;
+                input.value = List === firstNightOrderList ? role.firstNight : role.otherNight;
                 input.setAttribute("id", role.name + "night-order-edit-input");
                 const label = document.createElement("label");
                 label.textContent = role.name + ": ";

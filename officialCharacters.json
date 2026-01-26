@@ -1820,7 +1820,7 @@
   },
   {
     "id": "deusexfiasco_rah",
-    "name": "Deus ex Fiasco RAH",
+    "name": "Deus ex Fiasco",
     "ability": "At least once per game, the Storyteller will make a mistake, correct it, and publicly admit to it.",
     "characterType": "Fabled",
     "setup": true

@@ -192,7 +192,7 @@ function saveLocalStorage() {
 }
 
 function imagePath(role) {
-    return "./icons/Icon_" + role.name.toLowerCase().replaceAll(" ", "").replaceAll("’", "").replaceAll("-", "") + ".png";
+    return "./icons/Icon_" + role.name.toLowerCase().replaceAll(" ", "").replaceAll("-", "").replaceAll("'", "") + ".png";
 }
 
 export {
