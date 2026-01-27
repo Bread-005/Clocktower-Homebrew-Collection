@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const scriptSelection = document.querySelector(".script-tool-script-selection");
     const arrayOfArrays = [[], [], [], [], [], [], []];
 
+    updateScriptToolRoles();
     saveLocalStorage();
     createRoleSelection();
     displayRoleSelection();
@@ -109,7 +110,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     imgAndNameDiv.setAttribute("class", "img-and-name");
                     removeButton.addEventListener("click", function () {
                         selectedScript.roles = selectedScript.roles.filter(role1 => role1.name !== role.name || role1.characterType !== role.characterType);
-                        document.getElementById(role.name + role.createdAt + "-checkbox").checked = selectedScript.roles.find(role1 => role1.name === role.name && role1.ability === role.ability);
+                        if (role.name.includes(searchByNameInput.value) &&
+                            (websiteStorage.officialRoles.find(role1 => role1.name === role.name) || getRoleIdeas().find(role1 => role1.createdAt === role.createdAt))) {
+                            document.getElementById(role.name + role.createdAt + "-checkbox").checked = selectedScript.roles.find(role1 => role1.name === role.name && role1.ability === role.ability);
+                        }
                         saveLocalStorage();
                         displayScriptRoles();
                     });
@@ -291,5 +295,16 @@ document.addEventListener('DOMContentLoaded', function () {
             saveLocalStorage();
             displayScriptSelection();
         });
+    }
+
+    function updateScriptToolRoles() {
+        const allHomebrewRoles = getRoleIdeas();
+        for (const script of websiteStorage.scriptTool) {
+            for (let i = 0; i < script.roles.length; i++) {
+                if (websiteStorage.officialRoles.map(role => role.name).includes(script.roles[i].name)) continue;
+                script.roles[i] = allHomebrewRoles.find(role => role.createdAt === script.roles[i].createdAt);
+            }
+        }
+        saveLocalStorage();
     }
 });

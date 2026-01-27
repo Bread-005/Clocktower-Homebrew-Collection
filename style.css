@@ -449,7 +449,7 @@ input[type="number"] {
             background-color: gray;
             overflow: scroll;
             right: -160px;
-            width: 150px;
+            width: 160px;
             height: 220px;
             padding: 4px;
         }

@@ -1,6 +1,6 @@
 import {
-    getJsonString, firstNightList, otherNightList, allTags, updateRole, deleteRole, createPopup, getRoleIdeas,
-    saveLocalStorage, databaseIsConnected, createRole, websiteStorage
+    getJsonString, allTags, updateRole, deleteRole, createPopup, getRoleIdeas, saveLocalStorage, databaseIsConnected,
+    createRole, websiteStorage
 } from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -591,14 +591,24 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function fillFirstNightInfoTextArea() {
-        for (let i = 0; i < firstNightList.length; i++) {
-            firstNightInfoText.innerHTML += (i + 6) + " " + firstNightList[i] + "<br>";
+        const firstNightRoles = [];
+        for (const role1 of websiteStorage.officialRoles) {
+            if (role1.firstNight) firstNightRoles.push(role1);
+        }
+        firstNightRoles.sort((a, b) => a.firstNight - b.firstNight);
+        for (const role1 of firstNightRoles) {
+            firstNightInfoText.innerHTML += role1.firstNight + " " + role1.name + "<br>";
         }
     }
 
     function fillOtherNightInfoTextArea() {
-        for (let i = 0; i < otherNightList.length; i++) {
-            otherNightInfoText.innerHTML += (i + 7) + " " + otherNightList[i] + "<br>";
+        const otherNightRoles = [];
+        for (const role1 of websiteStorage.officialRoles) {
+            if (role1.otherNight) otherNightRoles.push(role1);
+        }
+        otherNightRoles.sort((a, b) => a.otherNight - b.otherNight);
+        for (const role1 of otherNightRoles) {
+            otherNightInfoText.innerHTML += role1.otherNight + " " + role1.name + "<br>";
         }
     }
 
@@ -697,5 +707,3 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
-
-export {firstNightList, otherNightList}
