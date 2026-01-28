@@ -91,6 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.querySelector(".display-" + team.toLowerCase()).textContent = "";
             for (const role of selectedScript.roles) {
                 if (role.characterType === team) {
+                    const roleDiv = document.createElement("div");
                     const div = document.createElement("div");
                     const imgAndNameDiv = document.createElement("div");
                     const removeButton = document.createElement("button");
@@ -98,13 +99,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     const img = document.createElement("img");
                     const name = document.createElement("div");
                     const abilityText = document.createElement("div");
+                    const jinxDiv = document.createElement("div");
                     removeButton.append(i);
                     imgAndNameDiv.append(removeButton);
                     imgAndNameDiv.append(img);
                     imgAndNameDiv.append(name);
                     div.append(imgAndNameDiv);
                     div.append(abilityText);
+                    roleDiv.append(div);
+                    roleDiv.append(jinxDiv);
 
+                    roleDiv.setAttribute("class", "complete-role");
                     div.setAttribute("class", "role");
                     div.style.background = getTeamColor(role.characterType);
                     imgAndNameDiv.setAttribute("class", "img-and-name");
@@ -127,7 +132,32 @@ document.addEventListener('DOMContentLoaded', function () {
                     name.textContent = role.name;
                     abilityText.textContent = role.ability;
                     abilityText.style.paddingRight = "0.5rem";
-                    document.querySelector(".display-" + team.toLowerCase()).append(div);
+                    jinxDiv.setAttribute("class", "jinx");
+
+                    if (role.jinxes) {
+                        for (const jinx of role.jinxes) {
+                            const jinxedRole = websiteStorage.officialRoles.find(role1 => role1.name === role.name) ? jinx.id : jinx.jinxedRole;
+                            if (!selectedScript.roles.map(role1 => role1.name.toLowerCase().replaceAll("'", "")).includes(jinxedRole.toLowerCase())) continue;
+                            const jinxImg = document.createElement("img");
+                            jinxImg.setAttribute("class", "jinx-image");
+                            jinxImg.src = imagePath({name: jinxedRole});
+                            jinxDiv.append(jinxImg);
+
+                            const jinxText = document.createElement("p");
+                            jinxText.textContent = jinx.reason;
+                            jinxText.setAttribute("class", "jinx-text");
+                            jinxDiv.append(jinxText);
+
+                            jinxImg.addEventListener("mouseover", () => {
+                                jinxText.style.visibility = "visible";
+                            });
+
+                            jinxImg.addEventListener("mouseout", () => {
+                                jinxText.style.visibility = "hidden";
+                            });
+                        }
+                    }
+                    document.querySelector(".display-" + team.toLowerCase()).append(roleDiv);
                 }
             }
         }
@@ -141,7 +171,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         name: role.name,
                         characterType: role.characterType,
                         ability: role.ability,
-                        isOfficial: true
+                        isOfficial: true,
+                        jinxes: role.jinxes
                     });
                 }
             }

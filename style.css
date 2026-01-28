@@ -853,13 +853,11 @@ input[type="number"] {
             flex-direction: column;
         }
 
-        .role {
+        .complete-role {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 0.2rem;
+            flex-direction: column;
             width: 50rem;
-            gap: 1rem;
+            margin: 0.2rem;
 
             @media (max-width: 1300px) {
                 width: 45rem;
@@ -874,17 +872,45 @@ input[type="number"] {
                 }
             }
 
-            .img-and-name {
+            .role {
                 display: flex;
-                justify-content: flex-start;
+                justify-content: space-between;
                 align-items: center;
-                gap: 0.5rem;
+                gap: 1rem;
 
-                .image {
-                    width: 35px;
-                    height: 35px;
+                .img-and-name {
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
+                    gap: 0.5rem;
+
+                    .image {
+                        width: 35px;
+                        height: 35px;
+                        background: white;
+                        border-radius: 25px;
+                    }
+                }
+            }
+
+            .jinx {
+                display: flex;
+                margin-left: 3rem;
+                gap: 0.5rem;
+                position: relative;
+
+                .jinx-image {
+                    width: 25px;
+                    height: 25px;
                     background: white;
                     border-radius: 25px;
+                }
+
+                .jinx-text {
+                    position: absolute;
+                    visibility: hidden;
+                    background: beige;
+                    top: 1rem;
                 }
             }
         }
