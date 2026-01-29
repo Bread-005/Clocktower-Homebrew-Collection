@@ -330,11 +330,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateScriptToolRoles() {
         const allHomebrewRoles = getRoleIdeas();
-        for (const script of websiteStorage.scriptTool) {
-            script.roles = script.roles.filter(role => role);
-            for (let i = 0; i < script.roles.length; i++) {
-                if (websiteStorage.officialRoles.map(role => role.name).includes(script.roles[i].name)) continue;
-                script.roles[i] = allHomebrewRoles.find(role => role.createdAt === script.roles[i].createdAt);
+        for (let i = 0; i < websiteStorage.scriptTool.length; i++) {
+            websiteStorage.scriptTool[i].roles = websiteStorage.scriptTool[i].roles.filter(role => role);
+            for (let j = 0; j < websiteStorage.scriptTool[i].roles.length; j++) {
+                if (websiteStorage.officialRoles.map(role => role.name).includes(websiteStorage.scriptTool[i].roles[j].name)) continue;
+                websiteStorage.scriptTool[i].roles[j] = allHomebrewRoles.find(role => role.createdAt === websiteStorage.scriptTool[i].roles[j].createdAt);
             }
         }
         saveLocalStorage();
