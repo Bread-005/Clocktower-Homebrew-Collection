@@ -331,6 +331,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateScriptToolRoles() {
         const allHomebrewRoles = getRoleIdeas();
         for (const script of websiteStorage.scriptTool) {
+            script.roles = script.roles.filter(role => role);
             for (let i = 0; i < script.roles.length; i++) {
                 if (websiteStorage.officialRoles.map(role => role.name).includes(script.roles[i].name)) continue;
                 script.roles[i] = allHomebrewRoles.find(role => role.createdAt === script.roles[i].createdAt);
