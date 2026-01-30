@@ -5,8 +5,7 @@
 body {
     margin: 0 auto;
     font-family: Kokonor, sans-serif;
-    min-width: 90vw;
-    max-width: 1200px;
+    max-width: 90vw;
     padding: 10px;
     background: gray;
 }

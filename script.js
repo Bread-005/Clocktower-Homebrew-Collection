@@ -1,6 +1,6 @@
 import {
     getJsonString, allTags, getTeamColor, updateRole, API_URL, createPopup, databaseIsConnected,
-    getRoleIdeas, websiteStorage, saveLocalStorage
+    getRoleIdeas, websiteStorage, saveLocalStorage, n
 } from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -45,8 +45,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const databaseSelection = document.getElementById("database-selection");
     const homebrewRolesDisplay = document.getElementById("homebrewroles");
     const roleIdeaPageSelection = document.querySelector(".role-idea-page-selection");
-    const scriptDownloadButton = document.getElementById("script-download-button");
-    const localstorageDownloadButton = document.getElementById("localstorage-download-button");
+    const rolesDownloadButton = document.getElementById("roles-download-button");
     const loginButton = document.querySelector(".login-button");
     const ownerFilter = document.querySelector(".owner-filter");
 
@@ -86,7 +85,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     setupOwnerFilterSelection();
     clearFilters();
     displayRoles();
-    displayMisc();
     displayRoleCreation();
 
     function displayRoles() {
@@ -229,9 +227,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             websiteStorage.user.roleSearch = roleSearch.value;
             websiteStorage.user.characterType = characterTypeSelection.value;
             websiteStorage.user.scriptFilter = scriptFilterSelection.value;
-            if (filter === scriptFilterSelection && scriptFilterSelection.value !== "All") {
-                scriptDownloadButton.textContent = "Download " + scriptFilterSelection.value;
-            }
             websiteStorage.user.tagFilter = tagFilterSelection.value;
             websiteStorage.user.onlyMyFavorites = onlyMyFavoritesCheckBox.checked;
             websiteStorage.user.sorting = sortingDropDownMenu.value;
@@ -239,7 +234,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             websiteStorage.user.databaseFilter = databaseSelection.value;
             saveLocalStorage();
             displayRoles();
-            displayMisc();
         });
     }
 
@@ -408,7 +402,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             websiteStorage.user.databaseFilter = "All";
             saveLocalStorage();
             displayRoles();
-            displayMisc();
         });
     }
 
@@ -511,80 +504,29 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     });
 
-    scriptDownloadButton.addEventListener("click", function () {
-
-        if (scriptFilterSelection.value === "All") return;
-
-        let content = [];
-        const script = scriptDownloadButton.textContent.replace("Download ", "");
+    rolesDownloadButton.addEventListener("click", () => {
+        let content = "[";
 
         const meta = {
             id: "_meta",
-            name: script
+            name: "CHC " + new Date().toLocaleString() + " - " + (scriptFilterSelection.value === "All" ? "All Roles" : scriptFilterSelection.value + " Roles")
         }
+        content += JSON.stringify(meta) + "," + n;
 
-        content.push(meta);
         const roles = filterRoles(getRoleIdeas());
 
-        if (roles.length === 0) return;
-
         for (const role of roles) {
-            content.push(getJsonString(role));
-        }
-
-        const dataUrl = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(content, null, 4));
-        const link = document.createElement("a");
-        link.href = dataUrl;
-        link.download = script + ".json";
-        link.click();
-    });
-
-    localstorageDownloadButton.addEventListener("click", function () {
-
-        const content = [];
-
-        for (const role of websiteStorage.localRoleIdeas) {
-            let tempRole = {};
-
-            for (let attribute in role) {
-                if (!role[attribute]) {
-                    continue;
-                }
-                if (Array.isArray(role[attribute]) && role[attribute].length === 0 && attribute !== "tags") {
-                    continue;
-                }
-                if (attribute === "rating") {
-                    continue;
-                }
-                if (attribute === "characterType") {
-                    tempRole.team = role[attribute];
-                    continue;
-                }
-                if (attribute === "jinxes" && Array.isArray(role.jinxes)) {
-                    const jinxes = [];
-
-                    for (const jinx of role.jinxes) {
-                        jinxes.push({
-                            id: jinx.jinxedRole.toLowerCase().replaceAll(" ", "_"),
-                            reason: jinx.reason
-                        });
-                    }
-                    tempRole.jinxes = jinxes;
-                    continue;
-                }
+            const tempRole = {};
+            for (const attribute in role) {
+                if (!role[attribute] || role[attribute].length === 0) continue;
                 tempRole[attribute] = role[attribute];
             }
-            tempRole.id = tempRole.name.toLowerCase().replaceAll(" ", "_");
-            if (tempRole.script) tempRole.id += "_" + tempRole.script.toLowerCase().replaceAll(" ", "_");
-            content.push(tempRole);
+            content += JSON.stringify(tempRole, null, 4) + "," + n;
         }
-
-        const dataUrl = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(content, null, 2));
+        content = content.replace(/,\s*$/, n + "]");
         const link = document.createElement("a");
-        link.href = dataUrl;
-        const today = new Date();
-        const completeDate = "(" + (today.getDate() < 10 ? "0" : "") + today.getDate() + "." + (today.getMonth() < 9 ? "0" : "") + (today.getMonth() + 1) + "." + today.getUTCFullYear() + " - " + today.getHours() + "." + today.getMinutes() + " Uhr)";
-        link.download = "Clocktower Homebrew Collection " + completeDate + ".json";
+        link.href = "data:application/json;charset=utf-8," + content;
+        link.download = meta.name + ".json";
         link.click();
     });
 
@@ -765,11 +707,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             tags.push("Seating Order");
         }
         return tags;
-    }
-
-    function displayMisc() {
-        scriptDownloadButton.textContent = "Download " + websiteStorage.user.scriptFilter;
-        scriptDownloadButton.style.display = scriptFilterSelection.value === "All" ? "none" : "flex";
     }
 
     function roleExistsMessage(role, showAlert = false) {
