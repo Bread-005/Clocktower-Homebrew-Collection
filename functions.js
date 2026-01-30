@@ -56,12 +56,10 @@ function getJsonString(role, copyJsonToClipboard = false) {
                 name: special.name,
                 type: special.type
             }
-            if (special.value) {
-                tempSpecial.value = special.value;
-            }
-            if (special.time) {
-                tempSpecial.time = special.time;
-            }
+            if (special.value) tempSpecial.value = special.value;
+            if (special.time) tempSpecial.time = special.time;
+            if (special.global) tempSpecial.global = special.global;
+
             jsonRole.special.push(tempSpecial);
         }
     }

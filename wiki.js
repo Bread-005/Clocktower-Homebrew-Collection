@@ -36,9 +36,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const specialDisplay = document.getElementById("special-display");
     const specialTypeSelection = document.getElementById("special-type-selection");
     const specialNameSelection = document.getElementById("special-name-selection");
-    const specialValueInput = document.getElementById("special-value-input");
-    const specialTimeSelection = document.getElementById("special-time-selection");
-    const specialAddButton = document.getElementById("special-add-button");
     const scriptText = document.getElementById("script-text");
     const scriptEditButton = document.getElementById("script-edit-button");
     const scriptEditInput = document.getElementById("script-edit-input");
@@ -573,15 +570,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function addSpecial() {
-        specialAddButton.addEventListener("click", async function () {
+        document.getElementById("special-add-button").addEventListener("click", async function () {
             if (specialTypeSelection.value === "" || specialNameSelection.value === "") {
                 return;
             }
             const special = {
                 name: specialNameSelection.value,
                 type: specialTypeSelection.value,
-                value: specialValueInput.value,
-                time: specialTimeSelection.value === "none" ? "" : specialTimeSelection.value
+                value: document.getElementById("special-value-input").value,
+                time: document.getElementById("special-time-selection").value,
+                global: document.getElementById("special-global-selection").value
             }
             role.special.push(special);
             await updateRole(role);
