@@ -198,7 +198,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                         score: Number.parseFloat(rateInput.value)
                     });
                 }
-                await updateRole(role, false);
+                await updateRole({createdAt: role.createdAt, rating: role.rating}, false);
                 saveLocalStorage();
                 displayRoles();
             });
@@ -209,7 +209,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 } else {
                     role.favoriteList.push(websiteStorage.user.currentUsername);
                 }
-                await updateRole(role, false);
+                await updateRole({createdAt: role.createdAt, favoriteList: role.favoriteList}, false);
                 saveLocalStorage();
                 displayRoles();
             });
@@ -509,7 +509,14 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         const meta = {
             id: "_meta",
-            name: "CHC " + new Date().toLocaleString() + " - " + (scriptFilterSelection.value === "All" ? "All Roles" : scriptFilterSelection.value + " Roles")
+            name: "CHC " + new Date().toLocaleString("de-DE", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit"
+            }) + " - " + (scriptFilterSelection.value === "All" ? "All Roles" : scriptFilterSelection.value + " Roles")
         }
         content += JSON.stringify(meta) + "," + n;
 

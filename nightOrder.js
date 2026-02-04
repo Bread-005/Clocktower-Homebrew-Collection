@@ -123,7 +123,11 @@ document.addEventListener('DOMContentLoaded', function () {
                             role1.otherNight = Number.parseFloat(input.value);
                             roleNameAndNumber.textContent = role1.name + ": " + role1.otherNight;
                         }
-                        await updateRole(role1);
+                        await updateRole({
+                            createdAt: role1.createdAt,
+                            firstNight: role1.firstNight,
+                            otherNight: role1.otherNight
+                        });
                         saveLocalStorage();
                     }
                 });
