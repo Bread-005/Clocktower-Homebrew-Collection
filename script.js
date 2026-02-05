@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             wikiButton.append(wikiIcon);
 
             const wikiAnchor = document.createElement("a");
-            wikiAnchor.setAttribute("href", "wiki.html?r=" + role.createdAt);
+            wikiAnchor.setAttribute("href", "wiki.html?name=" + role.name.replace(/\s+/g, "_").replace(/[^a-zA-Z0-9-_]/g, "") + "&r=" + role.createdAt);
             wikiAnchor.append(wikiButton);
 
             const favoriteButton = document.createElement("button");
