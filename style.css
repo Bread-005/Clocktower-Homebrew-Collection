@@ -919,6 +919,9 @@ input[type="number"] {
         position: fixed;
         left: 90%;
         margin-right: 0.75rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
 
         .script-tool-script-selection {
             margin-top: 1rem;

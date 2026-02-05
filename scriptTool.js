@@ -1,6 +1,6 @@
 import {
     characterTypes, getTeamColor, getJsonString, StevenApprovedOrder, n, getRoleIdeas, websiteStorage,
-    saveLocalStorage, imagePath
+    saveLocalStorage, imagePath, createPopup
 } from "./functions.js";
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -49,33 +49,13 @@ document.addEventListener('DOMContentLoaded', function () {
         displayScriptSelection();
     });
 
-    document.getElementById("script-tool-download-json-button").addEventListener("click", function () {
-        const selectedScript = websiteStorage.scriptTool.find(script1 => script1.isSelected);
-        let script = "[";
-        const scriptHead = {
-            id: "_meta",
-            name: selectedScript.name,
-            author: selectedScript.author
-        }
-        if (!scriptHead.name) delete scriptHead.name;
-        if (!scriptHead.author) delete scriptHead.author;
-        script += JSON.stringify(scriptHead) + "," + n;
+    document.getElementById("script-tool-copy-json-button").addEventListener("click", () => {
+        navigator.clipboard.writeText(getScriptAsJSON()).then();
+        createPopup(document.getElementById("script-tool-copy-json-button"), "Copied Script JSON to clipboard", 3500, "lightblue");
+    });
 
-        for (const team of characterTypes) {
-            for (const role of selectedScript.roles) {
-                if (role.characterType === team) {
-                    if (websiteStorage.officialRoles.map(role1 => role1.name).includes(role.name)) {
-                        script += '"' + role.name.toLowerCase().replaceAll(" ", "_") + '",' + n;
-                        continue;
-                    }
-                    script += JSON.stringify(getJsonString(role), null, 4) + ',' + n;
-                }
-            }
-        }
-        script += "]";
-        script = script.replace("," + n + "]", n + "]");
-
-        const dataUrl = "data:application/json;charset=utf-8," + script;
+    document.getElementById("script-tool-download-json-button").addEventListener("click", () => {
+        const dataUrl = "data:application/json;charset=utf-8," + getScriptAsJSON();
         const link = document.createElement("a");
         link.href = dataUrl;
         link.download = scriptNameDisplay.textContent + ".json";
@@ -338,5 +318,33 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
         saveLocalStorage();
+    }
+
+    function getScriptAsJSON() {
+        const selectedScript = websiteStorage.scriptTool.find(script1 => script1.isSelected);
+        let script = "[";
+        const scriptHead = {
+            id: "_meta",
+            name: selectedScript.name,
+            author: selectedScript.author
+        }
+        if (!scriptHead.name) delete scriptHead.name;
+        if (!scriptHead.author) delete scriptHead.author;
+        script += JSON.stringify(scriptHead) + "," + n;
+
+        for (const team of characterTypes) {
+            for (const role of selectedScript.roles) {
+                if (role.characterType === team) {
+                    if (websiteStorage.officialRoles.map(role1 => role1.name).includes(role.name)) {
+                        script += '"' + role.name.toLowerCase().replaceAll(" ", "_") + '",' + n;
+                        continue;
+                    }
+                    script += JSON.stringify(getJsonString(role), null, 4) + ',' + n;
+                }
+            }
+        }
+        script += "]";
+        script = script.replace("," + n + "]", n + "]");
+        return script;
     }
 });
