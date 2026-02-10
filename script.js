@@ -725,9 +725,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
-    loginButton.addEventListener("click", () => {
-        window.location = "login.html";
-    });
+    loginButton.addEventListener("click", () => window.location = "login.html");
 
     function adjustLocalStorage() {
         if (!websiteStorage.user) {

@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const searchByNameInput = document.getElementById("search-by-name");
+    const onlyOfficialCheckbox = document.getElementById("only-official-checkbox");
     const roleSelectionSection = document.querySelector(".role-selection-section");
     const scriptNameDisplay = document.getElementById("script-name-display");
     const scriptAuthorDisplay = document.getElementById("script-author-display");
@@ -29,9 +30,8 @@ document.addEventListener('DOMContentLoaded', function () {
     displayScriptRoles();
     displayScriptSelection();
 
-    searchByNameInput.addEventListener("input", function () {
-        displayRoleSelection();
-    });
+    searchByNameInput.addEventListener("input", () => displayRoleSelection());
+    onlyOfficialCheckbox.addEventListener("click", () => displayRoleSelection());
 
     document.getElementById("script-save-namings-button").addEventListener("click", function () {
         const selectedScript = websiteStorage.scriptTool.find(script1 => script1.isSelected);
@@ -193,6 +193,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (searchByNameInput.value && !role.name.toLowerCase().startsWith(searchByNameInput.value.toLowerCase())) {
                     continue;
                 }
+                if (onlyOfficialCheckbox.checked && !role.isOfficial) continue;
 
                 const div = document.createElement("div");
                 const label = document.createElement("label");
