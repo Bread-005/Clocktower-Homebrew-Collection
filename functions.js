@@ -172,7 +172,32 @@ function imagePath(role) {
     return "./icons/Icon_" + role.name.toLowerCase().replaceAll(" ", "").replaceAll("-", "").replaceAll("'", "") + ".png";
 }
 
+function roleAlreadyExists(role) {
+    for (const role1 of getRoleIdeas()) {
+        console.log(role1.name)
+        if (role1.name === role.name && role1.characterType === role.characterType) {
+            console.log("Role already exists! \n%c" + role.name + " (" + role.characterType + "): %c" + role.ability,
+                "color: " + getTeamColor(role.characterType), "color: white");
+            alert("Role already exists!" + n + role.name + " (" + role.characterType + "): " + role.ability + " already exists!");
+            return true;
+        }
+    }
+    return isOfficial(role);
+}
+
+function isOfficial(role) {
+    for (const role1 of websiteStorage.officialRoles) {
+        if (role1.name.toLowerCase().replaceAll("_", "").replaceAll(" ", "") ===
+            role.name.toLowerCase().replaceAll("_", "").replaceAll(" ", "")) {
+            alert(role.name + " is an official role!");
+            return true;
+        }
+    }
+    return false;
+}
+
 export {
     getJsonString, allTags, getTeamColor, characterTypes, StevenApprovedOrder, updateRole, createRole, deleteRole,
-    API_URL, createPopup, n, databaseIsConnected, getRoleIdeas, websiteStorage, saveLocalStorage, imagePath
+    API_URL, createPopup, n, databaseIsConnected, getRoleIdeas, websiteStorage, saveLocalStorage, imagePath,
+    roleAlreadyExists, isOfficial
 }

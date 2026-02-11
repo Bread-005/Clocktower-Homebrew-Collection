@@ -1,6 +1,6 @@
 import {
     getJsonString, allTags, updateRole, deleteRole, createPopup, getRoleIdeas, saveLocalStorage, databaseIsConnected,
-    createRole, websiteStorage
+    createRole, websiteStorage, isOfficial
 } from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -376,6 +376,7 @@ document.addEventListener("DOMContentLoaded", function () {
             role.name = editRoleNameInput.value;
             role.characterType = editCharacterTypeInput.value;
             role.ability = editAbilityTextInput.value;
+            if (isOfficial(role)) return;
             await updateRole({
                 createdAt: role.createdAt,
                 name: role.name,

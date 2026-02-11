@@ -1,6 +1,6 @@
 import {
     getJsonString, allTags, getTeamColor, updateRole, API_URL, createPopup, databaseIsConnected,
-    getRoleIdeas, websiteStorage, saveLocalStorage, n
+    getRoleIdeas, websiteStorage, saveLocalStorage, n, roleAlreadyExists
 } from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -335,21 +335,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                 return;
             }
 
-            for (const role of getRoleIdeas()) {
-                if (role.name === roleNameInput.value && role.ability === abilityTextInput.value) {
-                    roleExistsMessage(role, true);
-                    return;
-                }
-            }
-
-            for (const role of websiteStorage.officialRoles) {
-                if (role.name.toLowerCase().replaceAll("_", "").replaceAll(" ", "") ===
-                    roleNameInput.value.toLowerCase().replaceAll("_", "").replaceAll(" ", "")) {
-                    alert(role.name + " (" + role.characterType + ") is an official role!");
-                    return;
-                }
-            }
-
             const role = {
                 name: roleNameInput.value,
                 characterType: characterTypeInput.value,
@@ -375,6 +360,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 isPrivate: true,
                 owner: [websiteStorage.user.currentUsername]
             }
+            if (roleAlreadyExists(role)) return;
             websiteStorage.localRoleIdeas.push(role);
             saveLocalStorage();
             roleNameInput.value = "";
@@ -454,7 +440,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                 createPopup(document.querySelector(".main-page"), "every role has to have these attributes: id, name, ability, team");
                 return;
             }
-
             addRoleViaJson(role);
         } catch (err) {
             createPopup(document.querySelector(".main-page"), "Your role has to be valid JSON!");
@@ -484,19 +469,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 if (!object.id) {
                     object.id = object.name.toLowerCase().replaceAll(" ", "_");
-                }
-
-                let roleExists = false;
-
-                for (const role of getRoleIdeas()) {
-                    if (role.name === object.name || role.ability === object.ability) {
-                        roleExists = true;
-                        break;
-                    }
-                }
-                if (roleExists) {
-                    roleExistsMessage(object);
-                    continue;
                 }
                 if (script) object.script = script;
                 addRoleViaJson(object);
@@ -571,21 +543,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     function addRoleViaJson(role) {
-        for (const role1 of getRoleIdeas()) {
-            if (role1.name === role.name && role1.characterType.toLowerCase() === role.team.toLowerCase()) {
-                roleExistsMessage(role, true);
-                return;
-            }
-        }
-
-        for (const role1 of websiteStorage.officialRoles) {
-            if (role1.name.toLowerCase().replaceAll("_", "").replaceAll(" ", "") ===
-                role.name.toLowerCase().replaceAll("_", "").replaceAll(" ", "")) {
-                alert(role.name + " (" + role.characterType + ") is an official role!");
-                return;
-            }
-        }
-
+        role.characterType = role.team[0].toUpperCase() + role.team.substring(1);
+        if (roleAlreadyExists(role)) return;
         role.createdAt = Date.now().toString();
         for (const role1 of getRoleIdeas()) {
             if (role1.createdAt === role.createdAt) {
@@ -594,7 +553,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                 role.createdAt = number.toString();
             }
         }
-        role.characterType = role.team[0].toUpperCase() + role.team.substring(1);
         role.team = undefined;
         if (role.image === undefined) role.image = "";
         if (role.otherImage === undefined) role.otherImage = "";
@@ -714,15 +672,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             tags.push("Seating Order");
         }
         return tags;
-    }
-
-    function roleExistsMessage(role, showAlert = false) {
-        console.log("Role already exists! \n%c" + role.name + " (" + role.team[0].toUpperCase() + role.team.substring(1) + "): %c" + role.ability,
-            "color: " + getTeamColor(role.team), "color: white");
-
-        if (showAlert) {
-            alert("Role already exists! \n" + role.name + " (" + role.team[0].toUpperCase() + role.team.substring(1) + "): " + role.ability + " already exists!");
-        }
     }
 
     loginButton.addEventListener("click", () => window.location = "login.html");
