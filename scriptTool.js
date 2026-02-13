@@ -99,6 +99,9 @@ document.addEventListener('DOMContentLoaded', function () {
                             (websiteStorage.officialRoles.find(role1 => role1.name === role.name) || getRoleIdeas().find(role1 => role1.createdAt === role.createdAt))) {
                             document.getElementById(role.name + role.createdAt + "-checkbox").checked = selectedScript.roles.find(role1 => role1.name === role.name && role1.ability === role.ability);
                         }
+                        if (selectedScript.roles.length === 0 && websiteStorage.scriptTool.length > 1) {
+                            deleteScript();
+                        }
                         saveLocalStorage();
                         displayScriptRoles();
                     });
@@ -252,10 +255,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (!checkbox.checked) {
                         selectedScript.roles = selectedScript.roles.filter(role1 => role1.name !== role.name || role1.characterType !== role.characterType);
                         if (selectedScript.roles.length === 0 && websiteStorage.scriptTool.length > 1) {
-                            websiteStorage.scriptTool = websiteStorage.scriptTool.filter(script1 => !script1.isSelected);
-                            websiteStorage.scriptTool[0].isSelected = true;
-                            displayRoleSelection();
-                            displayScriptSelection();
+                            deleteScript();
                         }
                     }
                     saveLocalStorage();
@@ -347,5 +347,12 @@ document.addEventListener('DOMContentLoaded', function () {
         script += "]";
         script = script.replace("," + n + "]", n + "]");
         return script;
+    }
+
+    function deleteScript() {
+        websiteStorage.scriptTool = websiteStorage.scriptTool.filter(script1 => !script1.isSelected);
+        websiteStorage.scriptTool[0].isSelected = true;
+        displayRoleSelection();
+        displayScriptSelection();
     }
 });
