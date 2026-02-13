@@ -252,7 +252,15 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         }
         if (input.includes("favorite first")) {
-            roles.sort((a, b) => a.rating - b.rating);
+            roles.sort((a, b) => {
+                let aTotalRatings = 0;
+                let bTotalRatings = 0;
+                for (const rating of a.rating) aTotalRatings += rating.score;
+                for (const rating of b.rating) bTotalRatings += rating.score;
+                const aResult = aTotalRatings === 0 ? 0 : aTotalRatings / a.rating.length;
+                const bResult = bTotalRatings === 0 ? 0 : bTotalRatings / b.rating.length;
+                return aResult - bResult;
+            });
             if (input === "Most favorite first") {
                 roles.reverse();
             }
