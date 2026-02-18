@@ -1,6 +1,6 @@
 import {
     getJsonString, allTags, updateRole, deleteRole, createPopup, getRoleIdeas, saveLocalStorage, databaseIsConnected,
-    createRole, websiteStorage, isOfficial, roleAlreadyExists
+    createRole, websiteStorage, roleAlreadyExists
 } from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             deleteButton.addEventListener("click", async function () {
                 role.comments = role.comments.filter(comment1 => comment1.createdAt !== comment.createdAt);
-                await updateRole({createdAt: role.createdAt, comments: role.comments}, false);
+                await updateRole(role, "comments", false);
                 saveLocalStorage();
                 displayComments();
             });
@@ -241,13 +241,13 @@ document.addEventListener("DOMContentLoaded", function () {
             role.image = uploadImageURL.value.replaceAll("\\", "");
             wikiRoleImage.setAttribute("src", role.image);
             uploadImageURL.value = role.image;
-            await updateRole({createdAt: role.createdAt, image: role.image});
+            await updateRole(role, "image");
             saveLocalStorage();
         });
         document.getElementById("other-upload-button").addEventListener("click", async function () {
             role.otherImage = uploadOtherImageURL.value.replaceAll("\\", "");
             uploadOtherImageURL.value = role.otherImage;
-            await updateRole({createdAt: role.createdAt, otherImage: role.otherImage});
+            await updateRole(role, "otherImage");
             saveLocalStorage();
         });
     }
@@ -286,7 +286,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (!tag.checked) {
                     role.tags = role.tags.filter(tag => tag.toString() !== tagString);
                 }
-                await updateRole({createdAt: role.createdAt, tags: role.tags});
+                await updateRole(role, "tags");
                 saveLocalStorage();
                 showTags();
             });
@@ -311,13 +311,7 @@ document.addEventListener("DOMContentLoaded", function () {
             role.firstNightReminder = firstNightReminderInput.value;
             role.otherNight = Number.parseFloat(otherNightInput.value);
             role.otherNightReminder = otherNightReminderInput.value;
-            await updateRole({
-                createdAt: role.createdAt,
-                firstNight: role.firstNight,
-                firstNightReminder: role.firstNightReminder,
-                otherNight: role.otherNight,
-                otherNightReminder: role.otherNightReminder,
-            });
+            await updateRole(role, "firstNight firstNightReminder otherNight otherNightReminder");
             saveLocalStorage();
             showNightOrder();
         });
@@ -334,7 +328,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 owner: websiteStorage.user.currentUsername
             }
             role.comments.push(comment);
-            await updateRole({createdAt: role.createdAt, comments: role.comments}, false);
+            await updateRole(role, "comments", false);
             saveLocalStorage();
             inputComment.value = "";
             displayComments();
@@ -364,7 +358,7 @@ document.addEventListener("DOMContentLoaded", function () {
         howToRunChangeButton.addEventListener("click", async function () {
             role.howToRun = howToRunInput.value;
             howToRunText.textContent = role.howToRun;
-            await updateRole({createdAt: role.createdAt, howToRun: role.howToRun});
+            await updateRole(role, "howToRun");
             saveLocalStorage();
         });
     }
@@ -384,13 +378,7 @@ document.addEventListener("DOMContentLoaded", function () {
             role.characterType = editCharacterTypeInput.value;
             role.ability = editAbilityTextInput.value;
 
-            if (isOfficial(role)) return;
-            await updateRole({
-                createdAt: role.createdAt,
-                name: role.name,
-                characterType: role.characterType,
-                ability: role.ability
-            });
+            await updateRole(role, "name characterType ability");
             saveLocalStorage();
             displayRole();
         });
@@ -433,7 +421,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 jinxRoleInput.value = "";
                 jinxTextInput.value = "";
-                await updateRole({createdAt: role.createdAt, jinxes: role.jinxes});
+                await updateRole(role, "jinxes");
                 saveLocalStorage();
                 showJinxes();
                 return;
@@ -451,7 +439,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 role.jinxes.push(jinx);
                 jinxRoleInput.value = "";
                 jinxTextInput.value = "";
-                await updateRole({createdAt: role.createdAt, jinxes: role.jinxes});
+                await updateRole(role, "jinxes");
                 saveLocalStorage();
                 showJinxes();
             }
@@ -462,7 +450,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         jinx1.reason = jinx.reason;
                         jinxRoleInput.value = "";
                         jinxTextInput.value = "";
-                        await updateRole({createdAt: role.createdAt, jinxes: role.jinxes});
+                        await updateRole(role, "jinxes");
                         saveLocalStorage();
                         showJinxes();
                         break;
@@ -500,7 +488,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 deleteButton.addEventListener("click", async function () {
                     role.jinxes = role.jinxes.filter(jinx1 => jinx1.jinxedRole !== jinx.jinxedRole);
-                    await updateRole({createdAt: role.createdAt, jinxes: role.jinxes});
+                    await updateRole(role, "jinxes");
                     saveLocalStorage();
                     showJinxes();
                 });
@@ -516,11 +504,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             if (pReminderTokenAddButton === reminderTokenAddButton) role.reminders.push(reminderTokenInput.value);
             if (pReminderTokenAddButton === globalReminderTokenAddButton) role.remindersGlobal.push(reminderTokenInput.value);
-            await updateRole({
-                createdAt: role.createdAt,
-                reminders: role.reminders,
-                remindersGlobal: role.remindersGlobal
-            });
+            await updateRole(role, "reminders remindersGlobal");
             saveLocalStorage();
             reminderTokenInput.value = "";
             displayReminders();
@@ -552,11 +536,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 deleteButton.addEventListener("click", async function () {
                     if (pReminderTokenList === reminderTokenList) role.reminders = role.reminders.filter(reminderToken1 => reminderToken1 !== reminderToken);
                     if (pReminderTokenList === globalReminderTokenList) role.remindersGlobal = role.remindersGlobal.filter(reminderToken1 => reminderToken1 !== reminderToken);
-                    await updateRole({
-                        createdAt: role.createdAt,
-                        reminders: role.reminders,
-                        remindersGlobal: role.remindersGlobal
-                    });
+                    await updateRole(role, "reminders remindersGlobal");
                     saveLocalStorage();
                     displayReminders();
                 });
@@ -588,7 +568,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 deleteButton.addEventListener("click", async function () {
                     role.special = role.special.filter(special1 => special1.name !== special.name);
-                    await updateRole({createdAt: role.createdAt, special: role.special});
+                    await updateRole(role, "special");
                     saveLocalStorage();
                     showSpecial();
                 });
@@ -610,7 +590,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 global: document.getElementById("special-global-selection").value
             }
             role.special.push(special);
-            await updateRole({createdAt: role.createdAt, special: role.special});
+            await updateRole(role, "special");
             saveLocalStorage();
             showSpecial();
         });
@@ -646,7 +626,7 @@ document.addEventListener("DOMContentLoaded", function () {
         scriptEditButton.addEventListener("click", async function () {
             role.script = scriptEditInput.value;
             scriptEditInput.value = "";
-            await updateRole({createdAt: role.createdAt, script: role.script});
+            await updateRole(role, "script");
             saveLocalStorage();
             showScript();
         });
@@ -666,7 +646,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 div.append(deleteButton);
                 deleteButton.addEventListener("click", async function () {
                     role.owner = role.owner.filter(owner1 => owner1 !== owner);
-                    await updateRole({createdAt: role.createdAt, owner: role.owner}, false);
+                    await updateRole(role, "owner", false);
                     saveLocalStorage();
                     showOwners();
                 });
@@ -687,7 +667,7 @@ document.addEventListener("DOMContentLoaded", function () {
         button.addEventListener("click", async function () {
             if (!input.value) return;
             role.owner.push(input.value);
-            await updateRole({createdAt: role.createdAt, owner: role.owner}, false);
+            await updateRole(role, "owner", false);
             saveLocalStorage();
             showOwners();
         });

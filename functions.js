@@ -87,7 +87,7 @@ const characterTypes = ["Townsfolk", "Outsider", "Minion", "Demon", "Traveller",
 
 const StevenApprovedOrder = ["You start knowing", "Each night,", "Each night*,", "Each day", "Once per game", " "];
 
-async function updateRole(role, updateLastEdited = true) {
+async function updateRole(role, attributes, updateLastEdited = true) {
     if (updateLastEdited) {
         role.lastEdited = Date.now().toString();
     }
@@ -96,7 +96,7 @@ async function updateRole(role, updateLastEdited = true) {
     await fetch(API_URL + '/roles/update', {
         method: "PUT",
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(role)
+        body: JSON.stringify({role: role, attributes: attributes})
     });
     websiteStorage.roleIdeas = await fetch(API_URL + '/roles').then(res => res.json());
 }
@@ -176,9 +176,9 @@ function roleAlreadyExists(role) {
     for (const role1 of getRoleIdeas()) {
         console.log(role1.name)
         if (role1.name === role.name && role1.characterType === role.characterType) {
-            console.log("Role already exists! \n%c" + role.name + " (" + role.characterType + "): %c" + role.ability,
-                "color: " + getTeamColor(role.characterType), "color: white");
-            alert("Role already exists!" + n + role.name + " (" + role.characterType + "): " + role.ability + " already exists!");
+            console.log("Role already exists! \n%c" + role1.name + " (" + role1.characterType + "): %c" + role1.ability,
+                "color: " + getTeamColor(role1.characterType), "color: white");
+            alert("Changes not saved" + n + "Role already exists!" + n + role1.name + " (" + role1.characterType + "): " + role1.ability);
             return true;
         }
     }

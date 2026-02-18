@@ -198,7 +198,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                         score: Number.parseFloat(rateInput.value)
                     });
                 }
-                await updateRole({createdAt: role.createdAt, rating: role.rating}, false);
+                await updateRole(role, "rating", false);
                 saveLocalStorage();
                 displayRoles();
             });
@@ -209,7 +209,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 } else {
                     role.favoriteList.push(websiteStorage.user.currentUsername);
                 }
-                await updateRole({createdAt: role.createdAt, favoriteList: role.favoriteList}, false);
+                await updateRole(role, "favoriteList", false);
                 saveLocalStorage();
                 displayRoles();
             });
