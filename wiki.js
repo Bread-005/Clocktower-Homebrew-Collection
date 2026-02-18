@@ -1,6 +1,6 @@
 import {
     getJsonString, allTags, updateRole, deleteRole, createPopup, getRoleIdeas, saveLocalStorage, databaseIsConnected,
-    createRole, websiteStorage, isOfficial
+    createRole, websiteStorage, isOfficial, roleAlreadyExists
 } from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -59,6 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
     document.title = role.name;
+    document.getElementById("wiki-icon").href = role.image || "https://i.postimg.cc/qM09f8cD/placeholder-icon.png";
     let inEditMode = false;
 
     if (role.image !== "") {
@@ -373,9 +374,16 @@ document.addEventListener("DOMContentLoaded", function () {
             if (editRoleNameInput.value === "" || editCharacterTypeInput.value === "" || editAbilityTextInput.value === "") {
                 return;
             }
+            if (roleAlreadyExists({
+                name: editRoleNameInput.value,
+                characterType: editCharacterTypeInput.value,
+                ability: editAbilityTextInput.value
+            })) return;
+
             role.name = editRoleNameInput.value;
             role.characterType = editCharacterTypeInput.value;
             role.ability = editAbilityTextInput.value;
+
             if (isOfficial(role)) return;
             await updateRole({
                 createdAt: role.createdAt,
