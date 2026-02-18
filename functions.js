@@ -174,7 +174,6 @@ function imagePath(role) {
 
 function roleAlreadyExists(role) {
     for (const role1 of getRoleIdeas()) {
-        console.log(role1.name)
         if (role1.name === role.name && role1.characterType === role.characterType) {
             console.log("Role already exists! \n%c" + role1.name + " (" + role1.characterType + "): %c" + role1.ability,
                 "color: " + getTeamColor(role1.characterType), "color: white");

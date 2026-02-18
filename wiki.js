@@ -1,6 +1,6 @@
 import {
     getJsonString, allTags, updateRole, deleteRole, createPopup, getRoleIdeas, saveLocalStorage, databaseIsConnected,
-    createRole, websiteStorage, roleAlreadyExists
+    createRole, websiteStorage, roleAlreadyExists, isOfficial
 } from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -368,15 +368,17 @@ document.addEventListener("DOMContentLoaded", function () {
             if (editRoleNameInput.value === "" || editCharacterTypeInput.value === "" || editAbilityTextInput.value === "") {
                 return;
             }
-            if (roleAlreadyExists({
-                name: editRoleNameInput.value,
-                characterType: editCharacterTypeInput.value,
-                ability: editAbilityTextInput.value
-            })) return;
+            if (role.name !== editRoleNameInput.value) {
+                if (roleAlreadyExists({
+                    name: editRoleNameInput.value,
+                    characterType: editCharacterTypeInput.value
+                })) return;
+            }
 
             role.name = editRoleNameInput.value;
             role.characterType = editCharacterTypeInput.value;
             role.ability = editAbilityTextInput.value;
+            if (isOfficial(role)) return;
 
             await updateRole(role, "name characterType ability");
             saveLocalStorage();
