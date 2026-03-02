@@ -140,6 +140,46 @@ document.addEventListener('DOMContentLoaded', function () {
                             });
                         }
                     }
+                    if (role.name === "Bootlegger" && role.characterType === "Loric") {
+                        if (!role.rules) role.rules = [];
+                        saveLocalStorage();
+                        for (const rule of role.rules) {
+                            const div = document.createElement("div");
+                            div.style.display = "flex";
+                            div.style.alignItems = "center";
+                            const button = document.createElement("button");
+                            const minusIcon = document.createElement("i");
+                            minusIcon.setAttribute("class", "fa-solid fa-x");
+                            const text = document.createElement("div");
+                            text.textContent = rule;
+                            button.addEventListener("click", () => {
+                                role.rules = role.rules.filter(rule1 => rule1 !== rule);
+                                saveLocalStorage();
+                                displayScriptRoles();
+                            });
+                            button.append(minusIcon);
+                            div.append(button);
+                            div.append(text);
+                            roleDiv.append(div);
+                        }
+                        const div = document.createElement("div");
+                        const button = document.createElement("button");
+                        const plusIcon = document.createElement("i");
+                        plusIcon.setAttribute("class", "fa-solid fa-plus");
+                        const input = document.createElement("input");
+                        input.style.width = "80%";
+                        input.style.height = "20px";
+                        button.addEventListener("click", () => {
+                            if (!input.value) return;
+                            role.rules.push(input.value);
+                            saveLocalStorage();
+                            displayScriptRoles();
+                        });
+                        button.append(plusIcon);
+                        div.append(button);
+                        div.append(input);
+                        roleDiv.append(div);
+                    }
                     document.querySelector(".display-" + team.toLowerCase()).append(roleDiv);
                 }
             }
@@ -324,14 +364,16 @@ document.addEventListener('DOMContentLoaded', function () {
     function getScriptAsJSON() {
         const selectedScript = websiteStorage.scriptTool.find(script1 => script1.isSelected);
         let script = "[";
-        const scriptHead = {
-            id: "_meta",
-            name: selectedScript.name,
-            author: selectedScript.author
+        const scriptHead = {id: "_meta"}
+        if (selectedScript.name) scriptHead.name = selectedScript.name;
+        if (selectedScript.author) scriptHead.author = selectedScript.author;
+        if (selectedScript.roles.find(role => role.name === "Bootlegger")) {
+            scriptHead.bootlegger = [];
+            for (const rule of selectedScript.roles.find(role => role.name === "Bootlegger").rules) {
+                scriptHead.bootlegger.push(rule);
+            }
         }
-        if (!scriptHead.name) delete scriptHead.name;
-        if (!scriptHead.author) delete scriptHead.author;
-        script += JSON.stringify(scriptHead) + "," + n;
+        script += (scriptHead.bootlegger ? JSON.stringify(scriptHead, null, 4) : JSON.stringify(scriptHead)) + "," + n;
 
         for (const team of characterTypes) {
             for (const role of selectedScript.roles) {
