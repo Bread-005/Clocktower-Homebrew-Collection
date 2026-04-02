@@ -67,12 +67,15 @@ document.addEventListener("DOMContentLoaded", async function () {
         loginButton.textContent = "logout";
 
         const users = await fetch(API_URL + "/users").then(res => res.json());
-        const user = users.find(u => u.name === loginStorage.name);
-
-        if (user.password !== loginStorage.password) {
+        if (loginStorage.password !== users.find(user => user.name === loginStorage.name)?.password) {
             window.location = "https://bread-005.github.io/login-page/index.html";
             return;
         }
+
+        await fetch(API_URL + '/users/update/' + loginStorage.name, {
+            method: "PUT",
+            headers: {'Content-Type': 'application/json'}
+        });
 
     } else {
         websiteStorage.user.ownerFilter = "All";
