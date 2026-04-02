@@ -195,8 +195,10 @@ function isOfficial(role) {
     return false;
 }
 
+const loginStorage = JSON.parse(localStorage.getItem("login-page"));
+
 export {
     getJsonString, allTags, getTeamColor, characterTypes, StevenApprovedOrder, updateRole, createRole, deleteRole,
     API_URL, createPopup, n, databaseIsConnected, getRoleIdeas, websiteStorage, saveLocalStorage, imagePath,
-    roleAlreadyExists, isOfficial
+    roleAlreadyExists, isOfficial, loginStorage
 }

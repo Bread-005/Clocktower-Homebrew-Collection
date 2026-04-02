@@ -1,6 +1,6 @@
 import {
     getJsonString, allTags, updateRole, deleteRole, createPopup, getRoleIdeas, saveLocalStorage, databaseIsConnected,
-    createRole, websiteStorage, roleAlreadyExists, isOfficial
+    createRole, websiteStorage, roleAlreadyExists, isOfficial, loginStorage
 } from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
             deleteButtonIcon.setAttribute("class", "js-delete-button fa-solid fa-trash");
 
             deleteButton.append(deleteButtonIcon);
-            if (!role.owner || role.owner.includes(websiteStorage.user.currentUsername) || comment.owner === websiteStorage.user.currentUsername) {
+            if (!role.owner || role.owner.includes(loginStorage.name) || comment.owner === loginStorage.name) {
                 list.append(deleteButton);
             }
             document.getElementById("comments-list").append(list);
@@ -325,7 +325,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const comment = {
                 text: inputComment.value,
                 createdAt: Date.now().toString(),
-                owner: websiteStorage.user.currentUsername
+                owner: loginStorage.name
             }
             role.comments.push(comment);
             await updateRole(role, "comments", false);
@@ -548,7 +548,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function hideEditStuff() {
-        if (role.owner && !role.owner.includes(websiteStorage.user.currentUsername)) {
+        if (role.owner && !role.owner.includes(loginStorage.name)) {
             editButton.style.display = "none";
         }
         mainRoleDisplay.style.display = "flex";
@@ -640,7 +640,7 @@ document.addEventListener("DOMContentLoaded", function () {
         for (const owner of role.owner) {
             const div = document.createElement("div");
             div.textContent = owner;
-            if (websiteStorage.user.currentUsername !== owner) {
+            if (loginStorage.name !== owner) {
                 const deleteButton = document.createElement("button");
                 const deleteIcon = document.createElement("i");
                 deleteIcon.setAttribute("class", "fa-solid fa-trash");

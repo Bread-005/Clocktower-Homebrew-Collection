@@ -1,14 +1,14 @@
 import {
     characterTypes, getTeamColor, getJsonString, StevenApprovedOrder, n, getRoleIdeas, websiteStorage,
-    saveLocalStorage, imagePath, createPopup
+    saveLocalStorage, imagePath, createPopup, loginStorage
 } from "./functions.js";
 
 document.addEventListener('DOMContentLoaded', function () {
 
     if (!websiteStorage.scriptTool) {
         websiteStorage.scriptTool = [
-            {name: "Script-Name", author: websiteStorage.user.currentUsername, roles: [], isSelected: true},
-            {name: "Script-Name2", author: websiteStorage.user.currentUsername, roles: [], isSelected: false}
+            {name: "Script-Name", author: loginStorage.name, roles: [], isSelected: true},
+            {name: "Script-Name2", author: loginStorage.name, roles: [], isSelected: false}
         ];
         saveLocalStorage();
     }
@@ -340,7 +340,7 @@ document.addEventListener('DOMContentLoaded', function () {
         button.addEventListener("click", () => {
             websiteStorage.scriptTool.push({
                 name: "Script-Name",
-                author: websiteStorage.user.currentUsername,
+                author: loginStorage.name,
                 roles: [],
                 isSelected: false
             });

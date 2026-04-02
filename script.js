@@ -1,6 +1,6 @@
 import {
     getJsonString, allTags, getTeamColor, updateRole, API_URL, createPopup, databaseIsConnected,
-    getRoleIdeas, websiteStorage, saveLocalStorage, n, roleAlreadyExists
+    getRoleIdeas, websiteStorage, saveLocalStorage, n, roleAlreadyExists, loginStorage
 } from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -19,16 +19,19 @@ document.addEventListener("DOMContentLoaded", async function () {
                 onlyMyFavorites: false,
                 scriptFilter: "All",
                 tagFilter: "None",
-                currentUsername: "User12345",
                 ownerFilter: "All",
                 databaseFilter: "All",
-                tempMessage: "",
                 roleCreationMode: 0
             },
             archive: []
         }
         localStorage.setItem(storageString, JSON.stringify(storage));
         window.location.reload();
+    }
+
+    if (!localStorage.getItem("login-page")) {
+        window.location = "https://bread-005.github.io/login-page/index.html";
+        return;
     }
 
     const jsonInputTextarea = document.getElementById("json-input-textarea");
@@ -54,22 +57,20 @@ document.addEventListener("DOMContentLoaded", async function () {
     } catch (error) {
         console.log("Could not reach https://raw.githubusercontent.com/Bread-005/Clocktower-Homebrew-Collection/main/officialCharacters.json");
     }
-    websiteStorage.user.tempMessage = "";
     adjustLocalStorage();
     saveLocalStorage();
 
     if (await databaseIsConnected()) {
         websiteStorage.roleIdeas = await fetch(API_URL + '/roles').then(res => res.json());
         saveLocalStorage();
-        document.getElementById("current-username-display").textContent = "Username: " + websiteStorage.user.currentUsername;
+        document.getElementById("current-username-display").textContent = "Username: " + loginStorage.name;
         loginButton.textContent = "logout";
 
         const users = await fetch(API_URL + "/users").then(res => res.json());
-        if (!users.find(user => user.name === websiteStorage.user.currentUsername && user.password === websiteStorage.user.password)) {
-            websiteStorage.user.tempMessage = "To grant access to public roles, you have to login or sign up to an account!";
-            websiteStorage.user.currentUsername = "User12345";
-            saveLocalStorage();
-            window.location = "login.html";
+        const user = users.find(u => u.name === loginStorage.name);
+
+        if (user.password !== loginStorage.password) {
+            window.location = "https://bread-005.github.io/login-page/index.html";
             return;
         }
 
@@ -127,8 +128,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             const rateIcon = document.createElement("i");
             rateIcon.setAttribute("class", "fa-sharp fa-regular fa-star");
 
-            if (role.rating.find(rating => rating.user === websiteStorage.user.currentUsername && rating.score > 0)) {
-                rateInput.value = role.rating.find(rating => rating.user === websiteStorage.user.currentUsername).score;
+            if (role.rating.find(rating => rating.user === loginStorage.name && rating.score > 0)) {
+                rateInput.value = role.rating.find(rating => rating.user === loginStorage.name).score;
                 rateIcon.setAttribute("class", "fa-solid fa-star");
                 rateIcon.setAttribute("style", "color: #FFD43B;");
             }
@@ -147,7 +148,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             const favoriteButton = document.createElement("button");
             const favoriteIcon = document.createElement("i");
             favoriteIcon.setAttribute("class", "fa-light fa-heart");
-            if (role.favoriteList.includes(websiteStorage.user.currentUsername)) {
+            if (role.favoriteList.includes(loginStorage.name)) {
                 favoriteIcon.setAttribute("class", "fa-solid fa-heart");
                 favoriteIcon.classList.add("red");
             } else {
@@ -190,11 +191,11 @@ document.addEventListener("DOMContentLoaded", async function () {
                 if (rateInput.value === "") {
                     return;
                 }
-                if (role.rating.find(rating => rating.user === websiteStorage.user.currentUsername)) {
-                    role.rating.find(rating => rating.user === websiteStorage.user.currentUsername).score = Number.parseFloat(rateInput.value);
+                if (role.rating.find(rating => rating.user === loginStorage.name)) {
+                    role.rating.find(rating => rating.user === loginStorage.name).score = Number.parseFloat(rateInput.value);
                 } else {
                     role.rating.push({
-                        user: websiteStorage.user.currentUsername,
+                        user: loginStorage.name,
                         score: Number.parseFloat(rateInput.value)
                     });
                 }
@@ -204,10 +205,10 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
 
             favoriteButton.addEventListener("click", async function () {
-                if (role.favoriteList.includes(websiteStorage.user.currentUsername)) {
-                    role.favoriteList = role.favoriteList.filter(name => name !== websiteStorage.user.currentUsername);
+                if (role.favoriteList.includes(loginStorage.name)) {
+                    role.favoriteList = role.favoriteList.filter(name => name !== loginStorage.name);
                 } else {
-                    role.favoriteList.push(websiteStorage.user.currentUsername);
+                    role.favoriteList.push(loginStorage.name);
                 }
                 await updateRole(role, "favoriteList", false);
                 saveLocalStorage();
@@ -317,7 +318,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             roles = roles.filter(role => role.tags.length === 0);
         }
         if (onlyMyFavoritesCheckBox.checked) {
-            roles = roles.filter(role => role.favoriteList.includes(websiteStorage.user.currentUsername));
+            roles = roles.filter(role => role.favoriteList.includes(loginStorage.name));
         }
         if (scriptFilterSelection.value !== "All") {
             roles = roles.filter(role => role.script === scriptFilterSelection.value);
@@ -366,7 +367,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 comments: [],
                 lastEdited: Date.now().toString(),
                 isPrivate: true,
-                owner: [websiteStorage.user.currentUsername]
+                owner: [loginStorage.name]
             }
             if (roleAlreadyExists(role)) return;
             websiteStorage.localRoleIdeas.push(role);
@@ -626,7 +627,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         role.comments = [];
         role.lastEdited = Date.now().toString();
         role.isPrivate = true;
-        role.owner = [websiteStorage.user.currentUsername];
+        role.owner = [loginStorage.name];
         websiteStorage.localRoleIdeas.push(role);
         saveLocalStorage();
         jsonInputTextarea.value = "";
@@ -682,7 +683,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         return tags;
     }
 
-    loginButton.addEventListener("click", () => window.location = "login.html");
+    loginButton.addEventListener("click", () => window.location = "https://bread-005.github.io/login-page/index.html");
 
     function adjustLocalStorage() {
         if (!websiteStorage.user) {
@@ -694,19 +695,22 @@ document.addEventListener("DOMContentLoaded", async function () {
                 onlyMyFavorites: false,
                 scriptFilter: "All",
                 tagFilter: "None",
-                currentUsername: "User12345",
                 ownerFilter: "All",
                 databaseFilter: "All",
-                tempMessage: "",
                 roleCreationMode: 0
             }
             saveLocalStorage();
         }
+        delete websiteStorage.scriptToolRoles;
+        delete websiteStorage.user.databaseUse;
+        delete websiteStorage.user.tempRole;
+        delete websiteStorage.user.currentUsername;
+        delete websiteStorage.user.password;
+        delete websiteStorage.user.tempMessage;
+        saveLocalStorage();
+
         if (!websiteStorage.localRoleIdeas) {
             websiteStorage.localRoleIdeas = [];
-        }
-        if (!websiteStorage.user.currentUsername) {
-            websiteStorage.user.currentUsername = "User12345";
         }
         if (!websiteStorage.user.databaseFilter) {
             websiteStorage.user.databaseFilter = "All";
@@ -721,23 +725,23 @@ document.addEventListener("DOMContentLoaded", async function () {
                 role.rating = [];
                 if (ratingNumber > 0) {
                     role.rating.push({
-                        user: websiteStorage.user.currentUsername,
+                        user: loginStorage.name,
                         score: ratingNumber
                     });
                 }
             }
             if (Array.isArray(role.rating) && role.rating.length === 1 && role.rating[0].user === "") {
-                role.rating[0].user = websiteStorage.user.currentUsername;
+                role.rating[0].user = loginStorage.name;
             }
             if (!role.favoriteList) {
                 role.favoriteList = [];
-                if (role.isFavorite) role.favoriteList.push(websiteStorage.user.currentUsername);
+                if (role.isFavorite) role.favoriteList.push(loginStorage.name);
             }
             if (role.isPrivate === undefined) {
                 role.isPrivate = true;
             }
             if (!role.owner) {
-                role.owner = [websiteStorage.user.currentUsername];
+                role.owner = [loginStorage.name];
             }
             if (!role.lastEdited) {
                 role.lastEdited = role.createdAt;
@@ -747,7 +751,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
             if (role.owner.includes("User12345")) {
                 role.owner = role.owner.filter(owner => owner !== "User12345");
-                role.owner.push(websiteStorage.user.currentUsername);
+                role.owner.push(loginStorage.name);
             }
         }
         saveLocalStorage();

@@ -1,4 +1,4 @@
-import {getRoleIdeas, imagePath, saveLocalStorage, updateRole, websiteStorage} from "./functions.js";
+import {getRoleIdeas, imagePath, loginStorage, saveLocalStorage, updateRole, websiteStorage} from "./functions.js";
 
 document.addEventListener('DOMContentLoaded', function () {
     const firstNightOrderDisplayDiv = document.querySelector(".first-night-order-display-div");
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             div.append(img);
             div.append(roleNameAndNumber);
-            if (websiteStorage.officialRoles.map(role1 => role1.name).includes(role.name) || role.name === "Minion info" || role.name === "Demon info" || !role.owner?.includes(websiteStorage.user.currentUsername)) {
+            if (websiteStorage.officialRoles.map(role1 => role1.name).includes(role.name) || role.name === "Minion info" || role.name === "Demon info" || !role.owner?.includes(loginStorage.name)) {
                 div.setAttribute("class", "night-order-img-text-div");
             } else {
                 div.append(button);
