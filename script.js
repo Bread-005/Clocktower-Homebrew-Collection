@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         window.location.reload();
     }
 
-    if (!localStorage.getItem("login-page")) {
+    if (!localStorage.getItem("login-page") || !loginStorage.name) {
         window.location = "https://bread-005.github.io/login-page/index.html";
         return;
     }
