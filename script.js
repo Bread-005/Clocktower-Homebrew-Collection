@@ -52,11 +52,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const loginButton = document.querySelector(".login-button");
     const ownerFilter = document.querySelector(".owner-filter");
 
-    try {
-        websiteStorage.officialRoles = await fetch("./officialCharacters.json").then(res => res.json());
-    } catch (error) {
-        console.log("Could not reach https://raw.githubusercontent.com/Bread-005/Clocktower-Homebrew-Collection/main/officialCharacters.json");
-    }
+    websiteStorage.officialRoles = await fetch("./officialCharacters.json").then(res => res.json());
     adjustLocalStorage();
     saveLocalStorage();
 

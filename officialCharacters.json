@@ -176,7 +176,7 @@
     "ability": "Each night, you learn how many players’ abilities worked abnormally (since dawn) due to another character's ability.",
     "characterType": "Townsfolk",
     "firstNight": 77,
-    "otherNight": 97,
+    "otherNight": 96,
     "jinxes": [
       {
         "id": "chambermaid",
