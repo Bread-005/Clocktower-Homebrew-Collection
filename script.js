@@ -94,132 +94,157 @@ document.addEventListener("DOMContentLoaded", async function () {
         const roleIdeaArray = roles.slice((websiteStorage.user.page - 1) * 10, websiteStorage.user.page * 10);
 
         homebrewRolesDisplay.innerHTML = "";
-
         for (const role of roleIdeaArray) {
-
-            const roleDiv = document.createElement("div");
-            roleDiv.setAttribute("class", "role-div");
-
-            roleDiv.style.background = getTeamColor(role.characterType);
-
-            const roleImageAndText = document.createElement("div");
-            roleImageAndText.setAttribute("class", "role-image-and-text");
-
-            const roleImage = document.createElement("img");
-            roleImage.setAttribute("class", "clocktower-icon");
-            roleImage.setAttribute("src", role.image ? role.image : "https://i.postimg.cc/qM09f8cD/placeholder-icon.png");
-            roleImage.setAttribute("alt", role.name);
-
-            const roleText = document.createElement("div");
-            roleText.textContent = role.name + " (" + role.characterType + "): " + role.ability;
-
-            const buttons = document.createElement("div");
-            buttons.setAttribute("class", "role-buttons");
-
-            const rateInput = document.createElement("input");
-            rateInput.setAttribute("class", "rate-input");
-            rateInput.setAttribute("type", "number");
-            rateInput.setAttribute("min", "0");
-            rateInput.setAttribute("max", "10");
-
-            const rateButton = document.createElement("button");
-
-            const rateIcon = document.createElement("i");
-            rateIcon.setAttribute("class", "fa-sharp fa-regular fa-star");
-
-            if (role.rating.find(rating => rating.user === loginStorage.name && rating.score > 0)) {
-                rateInput.value = role.rating.find(rating => rating.user === loginStorage.name).score;
-                rateIcon.setAttribute("class", "fa-solid fa-star");
-                rateIcon.setAttribute("style", "color: #FFD43B;");
-            }
-            rateButton.append(rateIcon);
-
-            const wikiButton = document.createElement("button");
-
-            const wikiIcon = document.createElement("i");
-            wikiIcon.setAttribute("class", "fa-solid fa-book");
-            wikiButton.append(wikiIcon);
-
-            const wikiAnchor = document.createElement("a");
-            wikiAnchor.setAttribute("href", "wiki.html?name=" + role.name.replace(/\s+/g, "_").replace(/[^a-zA-Z0-9-_]/g, "") + "&r=" + role.createdAt);
-            wikiAnchor.append(wikiButton);
-
-            const favoriteButton = document.createElement("button");
-            const favoriteIcon = document.createElement("i");
-            favoriteIcon.setAttribute("class", "fa-light fa-heart");
-            if (role.favoriteList.includes(loginStorage.name)) {
-                favoriteIcon.setAttribute("class", "fa-solid fa-heart");
-                favoriteIcon.classList.add("red");
-            } else {
-                favoriteIcon.classList.remove("red");
-                favoriteIcon.setAttribute("class", "fa-light fa-heart");
-            }
-            favoriteButton.append(favoriteIcon);
-
-            const downloadJsonButton = document.createElement("button");
-            downloadJsonButton.style.position = "relative";
-            const downloadIcon = document.createElement("i");
-            downloadIcon.setAttribute("class", "fa-solid fa-download");
-            downloadJsonButton.append(downloadIcon);
-
-            roleImageAndText.append(roleImage);
-            roleImageAndText.append(roleText);
-            roleDiv.append(roleImageAndText);
-            buttons.append(rateInput);
-            buttons.append(rateButton);
-            buttons.append(wikiAnchor);
-            buttons.append(favoriteButton);
-            buttons.append(downloadJsonButton);
-            roleDiv.append(buttons);
-            homebrewRolesDisplay.append(roleDiv);
-
-            rateInput.addEventListener("input", function () {
-                rateIcon.setAttribute("class", "fa-sharp fa-star");
-                rateIcon.style.color = "black";
-            });
-
-            rateButton.addEventListener("click", async function () {
-                if (rateInput.value < 0) {
-                    rateInput.value = "0";
-                    return;
-                }
-                if (rateInput.value > 10) {
-                    rateInput.value = "10";
-                    return;
-                }
-                if (rateInput.value === "") {
-                    return;
-                }
-                if (role.rating.find(rating => rating.user === loginStorage.name)) {
-                    role.rating.find(rating => rating.user === loginStorage.name).score = Number.parseFloat(rateInput.value);
-                } else {
-                    role.rating.push({
-                        user: loginStorage.name,
-                        score: Number.parseFloat(rateInput.value)
-                    });
-                }
-                await updateRole(role, "rating", false);
-                saveLocalStorage();
-                displayRoles();
-            });
-
-            favoriteButton.addEventListener("click", async function () {
-                if (role.favoriteList.includes(loginStorage.name)) {
-                    role.favoriteList = role.favoriteList.filter(name => name !== loginStorage.name);
-                } else {
-                    role.favoriteList.push(loginStorage.name);
-                }
-                await updateRole(role, "favoriteList", false);
-                saveLocalStorage();
-                displayRoles();
-            });
-
-            downloadJsonButton.addEventListener("click", function () {
-                getJsonString(role, true);
-                createPopup(document.querySelector(".main-page"), "Role Json copied to Clipboard", 3500, "lightblue");
-            });
+            homebrewRolesDisplay.append(createRoleCard(role));
         }
         showPages(roles, roleIdeaArray);
+    }
+
+    function createRoleCard(role) {
+        const roleDiv = document.createElement("div");
+        roleDiv.setAttribute("class", "role-div");
+        roleDiv.style.background = getTeamColor(role.characterType);
+
+        roleDiv.append(createRoleImageAndText(role));
+        roleDiv.append(createRoleButtons(role));
+
+        return roleDiv;
+    }
+
+    function createRoleImageAndText(role) {
+        const roleImageAndText = document.createElement("div");
+        roleImageAndText.setAttribute("class", "role-image-and-text");
+
+        const roleImage = document.createElement("img");
+        roleImage.setAttribute("class", "clocktower-icon");
+        roleImage.setAttribute("src", role.image ? role.image : "https://i.postimg.cc/qM09f8cD/placeholder-icon.png");
+        roleImage.setAttribute("alt", role.name);
+
+        const roleText = document.createElement("div");
+        roleText.textContent = role.name + " (" + role.characterType + "): " + role.ability;
+
+        roleImageAndText.append(roleImage);
+        roleImageAndText.append(roleText);
+
+        return roleImageAndText;
+    }
+
+    function createRoleButtons(role) {
+        const buttons = document.createElement("div");
+        buttons.setAttribute("class", "role-buttons");
+
+        buttons.append(...createRateControl(role));
+        buttons.append(createWikiAnchor(role));
+        buttons.append(createFavoriteButton(role));
+        buttons.append(createDownloadJsonButton(role));
+
+        return buttons;
+    }
+
+    function createRateControl(role) {
+        const rateInput = document.createElement("input");
+        rateInput.setAttribute("class", "rate-input");
+        rateInput.setAttribute("type", "number");
+        rateInput.setAttribute("min", "0");
+        rateInput.setAttribute("max", "10");
+
+        const rateButton = document.createElement("button");
+
+        const rateIcon = document.createElement("i");
+        rateIcon.setAttribute("class", "fa-sharp fa-regular fa-star");
+
+        if (role.rating.find(rating => rating.user === loginStorage.name && rating.score > 0)) {
+            rateInput.value = role.rating.find(rating => rating.user === loginStorage.name).score;
+            rateIcon.setAttribute("class", "fa-solid fa-star");
+            rateIcon.setAttribute("style", "color: #FFD43B;");
+        }
+        rateButton.append(rateIcon);
+
+        rateInput.addEventListener("input", function () {
+            rateIcon.setAttribute("class", "fa-sharp fa-star");
+            rateIcon.style.color = "black";
+        });
+
+        rateButton.addEventListener("click", async function () {
+            if (rateInput.value < 0) {
+                rateInput.value = "0";
+                return;
+            }
+            if (rateInput.value > 10) {
+                rateInput.value = "10";
+                return;
+            }
+            if (rateInput.value === "") {
+                return;
+            }
+            if (role.rating.find(rating => rating.user === loginStorage.name)) {
+                role.rating.find(rating => rating.user === loginStorage.name).score = Number.parseFloat(rateInput.value);
+            } else {
+                role.rating.push({
+                    user: loginStorage.name,
+                    score: Number.parseFloat(rateInput.value)
+                });
+            }
+            await updateRole(role, "rating", false);
+            saveLocalStorage();
+            displayRoles();
+        });
+
+        return [rateInput, rateButton];
+    }
+
+    function createWikiAnchor(role) {
+        const wikiButton = document.createElement("button");
+
+        const wikiIcon = document.createElement("i");
+        wikiIcon.setAttribute("class", "fa-solid fa-book");
+        wikiButton.append(wikiIcon);
+
+        const wikiAnchor = document.createElement("a");
+        wikiAnchor.setAttribute("href", "wiki.html?name=" + role.name.replace(/\s+/g, "_").replace(/[^a-zA-Z0-9-_]/g, "") + "&r=" + role.createdAt);
+        wikiAnchor.append(wikiButton);
+
+        return wikiAnchor;
+    }
+
+    function createFavoriteButton(role) {
+        const favoriteButton = document.createElement("button");
+        const favoriteIcon = document.createElement("i");
+        if (role.favoriteList.includes(loginStorage.name)) {
+            favoriteIcon.setAttribute("class", "fa-solid fa-heart");
+            favoriteIcon.classList.add("red");
+        } else {
+            favoriteIcon.setAttribute("class", "fa-light fa-heart");
+        }
+        favoriteButton.append(favoriteIcon);
+
+        favoriteButton.addEventListener("click", async function () {
+            if (role.favoriteList.includes(loginStorage.name)) {
+                role.favoriteList = role.favoriteList.filter(name => name !== loginStorage.name);
+            } else {
+                role.favoriteList.push(loginStorage.name);
+            }
+            await updateRole(role, "favoriteList", false);
+            saveLocalStorage();
+            displayRoles();
+        });
+
+        return favoriteButton;
+    }
+
+    function createDownloadJsonButton(role) {
+        const downloadJsonButton = document.createElement("button");
+        downloadJsonButton.style.position = "relative";
+        const downloadIcon = document.createElement("i");
+        downloadIcon.setAttribute("class", "fa-solid fa-download");
+        downloadJsonButton.append(downloadIcon);
+
+        downloadJsonButton.addEventListener("click", function () {
+            getJsonString(role, true);
+            createPopup(document.querySelector(".main-page"), "Role Json copied to Clipboard", 3500, "lightblue");
+        });
+
+        return downloadJsonButton;
     }
 
     for (const filter of document.querySelectorAll(".filter")) {
@@ -553,15 +578,39 @@ document.addEventListener("DOMContentLoaded", async function () {
     function addRoleViaJson(role) {
         role.characterType = role.team[0].toUpperCase() + role.team.substring(1);
         if (roleAlreadyExists(role)) return;
-        role.createdAt = Date.now().toString();
-        for (const role1 of getRoleIdeas()) {
-            if (role1.createdAt === role.createdAt) {
-                let number = role1.createdAt;
-                number++;
-                role.createdAt = number.toString();
+        role.team = undefined;
+
+        role.createdAt = generateUniqueCreatedAt(Date.now().toString());
+        normalizeRoleImage(role);
+        normalizeRoleDefaults(role);
+        normalizeJinxes(role.jinxes);
+        normalizeSpecial(role.special);
+        normalizeRoleTags(role);
+
+        role.rating = [];
+        role.favoriteList = [];
+        role.howToRun = "";
+        role.comments = [];
+        role.lastEdited = Date.now().toString();
+        role.isPrivate = true;
+        role.owner = [loginStorage.name];
+
+        websiteStorage.localRoleIdeas.push(role);
+        saveLocalStorage();
+        jsonInputTextarea.value = "";
+        window.location.reload();
+    }
+
+    function generateUniqueCreatedAt(candidateCreatedAt) {
+        for (const existingRole of getRoleIdeas()) {
+            if (existingRole.createdAt === candidateCreatedAt) {
+                candidateCreatedAt = (Number(candidateCreatedAt) + 1).toString();
             }
         }
-        role.team = undefined;
+        return candidateCreatedAt;
+    }
+
+    function normalizeRoleImage(role) {
         if (role.image === undefined) role.image = "";
         if (role.otherImage === undefined) role.otherImage = "";
         if (Array.isArray(role.image)) {
@@ -574,35 +623,38 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (typeof (role.image) === "string") {
             role.image = role.image.replaceAll("\\", "");
         }
+    }
+
+    function normalizeRoleDefaults(role) {
         if (role.firstNight === undefined) role.firstNight = 0;
         if (role.firstNightReminder === undefined) role.firstNightReminder = "";
         if (role.otherNight === undefined) role.otherNight = 0;
         if (role.otherNightReminder === undefined) role.otherNightReminder = "";
         if (role.jinxes === undefined) role.jinxes = [];
-
-        for (let i = 0; i < role.jinxes.length; i++) {
-            const jinx = role.jinxes[i];
-            if (jinx.id === "") jinx.id = undefined;
-            if (!jinx.id || !jinx.reason) continue;
-            jinx.createdAt = (Date.now() + i).toString();
-            jinx.jinxedRole = jinx.id[0].toUpperCase();
-            for (let j = 1; j < jinx.id.length; j++) {
-                if (jinx.id[j] === "_") {
-                    jinx.jinxedRole += " ";
-                    continue;
-                }
-                if (jinx.id[j - 1] === "_") {
-                    jinx.jinxedRole += jinx.id[j].toUpperCase();
-                    continue;
-                }
-                jinx.jinxedRole += jinx.id[j];
-            }
-            jinx.id = undefined;
-        }
         if (role.reminders === undefined) role.reminders = [];
         if (role.remindersGlobal === undefined) role.remindersGlobal = [];
         if (role.special === undefined) role.special = [];
-        for (const special of role.special) {
+        if (!role.script) role.script = "";
+        role.script = role.script.split(" v")[0];
+    }
+
+    function normalizeJinxes(jinxes) {
+        for (let i = 0; i < jinxes.length; i++) {
+            const jinx = jinxes[i];
+            if (jinx.id === "") jinx.id = undefined;
+            if (!jinx.id || !jinx.reason) continue;
+            jinx.createdAt = (Date.now() + i).toString();
+            jinx.jinxedRole = snakeCaseIdToRoleName(jinx.id);
+            jinx.id = undefined;
+        }
+    }
+
+    function snakeCaseIdToRoleName(id) {
+        return id.split("_").map(word => word[0].toUpperCase() + word.slice(1)).join(" ");
+    }
+
+    function normalizeSpecial(specialList) {
+        for (const special of specialList) {
             if (special.time === undefined) {
                 special.time = "";
             }
@@ -610,27 +662,10 @@ document.addEventListener("DOMContentLoaded", async function () {
                 special.value = "";
             }
         }
-        role.rating = [];
-        role.favoriteList = [];
-        if (role.tags) {
-            role.tags = role.tags.filter(tag => allTags.includes(tag));
-        }
-        if (!role.tags) {
-            role.tags = autoAddTags(role);
-        }
-        role.howToRun = "";
-        if (!role.script) {
-            role.script = "";
-        }
-        role.script = role.script.split(" v")[0];
-        role.comments = [];
-        role.lastEdited = Date.now().toString();
-        role.isPrivate = true;
-        role.owner = [loginStorage.name];
-        websiteStorage.localRoleIdeas.push(role);
-        saveLocalStorage();
-        jsonInputTextarea.value = "";
-        window.location.reload();
+    }
+
+    function normalizeRoleTags(role) {
+        role.tags = role.tags ? role.tags.filter(tag => allTags.includes(tag)) : autoAddTags(role);
     }
 
     function autoAddTags(role) {

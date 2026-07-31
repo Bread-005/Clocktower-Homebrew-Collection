@@ -14,6 +14,11 @@ button {
     background: var(--primary);
     padding: 5px;
     margin: 5px;
+    cursor: pointer;
+
+    &:hover {
+        background: lightblue;
+    }
 }
 
 li {
@@ -23,10 +28,7 @@ li {
 .input {
     padding: 4px;
     margin: 2px;
-}
-
-button:hover {
-    background: lightblue;
+    border-radius: 5px;
 }
 
 .character-types {
