@@ -668,58 +668,52 @@ document.addEventListener("DOMContentLoaded", async function () {
         role.tags = role.tags ? role.tags.filter(tag => allTags.includes(tag)) : autoAddTags(role);
     }
 
-    function autoAddTags(role) {
-        const tags = [];
+    const autoTagRules = [
+        {tag: "Misinformation", matches: has => has("drunk") || has("poison") || has("false info") || has("register")},
+        {tag: "Protection", matches: has => has("safe") || has("cannot die") || has("can´t die")},
+        {tag: "Wincondition", matches: has => has("win") && !has("knowing") || has("lose") && !has("ability")},
+        {
+            tag: "Character Changing",
+            matches: has => has("become") && !has("alignment") && !has("evil") && !has("good") || has("swap")
+        },
+        {tag: "Setup", matches: has => has("[") && has("]")},
+        {tag: "Madness", matches: has => has("mad")},
+        {tag: "Nomination Phase", matches: has => has("nominat") || has("vot") || has("execut") || has("nominee")},
+        {
+            tag: "ST Consult",
+            matches: has => has("visit") || has("Storyteller") && !has("believe") && !has("think") || has("privately")
+        },
+        {tag: "When You Die", matches: has => has("When you die") || has("If you die")},
+        {tag: "Resurrection", matches: has => has("revive") || has("resurrect")},
+        {
+            tag: "Alignment Switching",
+            matches: has => (has("become") || has("turn")) && (has("alignment") || has("evil") || has("good"))
+        },
+        {tag: "Public", matches: has => has("public")},
+        {
+            tag: "Seating Order",
+            matches: has => has("neighbour") || has("neighbor") || has("step") || has("close") || has("near")
+        }
+    ];
 
+    function autoAddTags(role) {
         function has(string) {
             return role.ability.toLowerCase().includes(string.toLowerCase());
         }
 
-        if (has("drunk") || has("poison") || has("false info") || has("register")) {
-            tags.push("Misinformation");
-        }
-        if (has("safe") || has("cannot die") || has("can´t die")) {
-            tags.push("Protection");
-        }
-        if (has("win") && !has("knowing") || has("lose") && !has("ability")) {
-            tags.push("Wincondition");
-        }
-        if (has("become") && !has("alignment") && !has("evil") && !has("good") || has("swap")) {
-            tags.push("Character Changing");
-        }
-        if (has("[") && has("]")) {
-            tags.push("Setup");
-        }
-        if (has("mad")) {
-            tags.push("Madness");
-        }
-        if (has("nominat") || has("vot") || has("execut") || has("nominee")) {
-            tags.push("Nomination Phase");
-        }
-        if (has("visit") || has("Storyteller") && !has("believe") && !has("think") || has("privately")) {
-            tags.push("ST Consult");
-        }
-        if (has("When you die") || has("If you die")) {
-            tags.push("When You Die");
-        }
-        if (has("revive") || has("resurrect")) {
-            tags.push("Resurrection");
-        }
-        if ((has("become") || has("turn")) && (has("alignment") || has("evil") || has("good"))) {
-            tags.push("Alignment Switching");
-        }
-        if (has("public")) {
-            tags.push("Public");
-        }
-        if (has("neighbour") || has("neighbor") || has("step") || has("close") || has("near")) {
-            tags.push("Seating Order");
-        }
-        return tags;
+        return autoTagRules.filter(rule => rule.matches(has)).map(rule => rule.tag);
     }
 
     loginButton.addEventListener("click", () => window.location = "https://bread-005.github.io/login-page/index.html");
 
     function adjustLocalStorage() {
+        ensureUserDefaults();
+        removeObsoleteFields();
+        migrateLegacyRoles();
+        saveLocalStorage();
+    }
+
+    function ensureUserDefaults() {
         if (!websiteStorage.user) {
             websiteStorage.user = {
                 page: 1,
@@ -733,16 +727,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 databaseFilter: "All",
                 roleCreationMode: 0
             }
-            saveLocalStorage();
         }
-        delete websiteStorage.scriptToolRoles;
-        delete websiteStorage.user.databaseUse;
-        delete websiteStorage.user.tempRole;
-        delete websiteStorage.user.currentUsername;
-        delete websiteStorage.user.password;
-        delete websiteStorage.user.tempMessage;
-        saveLocalStorage();
-
         if (!websiteStorage.localRoleIdeas) {
             websiteStorage.localRoleIdeas = [];
         }
@@ -752,43 +737,72 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (!websiteStorage.user.roleCreationMode) {
             websiteStorage.user.roleCreationMode = 0;
         }
+    }
 
+    // Removes fields from earlier storage schema versions that are no longer read anywhere.
+    function removeObsoleteFields() {
+        delete websiteStorage.scriptToolRoles;
+        delete websiteStorage.user.databaseUse;
+        delete websiteStorage.user.tempRole;
+        delete websiteStorage.user.currentUsername;
+        delete websiteStorage.user.password;
+        delete websiteStorage.user.tempMessage;
+    }
+
+    function migrateLegacyRoles() {
         for (const role of websiteStorage.localRoleIdeas) {
-            if (typeof role.rating === "number") {
-                const ratingNumber = role.rating;
-                role.rating = [];
-                if (ratingNumber > 0) {
-                    role.rating.push({
-                        user: loginStorage.name,
-                        score: ratingNumber
-                    });
-                }
-            }
-            if (Array.isArray(role.rating) && role.rating.length === 1 && role.rating[0].user === "") {
-                role.rating[0].user = loginStorage.name;
-            }
-            if (!role.favoriteList) {
-                role.favoriteList = [];
-                if (role.isFavorite) role.favoriteList.push(loginStorage.name);
-            }
-            if (role.isPrivate === undefined) {
-                role.isPrivate = true;
-            }
-            if (!role.owner) {
-                role.owner = [loginStorage.name];
-            }
-            if (!role.lastEdited) {
-                role.lastEdited = role.createdAt;
-            }
-            if (role.lastEdited.toString().includes("-")) {
-                role.lastEdited = new Date(role.lastEdited).getTime().toString();
-            }
-            if (role.owner.includes("User12345")) {
-                role.owner = role.owner.filter(owner => owner !== "User12345");
-                role.owner.push(loginStorage.name);
+            migrateRoleRating(role);
+            migrateRoleFavorite(role);
+            migrateRoleOwnership(role);
+            migrateRoleLastEdited(role);
+        }
+    }
+
+    // Ratings used to be a single number per role instead of one entry per user.
+    function migrateRoleRating(role) {
+        if (typeof role.rating === "number") {
+            const ratingNumber = role.rating;
+            role.rating = [];
+            if (ratingNumber > 0) {
+                role.rating.push({
+                    user: loginStorage.name,
+                    score: ratingNumber
+                });
             }
         }
-        saveLocalStorage();
+        if (Array.isArray(role.rating) && role.rating.length === 1 && role.rating[0].user === "") {
+            role.rating[0].user = loginStorage.name;
+        }
+    }
+
+    function migrateRoleFavorite(role) {
+        if (!role.favoriteList) {
+            role.favoriteList = [];
+            if (role.isFavorite) role.favoriteList.push(loginStorage.name);
+        }
+    }
+
+    // "User12345" was a placeholder owner used before per-account ownership existed.
+    function migrateRoleOwnership(role) {
+        if (role.isPrivate === undefined) {
+            role.isPrivate = true;
+        }
+        if (!role.owner) {
+            role.owner = [loginStorage.name];
+        }
+        if (role.owner.includes("User12345")) {
+            role.owner = role.owner.filter(owner => owner !== "User12345");
+            role.owner.push(loginStorage.name);
+        }
+    }
+
+    function migrateRoleLastEdited(role) {
+        if (!role.lastEdited) {
+            role.lastEdited = role.createdAt;
+        }
+        if (role.lastEdited.toString().includes("-")) {
+            role.lastEdited = new Date(role.lastEdited).getTime().toString();
+        }
     }
 
     function setupOwnerFilterSelection() {
