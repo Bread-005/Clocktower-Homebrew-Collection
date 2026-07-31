@@ -150,8 +150,37 @@ function migrateRoleLastEdited(role) {
     }
 }
 
+function createRoleFromForm(name, characterType, ability, owner) {
+    const now = Date.now().toString();
+    return {
+        name: name,
+        characterType: characterType,
+        ability: ability,
+        createdAt: now,
+        image: "",
+        otherImage: "",
+        rating: [],
+        favoriteList: [],
+        tags: [],
+        firstNight: 0,
+        firstNightReminder: "",
+        otherNight: 0,
+        otherNightReminder: "",
+        howToRun: "",
+        jinxes: [],
+        reminders: [],
+        remindersGlobal: [],
+        special: [],
+        script: "",
+        comments: [],
+        lastEdited: now,
+        isPrivate: true,
+        owner: [owner]
+    }
+}
+
 export {
     autoAddTags, generateUniqueCreatedAt, normalizeRoleImage, normalizeRoleDefaults, snakeCaseIdToRoleName,
     normalizeJinxes, normalizeSpecial, normalizeRoleTags, migrateRoleRating, migrateRoleFavorite,
-    migrateRoleOwnership, migrateRoleLastEdited
+    migrateRoleOwnership, migrateRoleLastEdited, createRoleFromForm
 }

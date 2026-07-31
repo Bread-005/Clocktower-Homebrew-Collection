@@ -4,7 +4,8 @@ import {
 } from "./functions.js";
 import {
     generateUniqueCreatedAt, normalizeRoleImage, normalizeRoleDefaults, normalizeJinxes, normalizeSpecial,
-    normalizeRoleTags, migrateRoleRating, migrateRoleFavorite, migrateRoleOwnership, migrateRoleLastEdited
+    normalizeRoleTags, migrateRoleRating, migrateRoleFavorite, migrateRoleOwnership, migrateRoleLastEdited,
+    createRoleFromForm
 } from "./roleData.js";
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -266,37 +267,24 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     }
 
+    function averageRating(role) {
+        const totalScore = role.rating.reduce((sum, rating) => sum + rating.score, 0);
+        return totalScore === 0 ? 0 : totalScore / role.rating.length;
+    }
+
+    const roleSorters = {
+        "Newest first": (a, b) => Number(b.createdAt) - Number(a.createdAt),
+        "Oldest first": (a, b) => Number(a.createdAt) - Number(b.createdAt),
+        "Alphabet A-Z": (a, b) => a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1,
+        "Alphabet Z-A": (a, b) => a.name.toUpperCase() < b.name.toUpperCase() ? 1 : -1,
+        "Most favorite first": (a, b) => averageRating(b) - averageRating(a),
+        "Least favorite first": (a, b) => averageRating(a) - averageRating(b),
+        "Last Edited": (a, b) => Number(b.lastEdited) - Number(a.lastEdited)
+    };
+
     function sortRoles(roles) {
-        const input = sortingDropDownMenu.value;
-        if (input === "Newest first" || input === "Oldest first") {
-            roles.sort((a, b) => a.createdAt - b.createdAt);
-            if (input === "Newest first") {
-                roles.reverse();
-            }
-        }
-        if (input.includes("Alphabet")) {
-            roles.sort((a, b) => a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1);
-            if (input === "Alphabet Z-A") {
-                roles.reverse();
-            }
-        }
-        if (input.includes("favorite first")) {
-            roles.sort((a, b) => {
-                let aTotalRatings = 0;
-                let bTotalRatings = 0;
-                for (const rating of a.rating) aTotalRatings += rating.score;
-                for (const rating of b.rating) bTotalRatings += rating.score;
-                const aResult = aTotalRatings === 0 ? 0 : aTotalRatings / a.rating.length;
-                const bResult = bTotalRatings === 0 ? 0 : bTotalRatings / b.rating.length;
-                return aResult - bResult;
-            });
-            if (input === "Most favorite first") {
-                roles.reverse();
-            }
-        }
-        if (input === "Last Edited") {
-            roles.sort((a, b) => Number(b.lastEdited) - Number(a.lastEdited));
-        }
+        const sorter = roleSorters[sortingDropDownMenu.value];
+        if (sorter) roles.sort(sorter);
     }
 
     function showPages(array, pageArray) {
@@ -330,80 +318,69 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
+    function roleMatchesSearch(role) {
+        return roleSearch.value === "" ||
+            role.name.toUpperCase().includes(roleSearch.value.toUpperCase()) ||
+            role.ability.toUpperCase().includes(roleSearch.value.toUpperCase());
+    }
+
+    function roleMatchesCharacterType(role) {
+        return characterTypeSelection.value === "All" || role.characterType === characterTypeSelection.value;
+    }
+
+    function roleMatchesTagFilter(role) {
+        if (tagFilterSelection.value === "No Tags") return role.tags.length === 0;
+        if (tagFilterSelection.value === "None") return true;
+        return role.tags.includes(tagFilterSelection.value);
+    }
+
+    function roleMatchesFavoriteFilter(role) {
+        return !onlyMyFavoritesCheckBox.checked || role.favoriteList.includes(loginStorage.name);
+    }
+
+    function roleMatchesScriptFilter(role) {
+        return scriptFilterSelection.value === "All" || role.script === scriptFilterSelection.value;
+    }
+
+    function roleMatchesOwnerFilter(role) {
+        return websiteStorage.user.ownerFilter === "All" || role.owner.includes(websiteStorage.user.ownerFilter);
+    }
+
+    function roleMatchesDatabaseFilter(role) {
+        if (websiteStorage.user.databaseFilter === "Only Private") return role.isPrivate;
+        if (websiteStorage.user.databaseFilter === "Only Public") return !role.isPrivate;
+        return true;
+    }
+
+    const roleFilterPredicates = [
+        roleMatchesSearch, roleMatchesCharacterType, roleMatchesTagFilter, roleMatchesFavoriteFilter,
+        roleMatchesScriptFilter, roleMatchesOwnerFilter, roleMatchesDatabaseFilter
+    ];
+
     function filterRoles(roles) {
-        if (roleSearch.value !== "") {
-            roles = roles.filter(role =>
-                role.name.toUpperCase().includes(roleSearch.value.toUpperCase()) ||
-                role.ability.toUpperCase().includes(roleSearch.value.toUpperCase()));
-        }
-        if (characterTypeSelection.value !== "All") {
-            roles = roles.filter(role => role.characterType === characterTypeSelection.value);
-        }
-        if (tagFilterSelection.value !== "None" && tagFilterSelection.value !== "No Tags") {
-            roles = roles.filter(role => role.tags.includes(tagFilterSelection.value));
-        }
-        if (tagFilterSelection.value === "No Tags") {
-            roles = roles.filter(role => role.tags.length === 0);
-        }
-        if (onlyMyFavoritesCheckBox.checked) {
-            roles = roles.filter(role => role.favoriteList.includes(loginStorage.name));
-        }
-        if (scriptFilterSelection.value !== "All") {
-            roles = roles.filter(role => role.script === scriptFilterSelection.value);
-        }
-        if (websiteStorage.user.ownerFilter !== "All") {
-            roles = roles.filter(role => role.owner.includes(websiteStorage.user.ownerFilter));
-        }
-        if (websiteStorage.user.databaseFilter === "Only Private") {
-            roles = roles.filter(role => role.isPrivate);
-        }
-        if (websiteStorage.user.databaseFilter === "Only Public") {
-            roles = roles.filter(role => !role.isPrivate);
-        }
-        return roles;
+        return roles.filter(role => roleFilterPredicates.every(matches => matches(role)));
     }
 
     function addRole() {
-        document.getElementById("js-add-role").addEventListener("click", function () {
-            const roleNameInput = document.getElementById("role-name");
-            const characterTypeInput = document.getElementById("character-types");
-            const abilityTextInput = document.getElementById("ability-text");
-            if (roleNameInput.value === "" || characterTypeInput.value === "" || abilityTextInput.value === "") {
-                return;
-            }
+        document.getElementById("js-add-role").addEventListener("click", handleAddRoleClick);
+    }
 
-            const role = {
-                name: roleNameInput.value,
-                characterType: characterTypeInput.value,
-                ability: abilityTextInput.value,
-                createdAt: Date.now().toString(),
-                image: "",
-                otherImage: "",
-                rating: [],
-                favoriteList: [],
-                tags: [],
-                firstNight: 0,
-                firstNightReminder: "",
-                otherNight: 0,
-                otherNightReminder: "",
-                howToRun: "",
-                jinxes: [],
-                reminders: [],
-                remindersGlobal: [],
-                special: [],
-                script: "",
-                comments: [],
-                lastEdited: Date.now().toString(),
-                isPrivate: true,
-                owner: [loginStorage.name]
-            }
-            if (roleAlreadyExists(role)) return;
-            websiteStorage.localRoleIdeas.push(role);
-            saveLocalStorage();
-            roleNameInput.value = "";
-            abilityTextInput.value = "";
-            window.location.reload();
-        });
+    function handleAddRoleClick() {
+        const roleNameInput = document.getElementById("role-name");
+        const characterTypeInput = document.getElementById("character-types");
+        const abilityTextInput = document.getElementById("ability-text");
+        if (roleNameInput.value === "" || characterTypeInput.value === "" || abilityTextInput.value === "") {
+            return;
+        }
+
+        const role = createRoleFromForm(roleNameInput.value, characterTypeInput.value, abilityTextInput.value, loginStorage.name);
+        if (roleAlreadyExists(role)) return;
+
+        websiteStorage.localRoleIdeas.push(role);
+        saveLocalStorage();
+        roleNameInput.value = "";
+        abilityTextInput.value = "";
+        window.location.reload();
     }
 
     function clearFilters() {
