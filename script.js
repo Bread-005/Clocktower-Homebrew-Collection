@@ -272,17 +272,16 @@ document.addEventListener("DOMContentLoaded", async function () {
         return totalScore === 0 ? 0 : totalScore / role.rating.length;
     }
 
-    const roleSorters = {
-        "Newest first": (a, b) => Number(b.createdAt) - Number(a.createdAt),
-        "Oldest first": (a, b) => Number(a.createdAt) - Number(b.createdAt),
-        "Alphabet A-Z": (a, b) => a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1,
-        "Alphabet Z-A": (a, b) => a.name.toUpperCase() < b.name.toUpperCase() ? 1 : -1,
-        "Most favorite first": (a, b) => averageRating(b) - averageRating(a),
-        "Least favorite first": (a, b) => averageRating(a) - averageRating(b),
-        "Last Edited": (a, b) => Number(b.lastEdited) - Number(a.lastEdited)
-    };
-
     function sortRoles(roles) {
+        const roleSorters = {
+            "Newest first": (a, b) => Number(b.createdAt) - Number(a.createdAt),
+            "Oldest first": (a, b) => Number(a.createdAt) - Number(b.createdAt),
+            "Alphabet A-Z": (a, b) => a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1,
+            "Alphabet Z-A": (a, b) => a.name.toUpperCase() < b.name.toUpperCase() ? 1 : -1,
+            "Most favorite first": (a, b) => averageRating(b) - averageRating(a),
+            "Least favorite first": (a, b) => averageRating(a) - averageRating(b),
+            "Last Edited": (a, b) => Number(b.lastEdited) - Number(a.lastEdited)
+        };
         const sorter = roleSorters[sortingDropDownMenu.value];
         if (sorter) roles.sort(sorter);
     }
@@ -352,12 +351,11 @@ document.addEventListener("DOMContentLoaded", async function () {
         return true;
     }
 
-    const roleFilterPredicates = [
-        roleMatchesSearch, roleMatchesCharacterType, roleMatchesTagFilter, roleMatchesFavoriteFilter,
-        roleMatchesScriptFilter, roleMatchesOwnerFilter, roleMatchesDatabaseFilter
-    ];
-
     function filterRoles(roles) {
+        const roleFilterPredicates = [
+            roleMatchesSearch, roleMatchesCharacterType, roleMatchesTagFilter, roleMatchesFavoriteFilter,
+            roleMatchesScriptFilter, roleMatchesOwnerFilter, roleMatchesDatabaseFilter
+        ];
         return roles.filter(role => roleFilterPredicates.every(matches => matches(role)));
     }
 
