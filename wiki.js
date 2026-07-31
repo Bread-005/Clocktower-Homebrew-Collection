@@ -1,6 +1,6 @@
 import {
     getJsonString, allTags, updateRole, deleteRole, createPopup, getRoleIdeas, saveLocalStorage, databaseIsConnected,
-    createRole, websiteStorage, roleAlreadyExists, isOfficial, loginStorage
+    createRole, websiteStorage, roleAlreadyExists, isOfficial, loginStorage, getTeamColor
 } from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -52,6 +52,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const deleteConfirmationCancelButton = document.getElementById("delete-confirmation-cancel-button");
     const deletePopupBackground = document.querySelector(".delete-popup-background");
     const ownerDisplay = document.querySelector(".owner-display");
+    const tabButtons = document.querySelectorAll(".tab-button");
+    const tabPanels = document.querySelectorAll(".tab-panel");
+    const editOnlyTabs = ["icon", "owners", "privacy"];
 
     const role = getRoleIdeas().find(role1 => role1.createdAt === new URLSearchParams(window.location.search).get("r"));
     if (!role) {
@@ -67,6 +70,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     hideEditStuff();
+    initTabs();
+    hideEmptyTabsForNonOwners();
+    setActiveTab("night-order");
     toggleEditMode();
     changeImage();
     displayRole();
@@ -126,7 +132,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function displayRole() {
         document.getElementById("role-name").textContent = role.name;
-        document.getElementById("character-type").textContent = "Charactertype: " + role.characterType;
+        const characterTypeValue = document.getElementById("character-type-value");
+        characterTypeValue.textContent = role.characterType;
+        characterTypeValue.style.color = getTeamColor(role.characterType);
         document.getElementById("ability-text").textContent = "Ability: " + role.ability;
         if (window.innerWidth <= 600) {
             document.getElementById("role-name").append(wikiRoleImage);
@@ -228,6 +236,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 showJinxes();
                 showSpecial();
                 showScript();
+                const activeButton = document.querySelector(".tab-button.active");
+                if (activeButton && editOnlyTabs.includes(activeButton.dataset.tab)) {
+                    setActiveTab("night-order");
+                }
             }
             showOwners();
             showRolePrivacy();
@@ -544,6 +556,39 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             }
             pReminderTokenList.append(div);
+        }
+    }
+
+    function initTabs() {
+        tabButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                setActiveTab(button.dataset.tab);
+            });
+        });
+    }
+
+    function setActiveTab(tabName) {
+        tabButtons.forEach(button => button.classList.toggle("active", button.dataset.tab === tabName));
+        tabPanels.forEach(panel => panel.classList.toggle("active", panel.dataset.tab === tabName));
+    }
+
+    function hideEmptyTabsForNonOwners() {
+        const isOwner = !role.owner || role.owner.includes(loginStorage.name);
+        if (isOwner) {
+            return;
+        }
+        const emptyTabs = {
+            jinxes: role.jinxes.length === 0,
+            special: role.special.length === 0,
+            reminders: role.reminders.length === 0 && role.remindersGlobal.length === 0,
+            tags: role.tags.length === 0,
+            script: !role.script,
+            "how-to-run": !role.howToRun
+        };
+        for (const [tabName, isEmpty] of Object.entries(emptyTabs)) {
+            if (isEmpty) {
+                document.querySelector(`.tab-button[data-tab="${tabName}"]`).style.display = "none";
+            }
         }
     }
 

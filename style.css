@@ -350,10 +350,7 @@ input[type="number"] {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-
-    @media (min-width: 700px) {
-        padding: 2rem;
-    }
+    min-height: 95vh;
 
     .page-top {
         display: flex;
@@ -366,10 +363,14 @@ input[type="number"] {
             align-items: center;
             flex-direction: column;
             text-align: center;
-            /*background-color: purple;*/
+
+            h1, h2 {
+                margin: 7px 0;
+            }
 
             .ability-text {
-                padding: 0 50px;
+                padding: 0 5px;
+                font-size: 20px;
             }
         }
 
@@ -415,6 +416,27 @@ input[type="number"] {
                 width: 80vw;
                 padding: 10px;
             }
+        }
+    }
+
+    .wiki-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+        width: 100%;
+        margin: 1rem 0 1rem;
+
+        .tab-button.active {
+            background: lightblue;
+        }
+    }
+
+    .tab-panel {
+        display: none;
+
+        &.active {
+            display: contents;
         }
     }
 
@@ -486,78 +508,70 @@ input[type="number"] {
         }
     }
 
-    .reminder-tokens-tags-script-div {
-        width: 100%;
+    .reminder-token {
         display: flex;
         justify-content: center;
-        align-items: flex-start;
-        gap: 3rem;
+        align-items: center;
+        flex-direction: column;
 
-        .reminder-token {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-
-            h2 {
-                margin-bottom: 0.5rem;
-            }
-
-            .edit-reminder-token, .edit-global-reminder-token {
-                display: none;
-                justify-content: center;
-                align-items: center;
-                flex-direction: column;
-                margin-top: 1rem;
-            }
-
-            .reminder-token-list, .global-reminder-token-list {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                flex-direction: column;
-            }
+        h2 {
+            margin-bottom: 0.5rem;
         }
 
-        .tags {
-            display: flex;
+        .edit-reminder-token, .edit-global-reminder-token {
+            display: none;
             justify-content: center;
             align-items: center;
             flex-direction: column;
-
-            h2 {
-                margin-bottom: 0.5rem;
-            }
-
-            .edit-tags {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                flex-direction: column;
-                max-width: 800px;
-                margin-top: 0.5rem;
-
-                input {
-                    transform: scale(1.5);
-                    margin-left: 0.5rem;
-                }
-            }
+            margin-top: 1rem;
         }
 
-        .script {
+        .reminder-token-list, .global-reminder-token-list {
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            width: 200px;
+        }
+    }
 
-            h2 {
-                margin-bottom: 0.5rem;
-            }
+    .tags {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
 
-            h3 {
-                margin-top: 0;
+        h2 {
+            margin-bottom: 0.5rem;
+        }
+
+        .edit-tags {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            max-width: 800px;
+            margin-top: 0.5rem;
+
+            input {
+                transform: scale(1.5);
+                margin-left: 0.5rem;
             }
+        }
+    }
+
+    .script {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 200px;
+
+        h2 {
+            margin-bottom: 0.5rem;
+        }
+
+        h3 {
+            margin-top: 0;
         }
     }
 
@@ -595,7 +609,7 @@ input[type="number"] {
             }
 
             select {
-                height: 1.75rem;
+                height: 2.25rem;
                 margin-top: 0.5rem;
             }
 
@@ -651,8 +665,14 @@ input[type="number"] {
         }
     }
 
+    .download-json-button-container {
+        margin-top: auto;
+        padding-top: 2.5rem;
+        display: flex;
+        justify-content: center;
+    }
+
     .download-json-button {
-        margin-top: 30px;
         position: relative;
     }
 
