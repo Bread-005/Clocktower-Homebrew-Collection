@@ -12,69 +12,30 @@
 </head>
 <body>
 
-<div class="main-page">
-    <div class="main-page-top">
-        <h1>Clocktower Homebrew Collection</h1>
-        <img src="https://i.postimg.cc/MGVC0Q4V/BotC.webp" style="width: 280px" alt="Clocktower">
-    </div>
-    <div class="sub-page-top">
-        <h2>Write your homebrew role here</h2>
-        <div class="login-area">
-            <p id="current-username-display"></p>
-            <button class="login-button">Login</button>
+    <div class="main-page">
+        <div class="main-page-top">
+            <h1>Clocktower Homebrew Collection</h1>
+            <img src="https://i.postimg.cc/MGVC0Q4V/BotC.webp" style="width: 280px" alt="Clocktower">
         </div>
-    </div>
-    <div class="role-creation-div">
-        <div class="switch-role-creation-div">
-            <button id="switch-role-creation">Switch Role Creation</button>
-        </div>
-        <div class="create-main-role-attributes">
-            <div>
-                <label for="role-name">Rolename</label>
-                <input id="role-name" class="input" type="text"/>
+        <div class="sub-page-top">
+            <h2>Write your homebrew role here</h2>
+            <div class="login-area">
+                <p id="current-username-display"></p>
+                <button class="login-button">Login</button>
             </div>
-            <div style="margin: 5px">
-                <label for="character-types">Charactertype</label>
-                <select id="character-types" class="character-types">
-                    <option value="Townsfolk">Townsfolk</option>
-                    <option value="Outsider">Outsider</option>
-                    <option value="Minion">Minion</option>
-                    <option value="Demon">Demon</option>
-                    <option value="Traveller">Traveller</option>
-                    <option value="Fabled">Fabled</option>
-                    <option value="Loric">Loric</option>
-                </select>
+        </div>
+        <div class="role-creation-div">
+            <div class="switch-role-creation-div">
+                <button id="switch-role-creation">Switch Role Creation</button>
             </div>
-            <label for="ability-text"></label>
-            <textarea id="ability-text" class="text-area-input" cols="30" rows="4" placeholder="Abilitytext"></textarea>
-            <button id="js-add-role">Submit Role</button>
-        </div>
-        <div class="json-input-div">
-            <label for="json-input-textarea"></label>
-            <textarea id="json-input-textarea" class="text-area-input" cols="60" rows="10"
-                      placeholder="Put Json text here"></textarea>
-            <button id="add-role-button">Add Role</button>
-        </div>
-        <div class="script-upload-div">
-            <label for="script-upload">Upload script</label>
-            <input id="script-upload" type="file" accept=".json">
-        </div>
-        <div style="width: 153px"></div>
-    </div>
-
-    <h2>Role Ideas</h2>
-
-    <div class="role-display-settings">
-        <div class="role-filter">
-            <div class="filter-section">
+            <div class="create-main-role-attributes">
                 <div>
-                    <label for="role-search"></label>
-                    <input id="role-search" class="filter" placeholder="Search">
+                    <label for="role-name">Rolename</label>
+                    <input id="role-name" class="input" type="text" placeholder="Enter role name"/>
                 </div>
-                <div class="character-type-selection-div">
-                    <label for="character-type-selection">CharacterType</label>
-                    <select id="character-type-selection" class="character-type-selection filter">
-                        <option value="All">All</option>
+                <div style="margin: 5px">
+                    <label for="character-types">Charactertype</label>
+                    <select id="character-types" class="character-types">
                         <option value="Townsfolk">Townsfolk</option>
                         <option value="Outsider">Outsider</option>
                         <option value="Minion">Minion</option>
@@ -84,79 +45,119 @@
                         <option value="Loric">Loric</option>
                     </select>
                 </div>
+                <label for="ability-text"></label>
+                <textarea id="ability-text" class="text-area-input" cols="30" rows="4"
+                          placeholder="Abilitytext"></textarea>
+                <button id="js-add-role">Submit Role</button>
             </div>
-            <div class="filter-section">
-                <div id="script-filter-selection-div">
-                    <label for="script-filter-selection">Script</label>
-                    <select id="script-filter-selection" class="script-selection filter">
-                        <option value="All">All</option>
-                    </select>
+            <div class="json-input-div">
+                <label for="json-input-textarea"></label>
+                <textarea id="json-input-textarea" class="text-area-input" cols="60" rows="10"
+                          placeholder="Put Json text here"></textarea>
+                <button id="add-role-button">Add Role</button>
+            </div>
+            <div class="script-upload-div">
+                <label for="script-upload">Upload script</label>
+                <input id="script-upload" type="file" accept=".json">
+            </div>
+            <div style="width: 153px"></div>
+        </div>
+
+        <h2>Role Ideas</h2>
+
+        <div class="role-display-settings">
+            <div class="role-filter">
+                <div class="filter-section">
+                    <div>
+                        <label for="role-search"></label>
+                        <input id="role-search" class="filter" placeholder="Search">
+                    </div>
+                    <div class="character-type-selection-div">
+                        <label for="character-type-selection">CharacterType</label>
+                        <select id="character-type-selection" class="character-type-selection filter">
+                            <option value="All">All</option>
+                            <option value="Townsfolk">Townsfolk</option>
+                            <option value="Outsider">Outsider</option>
+                            <option value="Minion">Minion</option>
+                            <option value="Demon">Demon</option>
+                            <option value="Traveller">Traveller</option>
+                            <option value="Fabled">Fabled</option>
+                            <option value="Loric">Loric</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="tag-div">
-                    <label for="tag-filter-selection">Tag filter</label>
-                    <select id="tag-filter-selection" class="tag-filter-selection filter"></select>
+                <div class="filter-section">
+                    <div id="script-filter-selection-div">
+                        <label for="script-filter-selection">Script</label>
+                        <select id="script-filter-selection" class="script-selection filter">
+                            <option value="All">All</option>
+                        </select>
+                    </div>
+                    <div class="tag-div">
+                        <label for="tag-filter-selection">Tag filter</label>
+                        <select id="tag-filter-selection" class="tag-filter-selection filter"></select>
+                    </div>
+                </div>
+                <div class="filter-section">
+                    <div class="only-my-favorites-div">
+                        <label for="only-my-favorites">Only my Favorites</label>
+                        <input id="only-my-favorites" class="filter" type="checkbox">
+                    </div>
+                    <div class="owner-filter">
+                        <label for="owner-selection">Owner</label>
+                        <select id="owner-selection" class="owner-filter-selection filter"></select>
+                    </div>
+                </div>
+                <div class="filter-section">
+                    <div class="database-filter">
+                        <label for="database-selection">Database filter</label>
+                        <select id="database-selection" class="filter">
+                            <option value="All">All</option>
+                            <option value="Only Private">Only Private</option>
+                            <option value="Only Public">Only Public</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button id="clear-filters-button">Clear Filters</button>
+                    </div>
                 </div>
             </div>
-            <div class="filter-section">
-                <div class="only-my-favorites-div">
-                    <label for="only-my-favorites">Only my Favorites</label>
-                    <input id="only-my-favorites" class="filter" type="checkbox">
-                </div>
-                <div class="owner-filter">
-                    <label for="owner-selection">Owner</label>
-                    <select id="owner-selection" class="owner-filter-selection filter"></select>
-                </div>
-            </div>
-            <div class="filter-section">
-                <div class="database-filter">
-                    <label for="database-selection">Database filter</label>
-                    <select id="database-selection" class="filter">
-                        <option value="All">All</option>
-                        <option value="Only Private">Only Private</option>
-                        <option value="Only Public">Only Public</option>
-                    </select>
-                </div>
-                <div>
-                    <button id="clear-filters-button">Clear Filters</button>
-                </div>
+            <div class="sorting-role-display">
+                <label for="sorting">Sorting</label>
+                <select id="sorting" class="filter" style="padding: 6px">
+                    <option value="Alphabet A-Z">Alphabet A-Z</option>
+                    <option value="Alphabet Z-A">Alphabet Z-A</option>
+                    <option value="Newest first">Newest first</option>
+                    <option value="Oldest first">Oldest first</option>
+                    <option value="Most favorite first">Most favorite first</option>
+                    <option value="Least favorite first">Least favorite first</option>
+                    <option value="Last Edited">Last Edited</option>
+                </select>
             </div>
         </div>
-        <div class="sorting-role-display">
-            <label for="sorting">Sorting</label>
-            <select id="sorting" class="filter" style="padding: 6px">
-                <option value="Alphabet A-Z">Alphabet A-Z</option>
-                <option value="Alphabet Z-A">Alphabet Z-A</option>
-                <option value="Newest first">Newest first</option>
-                <option value="Oldest first">Oldest first</option>
-                <option value="Most favorite first">Most favorite first</option>
-                <option value="Least favorite first">Least favorite first</option>
-                <option value="Last Edited">Last Edited</option>
-            </select>
+
+        <div class="homebrew-display">
+            <div id="homebrewroles">Roles are loading (this may take up to 50 seconds)</div>
+            <div class="role-idea-page-selection"></div>
+        </div>
+
+        <div class="night-order-link">
+            <a href="nightorder.html">Full Nightorder</a>
+        </div>
+
+        <div class="download-buttons">
+            <button id="roles-download-button">Download All Roles matching your filters</button>
+        </div>
+
+        <div class="clocktower-script-tool-link">
+            <a href="https://script.bloodontheclocktower.com/" target="_blank">Already existing roles</a>
+        </div>
+
+        <div class="script-tool">
+            <a href="scriptTool.html">Create your own Script</a>
         </div>
     </div>
 
-    <div class="homebrew-display">
-        <div id="homebrewroles">Roles are loading (this may take up to 50 seconds)</div>
-        <div class="role-idea-page-selection"></div>
-    </div>
-
-    <div class="night-order-link">
-        <a href="nightorder.html">Full Nightorder</a>
-    </div>
-
-    <div class="download-buttons">
-        <button id="roles-download-button">Download All Roles matching your filters</button>
-    </div>
-
-    <div class="clocktower-script-tool-link">
-        <a href="https://script.bloodontheclocktower.com/" target="_blank">Already existing roles</a>
-    </div>
-
-    <div class="script-tool">
-        <a href="scriptTool.html">Create your own Script</a>
-    </div>
-</div>
-
-<script src="script.js" type="module" defer></script>
+    <script src="script.js" type="module" defer></script>
 </body>
 </html>

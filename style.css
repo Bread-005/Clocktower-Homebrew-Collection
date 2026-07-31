@@ -35,6 +35,19 @@ li {
     height: 2rem;
 }
 
+input:not([type="checkbox"]), select {
+    border: 2px solid var(--primary);
+    border-radius: 6px;
+    padding: 6px 8px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus {
+        outline: none;
+        border-color: #5c5468;
+        box-shadow: 0 0 4px var(--primary);
+    }
+}
+
 .text-area-input {
     margin: 5px;
     border: 2px solid transparent;
