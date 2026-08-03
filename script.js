@@ -166,6 +166,11 @@ document.addEventListener("DOMContentLoaded", async function () {
         rateButton.append(rateIcon);
 
         rateInput.addEventListener("input", function () {
+            if (rateInput.value === "") {
+                rateIcon.setAttribute("class", "fa-sharp fa-regular fa-star");
+                rateIcon.style.color = "black";
+                return;
+            }
             rateIcon.setAttribute("class", "fa-sharp fa-star");
             rateIcon.style.color = "black";
         });
