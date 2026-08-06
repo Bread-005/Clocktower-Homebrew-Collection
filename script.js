@@ -57,6 +57,17 @@ document.addEventListener("DOMContentLoaded", async function () {
     const loginButton = document.querySelector(".login-button");
     const ownerFilter = document.querySelector(".owner-filter");
 
+    const filterFieldBindings = [
+        {element: roleSearch, storageKey: "roleSearch"},
+        {element: characterTypeSelection, storageKey: "characterType"},
+        {element: scriptFilterSelection, storageKey: "scriptFilter"},
+        {element: tagFilterSelection, storageKey: "tagFilter"},
+        {element: onlyMyFavoritesCheckBox, storageKey: "onlyMyFavorites", isCheckbox: true},
+        {element: sortingDropDownMenu, storageKey: "sorting"},
+        {element: ownerSelection, storageKey: "ownerFilter"},
+        {element: databaseSelection, storageKey: "databaseFilter"}
+    ];
+
     websiteStorage.officialRoles = await fetch("./officialCharacters.json").then(res => res.json());
     adjustLocalStorage();
     saveLocalStorage();
@@ -259,14 +270,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     for (const filter of document.querySelectorAll(".filter")) {
         filter.addEventListener(filter === roleSearch ? "input" : "change", function () {
-            websiteStorage.user.roleSearch = roleSearch.value;
-            websiteStorage.user.characterType = characterTypeSelection.value;
-            websiteStorage.user.scriptFilter = scriptFilterSelection.value;
-            websiteStorage.user.tagFilter = tagFilterSelection.value;
-            websiteStorage.user.onlyMyFavorites = onlyMyFavoritesCheckBox.checked;
-            websiteStorage.user.sorting = sortingDropDownMenu.value;
-            websiteStorage.user.ownerFilter = ownerSelection.value;
-            websiteStorage.user.databaseFilter = databaseSelection.value;
+            for (const binding of filterFieldBindings) {
+                websiteStorage.user[binding.storageKey] = binding.isCheckbox
+                    ? binding.element.checked
+                    : binding.element.value;
+            }
             saveLocalStorage();
             displayRoles();
         });
@@ -408,34 +416,34 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     }
 
-    function setupScriptSelection() {
+    function populateSelectOptions(selectElement, values) {
+        selectElement.innerText = "";
+        for (const value of values) {
+            const option = document.createElement("option");
+            option.setAttribute("value", value);
+            option.textContent = value;
+            selectElement.append(option);
+        }
+    }
 
+    function setupScriptSelection() {
         const scripts = ["All"];
         for (const role of getRoleIdeas()) {
             if (!scripts.includes(role.script) && role.script) {
                 scripts.push(role.script);
             }
         }
-
-        scriptFilterSelection.textContent = "";
-
-        for (const script of scripts) {
-            const option = document.createElement("option");
-            option.setAttribute("value", script);
-            option.textContent = script;
-            scriptFilterSelection.append(option);
-        }
+        populateSelectOptions(scriptFilterSelection, scripts);
     }
 
     function setFilters() {
-        roleSearch.value = websiteStorage.user.roleSearch;
-        characterTypeSelection.value = websiteStorage.user.characterType;
-        sortingDropDownMenu.value = websiteStorage.user.sorting;
-        onlyMyFavoritesCheckBox.checked = websiteStorage.user.onlyMyFavorites;
-        scriptFilterSelection.value = websiteStorage.user.scriptFilter;
-        tagFilterSelection.value = websiteStorage.user.tagFilter;
-        ownerSelection.value = websiteStorage.user.ownerFilter;
-        databaseSelection.value = websiteStorage.user.databaseFilter;
+        for (const binding of filterFieldBindings) {
+            if (binding.isCheckbox) {
+                binding.element.checked = websiteStorage.user[binding.storageKey];
+            } else {
+                binding.element.value = websiteStorage.user[binding.storageKey];
+            }
+        }
     }
 
     document.getElementById("switch-role-creation").addEventListener("click", function () {
@@ -549,14 +557,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     function setupTagFilterSelection() {
-        tagFilterSelection.innerText = "";
         const modifiedAllTags = ["None"].concat(allTags).concat("No Tags");
-        for (const tag of modifiedAllTags) {
-            const option = document.createElement("option");
-            option.innerHTML = tag;
-            option.setAttribute("value", tag);
-            tagFilterSelection.append(option);
-        }
+        populateSelectOptions(tagFilterSelection, modifiedAllTags);
     }
 
     function addRoleViaJson(role) {
@@ -641,7 +643,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     function setupOwnerFilterSelection() {
         ownerFilter.style.display = "flex";
-        ownerSelection.innerText = "";
         const allOwners = ["All"];
         for (const role of getRoleIdeas()) {
             for (const owner of role.owner) {
@@ -650,12 +651,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 }
             }
         }
-        for (const owner of allOwners) {
-            const option = document.createElement("option");
-            option.innerHTML = owner;
-            option.setAttribute("value", owner);
-            ownerSelection.append(option);
-        }
+        populateSelectOptions(ownerSelection, allOwners);
     }
 
     function displayRoleCreation() {
