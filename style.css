@@ -314,12 +314,6 @@ input[type="number"] {
         }
     }
 
-    .clocktower-script-tool-link, .script-tool {
-        display: flex;
-        justify-content: center;
-        margin-top: 2rem;
-    }
-
     .blue {
         background-color: lightskyblue;
     }
@@ -1007,7 +1001,10 @@ input[type="number"] {
                 justify-content: center;
                 align-items: center;
                 margin: 3px 0;
-                height: 2.5rem;
+                padding: 0.25rem;
+                overflow-wrap: break-word;
+                word-break: break-word;
+                max-width: 100%;
             }
 
             .selected {

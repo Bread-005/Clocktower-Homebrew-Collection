@@ -36,9 +36,9 @@ document.addEventListener('DOMContentLoaded', function () {
             if (role.image === "") {
                 img.setAttribute("src", "https://i.postimg.cc/qM09f8cD/placeholder-icon.png");
             } else if (role.name === "Minion info") {
-                img.setAttribute("src", "https://clocktower.live/img/minioninfo.43365de6.webp");
+                img.setAttribute("src", "./icons/minioninfo.webp");
             } else if (role.name === "Demon info") {
-                img.setAttribute("src", "https://clocktower.live/img/demoninfo.4669d783.webp");
+                img.setAttribute("src", "./icons/demoninfo.webp");
             } else {
                 if (websiteStorage.officialRoles.find(role1 => role1.name === role.name)) {
                     img.setAttribute("src", imagePath(role));
