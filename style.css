@@ -260,6 +260,10 @@ input[type="number"] {
         align-items: center;
         flex-direction: column;
 
+        #homebrewroles {
+            min-height: 480px;
+        }
+
         .role-div {
             margin: 5px;
             min-width: 90vw;
@@ -274,10 +278,11 @@ input[type="number"] {
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                font-size: 14px;
 
                 .clocktower-icon {
-                    width: 50px;
-                    height: 50px;
+                    width: 45px;
+                    height: 45px;
                     margin-right: 10px;
                     background: white;
                 }

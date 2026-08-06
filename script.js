@@ -146,6 +146,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         roleImage.setAttribute("alt", role.name);
 
         const roleText = document.createElement("div");
+        roleText.setAttribute("class", "role-text");
         roleText.textContent = role.name + " (" + role.characterType + "): " + role.ability;
 
         roleImageAndText.append(roleImage);
@@ -316,6 +317,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 button.setAttribute("class", "blue");
             }
             button.addEventListener("click", function () {
+                const scrollPositionBeforeRerender = window.scrollY;
                 websiteStorage.user.page = Number.parseInt(button.textContent);
                 saveLocalStorage();
                 document.querySelectorAll(".blue").forEach(element => element.classList.remove("blue"));
@@ -323,6 +325,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     button.setAttribute("class", "blue");
                 }
                 displayRoles();
+                window.scrollTo(0, scrollPositionBeforeRerender);
             });
             roleIdeaPageSelection.append(button);
         }
