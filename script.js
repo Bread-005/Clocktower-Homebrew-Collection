@@ -56,6 +56,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     const rolesDownloadButton = document.getElementById("roles-download-button");
     const loginButton = document.querySelector(".login-button");
     const ownerFilter = document.querySelector(".owner-filter");
+    const switchRoleCreationButton = document.getElementById("switch-role-creation");
+    const jsAddRoleButton = document.getElementById("js-add-role");
+    const scriptUploadInput = document.getElementById("script-upload");
+    const characterTypeSelectionDiv = document.querySelector(".character-type-selection-div");
+    const scriptFilterSelectionDiv = document.getElementById("script-filter-selection-div");
+    const tagFilterDiv = document.querySelector(".tag-div");
+    const onlyMyFavoritesDiv = document.querySelector(".only-my-favorites-div");
+    const sortingRoleDisplay = document.querySelector(".sorting-role-display");
+    const mainPage = document.querySelector(".main-page");
 
     const filterFieldBindings = [
         {element: roleSearch, storageKey: "roleSearch"},
@@ -177,27 +186,15 @@ document.addEventListener("DOMContentLoaded", async function () {
         rateButton.append(rateIcon);
 
         rateInput.addEventListener("input", function () {
-            if (rateInput.value === "") {
-                rateIcon.setAttribute("class", "fa-sharp fa-regular fa-star");
-                rateIcon.style.color = "black";
-                return;
-            }
-            rateIcon.setAttribute("class", "fa-sharp fa-star");
+            rateIcon.setAttribute("class", rateInput.value === "" ? "fa-sharp fa-regular fa-star" : "fa-sharp fa-star");
             rateIcon.style.color = "black";
         });
 
         rateButton.addEventListener("click", async function () {
-            if (rateInput.value < 0) {
-                rateInput.value = "0";
-                return;
-            }
-            if (rateInput.value > 10) {
-                rateInput.value = "10";
-                return;
-            }
             if (rateInput.value === "") {
                 return;
             }
+            rateInput.value = Math.min(Math.max(Number.parseFloat(rateInput.value), 0), 10).toString();
             if (role.rating.find(rating => rating.user === loginStorage.name)) {
                 role.rating.find(rating => rating.user === loginStorage.name).score = Number.parseFloat(rateInput.value);
             } else {
@@ -262,7 +259,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         downloadJsonButton.addEventListener("click", function () {
             getJsonString(role, true);
-            createPopup(document.querySelector(".main-page"), "Role Json copied to Clipboard", 3500, "lightblue");
+            createPopup(mainPage, "Role Json copied to Clipboard", 3500, "lightblue");
         });
 
         return downloadJsonButton;
@@ -296,7 +293,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             "Last Edited": (a, b) => Number(b.lastEdited) - Number(a.lastEdited)
         };
         const sorter = roleSorters[sortingDropDownMenu.value];
-        if (sorter) roles.sort(sorter);
+        if (sorter) {
+            roles.sort(sorter);
+        }
     }
 
     function showPages(array, pageArray) {
@@ -313,7 +312,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         for (let i = 0; i < pages; i++) {
             const button = document.createElement("button");
             button.textContent = (i + 1).toString();
-            button.classList.remove("blue");
             if (websiteStorage.user.page === Number.parseInt(button.textContent)) {
                 button.setAttribute("class", "blue");
             }
@@ -373,7 +371,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     function addRole() {
-        document.getElementById("js-add-role").addEventListener("click", handleAddRoleClick);
+        jsAddRoleButton.addEventListener("click", handleAddRoleClick);
+    }
+
+    function saveNewRole(role, inputsToClear) {
+        websiteStorage.localRoleIdeas.push(role);
+        saveLocalStorage();
+        for (const input of inputsToClear) {
+            input.value = "";
+        }
+        window.location.reload();
     }
 
     function handleAddRoleClick() {
@@ -387,11 +394,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const role = createRoleFromForm(roleNameInput.value, characterTypeInput.value, abilityTextInput.value, loginStorage.name);
         if (roleAlreadyExists(role)) return;
 
-        websiteStorage.localRoleIdeas.push(role);
-        saveLocalStorage();
-        roleNameInput.value = "";
-        abilityTextInput.value = "";
-        window.location.reload();
+        saveNewRole(role, [roleNameInput, abilityTextInput]);
     }
 
     function clearFilters() {
@@ -403,9 +406,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             websiteStorage.user.roleSearch = "";
             websiteStorage.user.characterType = "All";
             websiteStorage.user.sorting = "Newest first"
-            websiteStorage.user.authorSearch = "";
             websiteStorage.user.tagFilter = "None";
-            websiteStorage.user.onlyMyIdeas = false;
             websiteStorage.user.onlyMyFavorites = false;
             websiteStorage.user.page = 1;
             websiteStorage.user.scriptFilter = "All";
@@ -446,7 +447,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
-    document.getElementById("switch-role-creation").addEventListener("click", function () {
+    switchRoleCreationButton.addEventListener("click", function () {
         websiteStorage.user.roleCreationMode += 1;
         if (websiteStorage.user.roleCreationMode === 3) websiteStorage.user.roleCreationMode = 0;
         saveLocalStorage();
@@ -462,16 +463,16 @@ document.addEventListener("DOMContentLoaded", async function () {
             const role = JSON.parse(text);
 
             if (!role.id || !role.name || !role.ability || !role.team) {
-                createPopup(document.querySelector(".main-page"), "every role has to have these attributes: id, name, ability, team");
+                createPopup(mainPage, "every role has to have these attributes: id, name, ability, team");
                 return;
             }
             addRoleViaJson(role);
         } catch (err) {
-            createPopup(document.querySelector(".main-page"), "Your role has to be valid JSON!");
+            createPopup(mainPage, "Your role has to be valid JSON!");
         }
     });
 
-    document.getElementById("script-upload").addEventListener("change", function (event) {
+    scriptUploadInput.addEventListener("change", function (event) {
         const file = event.target.files[0];
         if (!file) return;
 
@@ -545,13 +546,13 @@ document.addEventListener("DOMContentLoaded", async function () {
         function setup() {
             if (window.innerWidth <= 400) {
                 roleFilter.append(roleSearch);
-                document.querySelector(".character-type-selection-div").style.marginTop = "10px";
-                roleFilter.append(document.querySelector(".character-type-selection-div"));
-                roleFilter.append(document.getElementById("script-filter-selection-div"));
-                roleFilter.append(document.querySelector(".tag-div"));
-                roleFilter.append(document.querySelector(".only-my-favorites-div"));
+                characterTypeSelectionDiv.style.marginTop = "10px";
+                roleFilter.append(characterTypeSelectionDiv);
+                roleFilter.append(scriptFilterSelectionDiv);
+                roleFilter.append(tagFilterDiv);
+                roleFilter.append(onlyMyFavoritesDiv);
                 roleFilter.append(clearFiltersButton);
-                roleFilter.append(document.querySelector(".sorting-role-display"));
+                roleFilter.append(sortingRoleDisplay);
             }
         }
     }
@@ -581,10 +582,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         role.isPrivate = true;
         role.owner = [loginStorage.name];
 
-        websiteStorage.localRoleIdeas.push(role);
-        saveLocalStorage();
-        jsonInputTextarea.value = "";
-        window.location.reload();
+        saveNewRole(role, [jsonInputTextarea]);
     }
 
     loginButton.addEventListener("click", () => window.location = "https://bread-005.github.io/login-page/index.html");
