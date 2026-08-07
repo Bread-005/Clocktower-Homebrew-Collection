@@ -81,6 +81,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     adjustLocalStorage();
     saveLocalStorage();
 
+    mobileSupportSetup();
+    addRole();
+    setupScriptSelection();
+    setupTagFilterSelection();
+    setupOwnerFilterSelection();
+    clearFilters();
+    displayRoles();
+    displayRoleCreation();
+
     if (await databaseIsConnected()) {
         websiteStorage.roleIdeas = await fetch(API_URL + '/roles').then(res => res.json());
         saveLocalStorage();
@@ -98,19 +107,13 @@ document.addEventListener("DOMContentLoaded", async function () {
             headers: {'Content-Type': 'application/json'}
         });
 
+        setupScriptSelection();
+        setupOwnerFilterSelection();
+        displayRoles();
     } else {
         websiteStorage.user.ownerFilter = "All";
         saveLocalStorage();
     }
-
-    mobileSupportSetup();
-    addRole();
-    setupScriptSelection();
-    setupTagFilterSelection();
-    setupOwnerFilterSelection();
-    clearFilters();
-    displayRoles();
-    displayRoleCreation();
 
     function displayRoles() {
         setFilters();
