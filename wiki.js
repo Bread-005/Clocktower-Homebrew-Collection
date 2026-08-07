@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function nightOrderInfoButtonListener(button, text) {
         button.addEventListener("click", function () {
-            text.style.display = text.style.display === "flex" ? "none" : "flex";
+            text.style.display = text.style.display === "block" ? "none" : "block";
         });
     }
 
@@ -326,6 +326,8 @@ document.addEventListener("DOMContentLoaded", function () {
             await updateRole(role, "firstNight firstNightReminder otherNight otherNightReminder");
             saveLocalStorage();
             showNightOrder();
+            fillFirstNightInfoTextArea();
+            fillOtherNightInfoTextArea();
         });
     }
 
@@ -643,25 +645,52 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    function getNightOrderNeighbors(sortedOfficialRoles, nightOrderValue, nightOrderProperty) {
+        let previousRole = null;
+        let nextRole = null;
+        if (!nightOrderValue) {
+            return {previousRole, nextRole};
+        }
+        for (const officialRole of sortedOfficialRoles) {
+            if (officialRole[nightOrderProperty] <= nightOrderValue) {
+                previousRole = officialRole;
+            }
+            if (officialRole[nightOrderProperty] > nightOrderValue && !nextRole) {
+                nextRole = officialRole;
+            }
+        }
+        return {previousRole, nextRole};
+    }
+
     function fillFirstNightInfoTextArea() {
+        firstNightInfoText.innerHTML = "";
         const firstNightRoles = [];
         for (const role1 of websiteStorage.officialRoles) {
             if (role1.firstNight) firstNightRoles.push(role1);
         }
         firstNightRoles.sort((a, b) => a.firstNight - b.firstNight);
+        const {previousRole, nextRole} = getNightOrderNeighbors(firstNightRoles, role.firstNight, "firstNight");
         for (const role1 of firstNightRoles) {
-            firstNightInfoText.innerHTML += role1.firstNight + " " + role1.name + "<br>";
+            const line = role1.firstNight + " " + role1.name;
+            firstNightInfoText.innerHTML += role1 === previousRole || role1 === nextRole
+                ? `<span class="night-order-neighbor-highlight">${line}</span><br>`
+                : line + "<br>";
         }
     }
 
     function fillOtherNightInfoTextArea() {
+        otherNightInfoText.innerHTML = "";
         const otherNightRoles = [];
         for (const role1 of websiteStorage.officialRoles) {
             if (role1.otherNight) otherNightRoles.push(role1);
         }
         otherNightRoles.sort((a, b) => a.otherNight - b.otherNight);
+        const {previousRole, nextRole} = getNightOrderNeighbors(otherNightRoles, role.otherNight, "otherNight");
         for (const role1 of otherNightRoles) {
-            otherNightInfoText.innerHTML += role1.otherNight + " " + role1.name + "<br>";
+            const line = role1.otherNight + " " + role1.name;
+            otherNightInfoText.innerHTML += role1 === previousRole || role1 === nextRole
+                ? `<span class="night-order-neighbor-highlight">${line}</span><br>`
+                : line + "<br>";
         }
     }
 

@@ -509,6 +509,11 @@ input[type="number"] {
             width: 160px;
             height: 220px;
             padding: 4px;
+
+            .night-order-neighbor-highlight {
+                color: yellow;
+                font-weight: bold;
+            }
         }
 
         .night-order-number {
