@@ -114,26 +114,22 @@ input[type="number"] {
 
     .main-page-top {
         text-align: center;
-    }
-
-    .sub-page-top {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-
-        .login-area {
-            position: absolute;
-            right: 0;
-            margin-right: 4.5rem;
-            text-align: center;
-        }
+        margin-bottom: 3rem;
     }
 
     .role-creation-div {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        position: relative;
+
+        .login-area {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin-right: 4.5rem;
+            text-align: center;
+        }
 
         .change-role-creation-div {
             display: flex;
