@@ -96,7 +96,7 @@ async function updateRole(role, attributes, updateLastEdited = true) {
     await fetch(API_URL + '/roles/update', {
         method: "PUT",
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({role: role, attributes: attributes})
+        body: JSON.stringify({role: role, attributes: attributes, credentials: loginStorage})
     });
     websiteStorage.roleIdeas = await fetch(API_URL + '/roles').then(res => res.json());
 }
@@ -107,7 +107,7 @@ async function createRole(role) {
     await fetch(API_URL + '/roles/create', {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(role)
+        body: JSON.stringify({role: role, credentials: loginStorage})
     });
     websiteStorage.roleIdeas = await fetch(API_URL + '/roles').then(res => res.json());
 }
@@ -118,7 +118,7 @@ async function deleteRole(role) {
     await fetch(API_URL + '/roles/delete', {
         method: "DELETE",
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(role)
+        body: JSON.stringify({createdAt: role.createdAt, credentials: loginStorage})
     });
     websiteStorage.roleIdeas = await fetch(API_URL + '/roles').then(res => res.json());
 }

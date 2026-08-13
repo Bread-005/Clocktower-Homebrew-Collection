@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
     editScript();
     editHowToRun();
     howToRunInput.value = role.howToRun;
-    howToRunText.innerHTML = role.howToRun;
+    howToRunText.textContent = role.howToRun;
     showPersonalRating();
     displayComments();
     addComments();
