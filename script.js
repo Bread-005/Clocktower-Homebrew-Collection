@@ -91,18 +91,18 @@ document.addEventListener("DOMContentLoaded", async function () {
     displayRoleCreation();
 
     if (await databaseIsConnected()) {
-        websiteStorage.roleIdeas = await fetch(API_URL + '/roles').then(res => res.json());
+        websiteStorage.roleIdeas = await fetch(API_URL + '/clocktower-homebrew-collection/roles').then(res => res.json());
         saveLocalStorage();
         document.getElementById("current-username-display").textContent = "Username: " + loginStorage.name;
         loginButton.textContent = "logout";
 
-        const users = await fetch(API_URL + "/users").then(res => res.json());
+        const users = await fetch(API_URL + "/clocktower-homebrew-collection/users").then(res => res.json());
         if (loginStorage.password !== users.find(user => user.name === loginStorage.name)?.password) {
             window.location = "https://bread-005.github.io/login-page/index.html";
             return;
         }
 
-        await fetch(API_URL + '/users/update/' + loginStorage.name, {
+        await fetch(API_URL + '/clocktower-homebrew-collection/users/update/' + loginStorage.name, {
             method: "PUT",
             headers: {'Content-Type': 'application/json'}
         });

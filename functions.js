@@ -93,34 +93,34 @@ async function updateRole(role, attributes, updateLastEdited = true) {
     }
     if (!await databaseIsConnected()) return;
     const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
-    await fetch(API_URL + '/roles/update', {
+    await fetch(API_URL + '/clocktower-homebrew-collection/roles/update', {
         method: "PUT",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({role: role, attributes: attributes, credentials: loginStorage})
     });
-    websiteStorage.roleIdeas = await fetch(API_URL + '/roles').then(res => res.json());
+    websiteStorage.roleIdeas = await fetch(API_URL + '/clocktower-homebrew-collection/roles').then(res => res.json());
 }
 
 async function createRole(role) {
     if (!await databaseIsConnected()) return;
     const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
-    await fetch(API_URL + '/roles/create', {
+    await fetch(API_URL + '/clocktower-homebrew-collection/roles/create', {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({role: role, credentials: loginStorage})
     });
-    websiteStorage.roleIdeas = await fetch(API_URL + '/roles').then(res => res.json());
+    websiteStorage.roleIdeas = await fetch(API_URL + '/clocktower-homebrew-collection/roles').then(res => res.json());
 }
 
 async function deleteRole(role) {
     if (!await databaseIsConnected()) return;
     const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
-    await fetch(API_URL + '/roles/delete', {
+    await fetch(API_URL + '/clocktower-homebrew-collection/roles/delete', {
         method: "DELETE",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({createdAt: role.createdAt, credentials: loginStorage})
     });
-    websiteStorage.roleIdeas = await fetch(API_URL + '/roles').then(res => res.json());
+    websiteStorage.roleIdeas = await fetch(API_URL + '/clocktower-homebrew-collection/roles').then(res => res.json());
 }
 
 const API_URL = "https://clocktower-homebrew-collection-13pz.onrender.com";
@@ -148,7 +148,7 @@ const n = "\n";
 
 async function databaseIsConnected() {
     try {
-        const response = await fetch(API_URL + "/roles");
+        const response = await fetch(API_URL + "/clocktower-homebrew-collection/roles");
         return response.ok;
     } catch (err) {
         return false;
