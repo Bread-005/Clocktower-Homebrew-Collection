@@ -123,7 +123,7 @@ async function deleteRole(role) {
     websiteStorage.roleIdeas = await fetch(API_URL + '/clocktower-homebrew-collection/roles').then(res => res.json());
 }
 
-const API_URL = "https://clocktower-homebrew-collection-13pz.onrender.com";
+const API_URL = "https://hobby-projects-api.onrender.com";
 
 function createPopup(parentElement, text, duration = 10000, backgroundColor = "red") {
     const popup = document.createElement("div");
