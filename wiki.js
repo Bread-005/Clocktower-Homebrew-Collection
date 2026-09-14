@@ -1,6 +1,6 @@
 import {
     getJsonString, allTags, updateRole, deleteRole, createPopup, getRoleIdeas, saveLocalStorage, databaseIsConnected,
-    createRole, websiteStorage, roleAlreadyExists, isOfficial, loginStorage, getTeamColor
+    websiteStorage, roleAlreadyExists, isOfficial, loginStorage, getTeamColor
 } from "./functions.js";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -772,19 +772,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
             role.isPrivate = privacyCheckbox.checked;
+            await updateRole(role, "isPrivate");
             saveLocalStorage();
             loadPrivacyStatus();
-
-            if (role.isPrivate) {
-                websiteStorage.localRoleIdeas.push(role);
-                saveLocalStorage();
-                await deleteRole(role);
-            }
-            if (!role.isPrivate) {
-                websiteStorage.localRoleIdeas = websiteStorage.localRoleIdeas.filter(role1 => role1.createdAt !== role.createdAt);
-                saveLocalStorage();
-                await createRole(role);
-            }
             createPopup(document.querySelector(".wiki"), "Successfully made role " + (role.isPrivate ? "private" : "public"), 5000, "green");
         });
     }

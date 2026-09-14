@@ -103,7 +103,6 @@ async function updateRole(role, attributes, updateLastEdited = true) {
 
 async function createRole(role) {
     if (!await databaseIsConnected()) return;
-    const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
     await fetch(API_URL + '/clocktower-homebrew-collection/roles/create', {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
@@ -114,7 +113,6 @@ async function createRole(role) {
 
 async function deleteRole(role) {
     if (!await databaseIsConnected()) return;
-    const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
     await fetch(API_URL + '/clocktower-homebrew-collection/roles/delete', {
         method: "DELETE",
         headers: {'Content-Type': 'application/json'},

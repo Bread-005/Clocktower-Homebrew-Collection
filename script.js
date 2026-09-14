@@ -1,5 +1,5 @@
 import {
-    getJsonString, allTags, getTeamColor, updateRole, API_URL, createPopup, databaseIsConnected,
+    getJsonString, allTags, getTeamColor, updateRole, createRole, API_URL, createPopup, databaseIsConnected,
     getRoleIdeas, websiteStorage, saveLocalStorage, n, roleAlreadyExists, loginStorage
 } from "./functions.js";
 import {
@@ -93,6 +93,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (await databaseIsConnected()) {
         websiteStorage.roleIdeas = await fetch(API_URL + '/clocktower-homebrew-collection/roles').then(res => res.json());
         saveLocalStorage();
+        await migrateOfflineRolesToDatabase();
         document.getElementById("current-username-display").textContent = "Username: " + loginStorage.name;
         loginButton.textContent = "logout";
 
@@ -380,16 +381,19 @@ document.addEventListener("DOMContentLoaded", async function () {
         jsAddRoleButton.addEventListener("click", handleAddRoleClick);
     }
 
-    function saveNewRole(role, inputsToClear) {
-        websiteStorage.localRoleIdeas.push(role);
-        saveLocalStorage();
+    async function saveNewRole(role, inputsToClear) {
+        if (await databaseIsConnected()) {
+            await createRole(role);
+        } else {
+            websiteStorage.localRoleIdeas.push(role);
+            saveLocalStorage();
+        }
         for (const input of inputsToClear) {
             input.value = "";
         }
-        window.location.reload();
     }
 
-    function handleAddRoleClick() {
+    async function handleAddRoleClick() {
         const roleNameInput = document.getElementById("role-name");
         const characterTypeInput = document.getElementById("character-types");
         const abilityTextInput = document.getElementById("ability-text");
@@ -400,7 +404,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         const role = createRoleFromForm(roleNameInput.value, characterTypeInput.value, abilityTextInput.value, loginStorage.name);
         if (roleAlreadyExists(role)) return;
 
-        saveNewRole(role, [roleNameInput, abilityTextInput]);
+        await saveNewRole(role, [roleNameInput, abilityTextInput]);
+        window.location.reload();
     }
 
     function clearFilters() {
@@ -460,7 +465,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         displayRoleCreation();
     });
 
-    jsonAddRoleButton.addEventListener("click", function () {
+    jsonAddRoleButton.addEventListener("click", async function () {
         let text = jsonInputTextarea.value.replaceAll('""', '"');
         if (text[0] === '"') text = text.substring(1);
         if (text[text.length - 1] === '"') text = text.substring(0, text.length - 1);
@@ -472,7 +477,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                 createPopup(mainPage, "every role has to have these attributes: id, name, ability, team");
                 return;
             }
-            addRoleViaJson(role);
+            await addRoleViaJson(role);
+            window.location.reload();
         } catch (err) {
             createPopup(mainPage, "Your role has to be valid JSON!");
         }
@@ -485,7 +491,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const reader = new FileReader();
         reader.readAsText(file);
 
-        reader.addEventListener("load", function (event) {
+        reader.addEventListener("load", async function (event) {
             const array = JSON.parse(event.target.result.toString());
             let script = "";
 
@@ -503,8 +509,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                     object.id = object.name.toLowerCase().replaceAll(" ", "_");
                 }
                 if (script) object.script = script;
-                addRoleViaJson(object);
+                await addRoleViaJson(object);
             }
+            window.location.reload();
         });
     });
 
@@ -568,7 +575,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         populateSelectOptions(tagFilterSelection, modifiedAllTags);
     }
 
-    function addRoleViaJson(role) {
+    async function addRoleViaJson(role) {
         role.characterType = role.team[0].toUpperCase() + role.team.substring(1);
         if (roleAlreadyExists(role)) return;
         role.team = undefined;
@@ -588,7 +595,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         role.isPrivate = true;
         role.owner = [loginStorage.name];
 
-        saveNewRole(role, [jsonInputTextarea]);
+        await saveNewRole(role, [jsonInputTextarea]);
     }
 
     loginButton.addEventListener("click", () => window.location = "https://bread-005.github.io/login-page/index.html");
@@ -643,6 +650,19 @@ document.addEventListener("DOMContentLoaded", async function () {
             migrateRoleOwnership(role);
             migrateRoleLastEdited(role);
         }
+    }
+
+    // Roles created while offline used to stay browser-local forever; once a database
+    // connection exists again, move them into the database so they follow the account.
+    async function migrateOfflineRolesToDatabase() {
+        if (websiteStorage.localRoleIdeas.length === 0) return;
+
+        for (const role of websiteStorage.localRoleIdeas) {
+            await createRole(role);
+        }
+        websiteStorage.localRoleIdeas = [];
+        websiteStorage.roleIdeas = await fetch(API_URL + '/clocktower-homebrew-collection/roles').then(res => res.json());
+        saveLocalStorage();
     }
 
     function setupOwnerFilterSelection() {
