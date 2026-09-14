@@ -90,9 +90,9 @@ const StevenApprovedOrder = ["You start knowing", "Each night,", "Each night*,",
 async function updateRole(role, attributes, updateLastEdited = true) {
     if (updateLastEdited) {
         role.lastEdited = Date.now().toString();
+        attributes += " lastEdited";
     }
     if (!await databaseIsConnected()) return;
-    const websiteStorage = JSON.parse(localStorage.getItem("websiteStorage1"));
     await fetch(API_URL + '/clocktower-homebrew-collection/roles/update', {
         method: "PUT",
         headers: {'Content-Type': 'application/json'},
