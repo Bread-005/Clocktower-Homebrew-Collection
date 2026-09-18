@@ -36,7 +36,7 @@ All shared logic lives here and is imported by the page scripts. Key exports:
 - `API_URL` — backend base URL (`https://hobby-projects-api.onrender.com`)
 - `websiteStorage` — parsed `localStorage` object keyed as `"websiteStorage1"`;
   shape: `{ localRoleIdeas, roleIdeas, officialRoles, user, archive }`
-- `loginStorage` — parsed `localStorage` object keyed as `"login-page"`; shape: `{ name, password }`
+- `loginStorage` — parsed `localStorage` object keyed as `"login-page"`; shape: `{ name, token }`
 - `saveLocalStorage()` — persists `websiteStorage` back to `localStorage`
 - `getRoleIdeas()` — merges `roleIdeas` (remote) and `localRoleIdeas` (offline) into one array
 - `databaseIsConnected()` — async check against the API; app degrades gracefully when offline
@@ -64,8 +64,11 @@ Pure role-data logic with no DOM dependencies, used by `script.js` when creating
 1. On page load, `websiteStorage` is read from `localStorage`.
 2. If the backend is reachable, `roleIdeas` is refreshed from the API and merged with `localRoleIdeas`.
 3. All UI mutations call `saveLocalStorage()` immediately to keep the local copy in sync.
-4. Authentication is checked by comparing `loginStorage.password` against the `/users` endpoint on each page load;
-   failed auth redirects to the login page.
+4. Authentication is checked by sending `loginStorage.token` to the backend's `POST /session/verify` endpoint on each
+   page load; failed/expired auth redirects to the login page. The role create/update/delete endpoints separately
+   authenticate each request by forwarding `loginStorage` as `credentials` and having the backend look up the token
+   in its `sessions` collection. The login/logout button also calls `POST /session/delete` before redirecting to the
+   login page, invalidating the session server-side.
 
 ### Navigation
 

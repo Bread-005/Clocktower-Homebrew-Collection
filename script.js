@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         window.location.reload();
     }
 
-    if (!localStorage.getItem("login-page") || !loginStorage.name) {
+    if (!localStorage.getItem("login-page") || !loginStorage.name || !loginStorage.token) {
         window.location = "https://bread-005.github.io/login-page/index.html";
         return;
     }
@@ -97,8 +97,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.getElementById("current-username-display").textContent = "Username: " + loginStorage.name;
         loginButton.textContent = "logout";
 
-        const users = await fetch(API_URL + "/users").then(res => res.json());
-        if (loginStorage.password !== users.find(user => user.name === loginStorage.name)?.password) {
+        const session = await fetch(API_URL + "/session/verify", {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({token: loginStorage.token})
+        }).then(res => res.json());
+        if (!session.isValid) {
             window.location = "https://bread-005.github.io/login-page/index.html";
             return;
         }
@@ -598,7 +602,16 @@ document.addEventListener("DOMContentLoaded", async function () {
         await saveNewRole(role, [jsonInputTextarea]);
     }
 
-    loginButton.addEventListener("click", () => window.location = "https://bread-005.github.io/login-page/index.html");
+    loginButton.addEventListener("click", async () => {
+        if (loginStorage.token) {
+            await fetch(API_URL + "/session/delete", {
+                method: "POST",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({token: loginStorage.token})
+            });
+        }
+        window.location = "https://bread-005.github.io/login-page/index.html";
+    });
 
     function adjustLocalStorage() {
         ensureUserDefaults();
