@@ -250,14 +250,14 @@ document.addEventListener("DOMContentLoaded", function () {
         uploadImageURL.value = role.image;
         uploadOtherImageURL.value = role.otherImage;
         document.getElementById("upload-button").addEventListener("click", async function () {
-            role.image = uploadImageURL.value.replaceAll("\\", "");
+            role.image = uploadImageURL.value.replaceAll("\\", "").trim();
             wikiRoleImage.setAttribute("src", role.image);
             uploadImageURL.value = role.image;
             await updateRole(role, "image");
             saveLocalStorage();
         });
         document.getElementById("other-upload-button").addEventListener("click", async function () {
-            role.otherImage = uploadOtherImageURL.value.replaceAll("\\", "");
+            role.otherImage = uploadOtherImageURL.value.replaceAll("\\", "").trim();
             uploadOtherImageURL.value = role.otherImage;
             await updateRole(role, "otherImage");
             saveLocalStorage();

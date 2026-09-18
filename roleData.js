@@ -50,13 +50,13 @@ function normalizeRoleImage(role) {
     if (role.otherImage === undefined) role.otherImage = "";
     if (Array.isArray(role.image)) {
         const images = role.image;
-        role.image = images[0].replaceAll("\\", "");
+        role.image = images[0].replaceAll("\\", "").trim();
         if (images.length > 1) {
-            role.otherImage = images[1].replaceAll("\\", "");
+            role.otherImage = images[1].replaceAll("\\", "").trim();
         }
     }
     if (typeof (role.image) === "string") {
-        role.image = role.image.replaceAll("\\", "");
+        role.image = role.image.replaceAll("\\", "").trim();
     }
 }
 

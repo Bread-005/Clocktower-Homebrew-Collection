@@ -10,13 +10,13 @@ function getJsonString(role, copyJsonToClipboard = false) {
     }
     if (role.image && role.otherImage) {
         jsonRole.image = [
-            role.image,
-            role.otherImage
+            role.image.trim(),
+            role.otherImage.trim()
         ];
     } else if (role.image) {
-        jsonRole.image = role.image;
+        jsonRole.image = role.image.trim();
     } else if (role.otherImage && !role.image) {
-        jsonRole.image = role.otherImage;
+        jsonRole.image = role.otherImage.trim();
     }
     if (role.firstNight !== 0) {
         jsonRole.firstNight = role.firstNight;
