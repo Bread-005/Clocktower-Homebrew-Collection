@@ -74,7 +74,8 @@ function normalizeRoleDefaults(role) {
 }
 
 function snakeCaseIdToRoleName(id) {
-    return id.split("_").map(word => word[0].toUpperCase() + word.slice(1)).join(" ");
+    return id.split("_").filter(word => word.length > 0)
+        .map(word => word[0].toUpperCase() + word.slice(1)).join(" ");
 }
 
 function normalizeJinxes(jinxes) {
