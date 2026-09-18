@@ -667,15 +667,21 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // Roles created while offline used to stay browser-local forever; once a database
     // connection exists again, move them into the database so they follow the account.
+    // Each role is removed from localRoleIdeas and persisted right after its own transfer
+    // (not in bulk at the end) so an interrupted migration cannot recreate the same role
+    // twice in the database on the next run.
     async function migrateOfflineRolesToDatabase() {
-        if (websiteStorage.localRoleIdeas.length === 0) return;
-
-        for (const role of websiteStorage.localRoleIdeas) {
-            await createRole(role);
+        while (websiteStorage.localRoleIdeas.length > 0) {
+            const role = websiteStorage.localRoleIdeas[0];
+            const alreadyMigrated = websiteStorage.roleIdeas.some(existingRole =>
+                existingRole.name === role.name && existingRole.characterType === role.characterType);
+            if (!alreadyMigrated) {
+                await createRole(role);
+                websiteStorage.roleIdeas = await fetch(API_URL + '/clocktower-homebrew-collection/roles').then(res => res.json());
+            }
+            websiteStorage.localRoleIdeas.shift();
+            saveLocalStorage();
         }
-        websiteStorage.localRoleIdeas = [];
-        websiteStorage.roleIdeas = await fetch(API_URL + '/clocktower-homebrew-collection/roles').then(res => res.json());
-        saveLocalStorage();
     }
 
     function setupOwnerFilterSelection() {
