@@ -506,6 +506,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 }
             }
 
+            const alreadyExistingRoleNames = [];
             for (const object of array) {
                 if (!object.name || !object.ability || !object.team) continue;
 
@@ -513,7 +514,13 @@ document.addEventListener("DOMContentLoaded", async function () {
                     object.id = object.name.toLowerCase().replaceAll(" ", "_");
                 }
                 if (script) object.script = script;
-                await addRoleViaJson(object);
+                const wasSkipped = await addRoleViaJson(object, true);
+                if (wasSkipped) {
+                    alreadyExistingRoleNames.push(object.name);
+                }
+            }
+            if (alreadyExistingRoleNames.length > 0) {
+                alert("These roles already exist and were skipped:" + n + alreadyExistingRoleNames.join(n));
             }
             window.location.reload();
         });
@@ -579,9 +586,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         populateSelectOptions(tagFilterSelection, modifiedAllTags);
     }
 
-    async function addRoleViaJson(role) {
+    async function addRoleViaJson(role, silent = false) {
         role.characterType = role.team[0].toUpperCase() + role.team.substring(1);
-        if (roleAlreadyExists(role)) return;
+        if (roleAlreadyExists(role, silent)) return true;
         role.team = undefined;
 
         role.createdAt = generateUniqueCreatedAt(Date.now().toString());
@@ -600,6 +607,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         role.owner = [loginStorage.name];
 
         await saveNewRole(role, [jsonInputTextarea]);
+        return false;
     }
 
     loginButton.addEventListener("click", async () => {

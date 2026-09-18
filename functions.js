@@ -170,23 +170,27 @@ function imagePath(role) {
     return "./icons/Icon_" + role.name.toLowerCase().replaceAll(" ", "").replaceAll("-", "").replaceAll("'", "") + ".png";
 }
 
-function roleAlreadyExists(role) {
+function roleAlreadyExists(role, silent = false) {
     for (const role1 of getRoleIdeas()) {
         if (role1.name === role.name && role1.characterType === role.characterType) {
-            console.log("Role already exists! \n%c" + role1.name + " (" + role1.characterType + "): %c" + role1.ability,
-                "color: " + getTeamColor(role1.characterType), "color: white");
-            alert("Changes not saved" + n + "Role already exists!" + n + role1.name + " (" + role1.characterType + "): " + role1.ability);
+            if (!silent) {
+                console.log("Role already exists! \n%c" + role1.name + " (" + role1.characterType + "): %c" + role1.ability,
+                    "color: " + getTeamColor(role1.characterType), "color: white");
+                alert("Changes not saved" + n + "Role already exists!" + n + role1.name + " (" + role1.characterType + "): " + role1.ability);
+            }
             return true;
         }
     }
-    return isOfficial(role);
+    return isOfficial(role, silent);
 }
 
-function isOfficial(role) {
+function isOfficial(role, silent = false) {
     for (const role1 of websiteStorage.officialRoles) {
         if (role1.name.toLowerCase().replaceAll("_", "").replaceAll(" ", "") ===
             role.name.toLowerCase().replaceAll("_", "").replaceAll(" ", "")) {
-            alert(role.name + " is an official role!");
+            if (!silent) {
+                alert(role.name + " is an official role!");
+            }
             return true;
         }
     }
