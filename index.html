@@ -84,10 +84,13 @@
                 </div>
                 <div class="filter-section">
                     <div id="script-filter-selection-div">
-                        <label for="script-filter-selection">Script</label>
-                        <select id="script-filter-selection" class="script-selection filter">
-                            <option value="All">All</option>
-                        </select>
+                        <label for="script-filter-selection-toggle">Script</label>
+                        <div class="multi-select-dropdown" id="script-filter-selection">
+                            <button type="button" id="script-filter-selection-toggle"
+                                    class="multi-select-toggle script-selection">All
+                            </button>
+                            <div class="multi-select-options" id="script-filter-selection-options"></div>
+                        </div>
                     </div>
                     <div class="tag-div">
                         <label for="tag-filter-selection">Tag filter</label>

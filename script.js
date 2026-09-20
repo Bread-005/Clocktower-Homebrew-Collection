@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 characterType: "All",
                 sorting: "Newest first",
                 onlyMyFavorites: false,
-                scriptFilter: "All",
+                scriptFilter: ["All"],
                 tagFilter: "None",
                 ownerFilter: "All",
                 databaseFilter: "All",
@@ -48,6 +48,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     const tagFilterSelection = document.getElementById("tag-filter-selection");
     const onlyMyFavoritesCheckBox = document.getElementById("only-my-favorites");
     const scriptFilterSelection = document.getElementById("script-filter-selection");
+    const scriptFilterSelectionToggle = document.getElementById("script-filter-selection-toggle");
+    const scriptFilterSelectionOptions = document.getElementById("script-filter-selection-options");
     const clearFiltersButton = document.getElementById("clear-filters-button");
     const ownerSelection = document.getElementById("owner-selection");
     const databaseSelection = document.getElementById("database-selection");
@@ -69,7 +71,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     const filterFieldBindings = [
         {element: roleSearch, storageKey: "roleSearch"},
         {element: characterTypeSelection, storageKey: "characterType"},
-        {element: scriptFilterSelection, storageKey: "scriptFilter"},
         {element: tagFilterSelection, storageKey: "tagFilter"},
         {element: onlyMyFavoritesCheckBox, storageKey: "onlyMyFavorites", isCheckbox: true},
         {element: sortingDropDownMenu, storageKey: "sorting"},
@@ -84,6 +85,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     mobileSupportSetup();
     addRole();
     setupScriptSelection();
+    setupScriptFilterToggle();
     setupTagFilterSelection();
     setupOwnerFilterSelection();
     clearFilters();
@@ -360,7 +362,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     function roleMatchesScriptFilter(role) {
-        return scriptFilterSelection.value === "All" || role.script === scriptFilterSelection.value;
+        return websiteStorage.user.scriptFilter.includes("All") || websiteStorage.user.scriptFilter.includes(role.script);
     }
 
     function roleMatchesOwnerFilter(role) {
@@ -413,8 +415,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     function clearFilters() {
-        if (!getRoleIdeas().find(role => role.script === websiteStorage.user.scriptFilter)) {
-            websiteStorage.user.scriptFilter = "All";
+        if (!websiteStorage.user.scriptFilter.includes("All") &&
+            !websiteStorage.user.scriptFilter.some(script => getRoleIdeas().find(role => role.script === script))) {
+            websiteStorage.user.scriptFilter = ["All"];
             saveLocalStorage();
         }
         clearFiltersButton.addEventListener("click", function () {
@@ -424,10 +427,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             websiteStorage.user.tagFilter = "None";
             websiteStorage.user.onlyMyFavorites = false;
             websiteStorage.user.page = 1;
-            websiteStorage.user.scriptFilter = "All";
+            websiteStorage.user.scriptFilter = ["All"];
             websiteStorage.user.ownerFilter = "All";
             websiteStorage.user.databaseFilter = "All";
             saveLocalStorage();
+            setupScriptSelection();
             displayRoles();
         });
     }
@@ -449,7 +453,77 @@ document.addEventListener("DOMContentLoaded", async function () {
                 scripts.push(role.script);
             }
         }
-        populateSelectOptions(scriptFilterSelection, scripts);
+
+        scriptFilterSelectionOptions.innerHTML = "";
+        for (const script of scripts) {
+            scriptFilterSelectionOptions.append(createScriptFilterOption(script));
+        }
+        updateScriptFilterToggleLabel();
+    }
+
+    function createScriptFilterOption(script) {
+        const label = document.createElement("label");
+
+        const checkbox = document.createElement("input");
+        checkbox.setAttribute("type", "checkbox");
+        checkbox.value = script;
+        checkbox.checked = websiteStorage.user.scriptFilter.includes(script);
+
+        checkbox.addEventListener("change", function () {
+            handleScriptFilterCheckboxChange(script, checkbox.checked);
+        });
+
+        label.append(checkbox, document.createTextNode(script));
+        return label;
+    }
+
+    function handleScriptFilterCheckboxChange(script, isChecked) {
+        if (script === "All") {
+            websiteStorage.user.scriptFilter = isChecked ? ["All"] : [];
+        } else {
+            websiteStorage.user.scriptFilter = websiteStorage.user.scriptFilter.filter(value => value !== "All");
+            if (isChecked) {
+                websiteStorage.user.scriptFilter.push(script);
+            } else {
+                websiteStorage.user.scriptFilter = websiteStorage.user.scriptFilter.filter(value => value !== script);
+            }
+        }
+        if (websiteStorage.user.scriptFilter.length === 0) {
+            websiteStorage.user.scriptFilter = ["All"];
+        }
+
+        saveLocalStorage();
+        setupScriptSelection();
+        displayRoles();
+    }
+
+    function getScriptFilterLabel() {
+        const selectedScripts = websiteStorage.user.scriptFilter;
+        if (selectedScripts.includes("All")) {
+            return "All";
+        }
+        if (selectedScripts.length === 1) {
+            return selectedScripts[0];
+        }
+        return selectedScripts.length + " selected scripts";
+    }
+
+    function updateScriptFilterToggleLabel() {
+        scriptFilterSelectionToggle.textContent = getScriptFilterLabel();
+        scriptFilterSelectionToggle.setAttribute("title", websiteStorage.user.scriptFilter.join(", "));
+    }
+
+    function setupScriptFilterToggle() {
+        scriptFilterSelectionToggle.addEventListener("click", function (event) {
+            event.stopPropagation();
+            scriptFilterSelectionOptions.classList.toggle("open");
+        });
+
+        document.addEventListener("click", function (event) {
+            if (!scriptFilterSelection.contains(event.target)) {
+                scriptFilterSelectionOptions.classList.remove("open");
+            }
+        });
     }
 
     function setFilters() {
@@ -538,7 +612,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 hour: "2-digit",
                 minute: "2-digit",
                 second: "2-digit"
-            }) + " - " + (scriptFilterSelection.value === "All" ? "All Roles" : scriptFilterSelection.value + " Roles")
+            }) + " - " + getScriptFilterLabel() + (websiteStorage.user.scriptFilter.length === 1 ? " Roles" : "")
         }
         content += JSON.stringify(meta) + "," + n;
 
@@ -636,7 +710,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 characterType: "All",
                 sorting: "Newest first",
                 onlyMyFavorites: false,
-                scriptFilter: "All",
+                scriptFilter: ["All"],
                 tagFilter: "None",
                 ownerFilter: "All",
                 databaseFilter: "All",
@@ -651,6 +725,11 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
         if (!websiteStorage.user.roleCreationMode) {
             websiteStorage.user.roleCreationMode = 0;
+        }
+        if (!Array.isArray(websiteStorage.user.scriptFilter)) {
+            websiteStorage.user.scriptFilter = websiteStorage.user.scriptFilter
+                ? [websiteStorage.user.scriptFilter]
+                : ["All"];
         }
     }
 
