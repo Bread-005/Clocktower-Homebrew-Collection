@@ -50,6 +50,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     const scriptFilterSelection = document.getElementById("script-filter-selection");
     const scriptFilterSelectionToggle = document.getElementById("script-filter-selection-toggle");
     const scriptFilterSelectionOptions = document.getElementById("script-filter-selection-options");
+    const scriptFilterSelectionOptionsList = document.getElementById("script-filter-selection-options-list");
+    const scriptFilterSelectionSearch = document.getElementById("script-filter-selection-search");
     const clearFiltersButton = document.getElementById("clear-filters-button");
     const ownerSelection = document.getElementById("owner-selection");
     const databaseSelection = document.getElementById("database-selection");
@@ -454,15 +456,17 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         }
 
-        scriptFilterSelectionOptions.innerHTML = "";
+        scriptFilterSelectionOptionsList.innerHTML = "";
         for (const script of scripts) {
-            scriptFilterSelectionOptions.append(createScriptFilterOption(script));
+            scriptFilterSelectionOptionsList.append(createScriptFilterOption(script));
         }
         updateScriptFilterToggleLabel();
+        filterScriptOptionsBySearch();
     }
 
     function createScriptFilterOption(script) {
         const label = document.createElement("label");
+        label.setAttribute("data-script-name", script.toLowerCase());
 
         const checkbox = document.createElement("input");
         checkbox.setAttribute("type", "checkbox");
@@ -475,6 +479,14 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         label.append(checkbox, document.createTextNode(script));
         return label;
+    }
+
+    function filterScriptOptionsBySearch() {
+        const searchTerm = scriptFilterSelectionSearch.value.trim().toLowerCase();
+        for (const label of scriptFilterSelectionOptionsList.children) {
+            const matchesSearch = label.getAttribute("data-script-name").includes(searchTerm);
+            label.classList.toggle("hidden-by-search", !matchesSearch);
+        }
     }
 
     function handleScriptFilterCheckboxChange(script, isChecked) {
@@ -516,8 +528,20 @@ document.addEventListener("DOMContentLoaded", async function () {
     function setupScriptFilterToggle() {
         scriptFilterSelectionToggle.addEventListener("click", function (event) {
             event.stopPropagation();
+            const isOpening = !scriptFilterSelectionOptions.classList.contains("open");
             scriptFilterSelectionOptions.classList.toggle("open");
+            if (isOpening) {
+                scriptFilterSelectionSearch.value = "";
+                filterScriptOptionsBySearch();
+                scriptFilterSelectionSearch.focus();
+            }
         });
+
+        scriptFilterSelectionSearch.addEventListener("click", function (event) {
+            event.stopPropagation();
+        });
+
+        scriptFilterSelectionSearch.addEventListener("input", filterScriptOptionsBySearch);
 
         document.addEventListener("click", function (event) {
             if (!scriptFilterSelection.contains(event.target)) {
