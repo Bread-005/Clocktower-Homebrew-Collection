@@ -108,7 +108,13 @@ document.addEventListener("DOMContentLoaded", function () {
         for (const comment of role.comments) {
             const list = document.createElement("li");
             list.setAttribute("class", "comment");
-            list.textContent = comment.text;
+
+            const commentAuthor = document.createElement("strong");
+            commentAuthor.setAttribute("class", "comment-author");
+            commentAuthor.textContent = (comment.owner || "Unknown") + ": ";
+            list.append(commentAuthor);
+            list.append(document.createTextNode(comment.text));
+
             const deleteButton = document.createElement("button");
             deleteButton.style.marginLeft = "10px";
 
