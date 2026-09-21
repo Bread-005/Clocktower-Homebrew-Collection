@@ -372,8 +372,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     function roleMatchesDatabaseFilter(role) {
+        if (role.isPrivate && !role.owner.includes(loginStorage.name)) {
+            return false;
+        }
         if (websiteStorage.user.databaseFilter === "Only Private") {
-            return role.isPrivate && role.owner.includes(loginStorage.name);
+            return role.isPrivate;
         }
         if (websiteStorage.user.databaseFilter === "Only Public") {
             return !role.isPrivate;
