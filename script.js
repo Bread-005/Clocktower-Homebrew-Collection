@@ -715,14 +715,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         return false;
     }
 
-    loginButton.addEventListener("click", async () => {
-        if (loginStorage.token) {
-            await fetch(API_URL + "/session/delete", {
-                method: "POST",
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({token: loginStorage.token})
-            });
-        }
+    loginButton.addEventListener("click", () => {
         window.location = "https://bread-005.github.io/login-page/index.html";
     });
 
