@@ -357,6 +357,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (websiteStorage.officialRoles.map(role => role.name).includes(websiteStorage.scriptTool[i].roles[j].name)) continue;
                 websiteStorage.scriptTool[i].roles[j] = allHomebrewRoles.find(role => role.createdAt === websiteStorage.scriptTool[i].roles[j].createdAt);
             }
+            websiteStorage.scriptTool[i].roles = websiteStorage.scriptTool[i].roles.filter(role => role);
         }
         saveLocalStorage();
     }
